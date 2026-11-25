@@ -179,7 +179,7 @@ describe('Results Panel Visualizations (Phase 6)', () => {
       mode: 'commercial',
       input: comInput,
       result: comResult,
-      waUrl: 'https://wa.me/628139916890',
+      waUrl: 'https://wa.me/628170092221',
       onOpenQr: () => {
         qrOpened = true;
       }

@@ -213,7 +213,7 @@ Menyediakan utilitas *zero-dependency* untuk menghasilkan QR Code berbasis SVG m
   - Menghasilkan string atau node `<svg>` yang dapat diskalakan (*scalable*), tajam di layar Retina/kiosk, dan ringan.
 - **`src/js/utils/whatsapp.js`**:
   - Membuat format pesan terstruktur yang merangkum hasil kalkulasi untuk setiap mode (Residensial, Komersial, Baterai, PJUTS).
-  - Menghasilkan URL `https://wa.me/628139916890?text=...` dengan teks yang di-encode URI secara aman.
+  - Menghasilkan URL `https://wa.me/628170092221?text=...` dengan teks yang di-encode URI secara aman.
 - **`src/js/utils/formatter.js`**:
   - Fungsi utilitas untuk memformat Rupiah (`Rp 1.450.000`), desimal kWp (`3.60 kWp`), unit modul, dan persentase.
 - **`test/utils.test.js`**:
@@ -246,7 +246,7 @@ Anda adalah web developer spesialis utilitas. Kerjakan Fase 3 untuk Kalkulator E
    - Implementasikan QR Code generator berbasis SVG murni dalam Vanilla JS (ES Modules) tanpa dependensi eksternal apa pun (zero npm dependencies).
    - Fungsi generateQrSvg(text, options) mengembalikan string SVG yang valid, scalable, dan tajam.
 2. Buat src/js/utils/whatsapp.js:
-   - Fungsi generateWhatsAppUrl(mode, input, result) yang merangkum hasil kalkulasi menjadi pesan WhatsApp teknis terformat rapi dan ditargetkan ke nomor sales Indogreen (+62 813-9916-890).
+   - Fungsi generateWhatsAppUrl(mode, input, result) yang merangkum hasil kalkulasi menjadi pesan WhatsApp teknis terformat rapi dan ditargetkan ke nomor sales Indogreen (+62 817-0092-221 / 08170092221).
 3. Buat src/js/utils/formatter.js:
    - Fungsi formatRupiah(number), formatNumber(number, decimals), formatKwp(number).
 4. Buat test/utils.test.js untuk memvalidasi bahwa SVG QR terbentuk sempurna dan URL WA ter-encode dengan benar.

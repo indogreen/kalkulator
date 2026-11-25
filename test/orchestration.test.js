@@ -199,7 +199,7 @@ describe('Modal QR Component (modalQr.js)', () => {
       qrSlot: mockQrSlot
     });
 
-    const testUrl = 'https://wa.me/628139916890?text=Halo';
+    const testUrl = 'https://wa.me/628170092221?text=Halo';
     openModalQr(testUrl);
 
     assert.equal(mockDialog.open, true, 'Dialog must be open');

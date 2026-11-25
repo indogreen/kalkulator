@@ -253,7 +253,7 @@ export function initApp() {
       const mode = appState.activeMode;
       const input = appState.modes[mode];
       const result = calculateCurrentResult();
-      const waUrl = result ? generateWhatsAppUrl(mode, input, result) : 'https://wa.me/628139916890';
+      const waUrl = result ? generateWhatsAppUrl(mode, input, result) : 'https://wa.me/628170092221';
       openModalQr(waUrl);
     }
   });
@@ -274,7 +274,7 @@ export function initApp() {
       const mode = appState.activeMode;
       const input = appState.modes[mode];
       const result = calculateCurrentResult();
-      const waUrl = result ? generateWhatsAppUrl(mode, input, result) : 'https://wa.me/628139916890';
+      const waUrl = result ? generateWhatsAppUrl(mode, input, result) : 'https://wa.me/628170092221';
       openModalQr(waUrl);
     }
   });

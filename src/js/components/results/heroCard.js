@@ -3,7 +3,6 @@
  * Component: Hero Result Card (heroCard.js)
  * 
  * High-impact CAD black (#000000) canvas card showcasing:
- * - Signature ornamental corner square (12x12px green)
  * - Eyebrow mode-specific badge & status
  * - Large headline display-xl in INDOGREEN Green (#00b100)
  * - Mode-calibrated subtext with legal notes
@@ -38,9 +37,9 @@ export function getHeroCardHtml({ mode, input, result }) {
     badgeText = isMinApplied ? 'REKENING MIN. PLN' : 'SWAKONSUMSI OPTIMAL';
     
     mainValueHtml = `
-      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs break-words">
+      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs break-words tabular-nums">
         <span>${formatRupiah(savingsRp)}</span>
-        <span class="type-heading-lg text-on-dark-mute font-normal">/ bulan</span>
+        <span class="text-base tablet:text-lg text-on-dark-mute font-normal">/ bulan</span>
       </div>
     `;
 
@@ -84,9 +83,9 @@ export function getHeroCardHtml({ mode, input, result }) {
     badgeText = activeScheme?.id === 'opex_ppa' ? 'ZERO CAPEX (Rp 0)' : 'SKEMA AKTIF';
 
     mainValueHtml = `
-      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs break-words">
+      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs break-words tabular-nums">
         <span>${formatRupiah(monthlyNetSavings)}</span>
-        <span class="type-heading-lg text-on-dark-mute font-normal">/ bulan</span>
+        <span class="text-base tablet:text-lg text-on-dark-mute font-normal">/ bulan</span>
       </div>
     `;
 
@@ -129,9 +128,9 @@ export function getHeroCardHtml({ mode, input, result }) {
     badgeText = 'SEAMLESS UPS (<10MS)';
 
     mainValueHtml = `
-      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs break-words">
+      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs break-words tabular-nums">
         <span>${actualHours} Jam</span>
-        <span class="type-heading-lg text-on-dark-mute font-normal">Cadangan Penuh</span>
+        <span class="text-base tablet:text-lg text-on-dark-mute font-normal">Cadangan Penuh</span>
       </div>
     `;
 
@@ -170,9 +169,9 @@ export function getHeroCardHtml({ mode, input, result }) {
     badgeText = '100% OTONOM SURYA';
 
     mainValueHtml = `
-      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs break-words">
+      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs break-words tabular-nums">
         <span>${formatRupiah(avoidedMonthly)}</span>
-        <span class="type-heading-lg text-on-dark-mute font-normal">/ bulan</span>
+        <span class="text-base tablet:text-lg text-on-dark-mute font-normal">/ bulan</span>
       </div>
     `;
 
@@ -208,10 +207,10 @@ export function getHeroCardHtml({ mode, input, result }) {
     <article class="relative bg-surface-dark text-on-dark border border-hairline-strong p-md tablet:p-lg rounded-sm flex flex-col gap-md select-none" aria-label="Ringkasan Estimasi Utama Hasil Simulasi">
       <!-- Header Strip: Eyebrow & Status Badge -->
       <div class="flex items-center justify-between border-b border-hairline-strong pb-xs pt-xs">
-        <span class="type-caption-sm text-accent-yellow font-bold uppercase tracking-wider">
+        <span class="text-xs font-semibold text-accent-yellow uppercase tracking-wider">
           ${eyebrow}
         </span>
-        <span class="type-caption-xs bg-surface-elevated text-primary border border-hairline-strong px-xs py-xxs rounded-sm uppercase font-bold tracking-wider">
+        <span class="text-[11px] bg-surface-elevated text-primary border border-hairline-strong px-xs py-xxs rounded-sm uppercase font-bold tracking-wider">
           ${badgeText}
         </span>
       </div>
@@ -219,7 +218,7 @@ export function getHeroCardHtml({ mode, input, result }) {
       <!-- Main Headline Value -->
       <div class="flex flex-col gap-xxs">
         ${mainValueHtml}
-        <p class="type-body-sm text-on-dark-mute">
+        <p class="text-sm text-on-dark-mute leading-relaxed">
           ${subtextHtml}
         </p>
       </div>
@@ -228,9 +227,9 @@ export function getHeroCardHtml({ mode, input, result }) {
       <div class="grid grid-cols-2 tablet:grid-cols-4 gap-xs pt-xs border-t border-hairline-strong">
         ${specs.map(spec => `
           <div class="flex flex-col p-xs bg-surface-elevated rounded-sm border border-hairline-strong">
-            <span class="type-caption-xs text-on-dark-mute uppercase tracking-wide">${spec.label}</span>
-            <span class="type-caption-md font-bold text-on-dark truncate mt-xxs">${spec.value}</span>
-            <span class="type-caption-xs text-mute truncate">${spec.sub}</span>
+            <span class="text-[11px] text-on-dark-mute uppercase tracking-wide">${spec.label}</span>
+            <span class="text-sm font-bold text-on-dark truncate mt-0.5 tabular-nums">${spec.value}</span>
+            <span class="text-xs text-mute truncate">${spec.sub}</span>
           </div>
         `).join('')}
       </div>

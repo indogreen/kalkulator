@@ -46,14 +46,14 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
       <!-- 1. Preset Daya Listrik PLN (VA) -->
       <div class="flex flex-col gap-xs">
         <div class="flex items-center justify-between">
-          <label id="label-res-power" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+          <label id="label-res-power" class="text-sm font-semibold text-ink">
             1. Daya Listrik PLN Terpasang
           </label>
-          <span id="display-power-va" class="type-caption-sm font-bold text-primary-dark">
+          <span id="display-power-va" class="text-sm font-bold text-primary-dark tabular-nums">
             ${current.powerVa.toLocaleString('id-ID')} VA
           </span>
         </div>
-        <p id="desc-res-power" class="type-caption-xs text-mute">
+        <p id="desc-res-power" class="text-xs text-mute leading-normal">
           Pilih batas daya sambungan meteran PLN di rumah Anda:
         </p>
 
@@ -62,7 +62,7 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
             const isActive = current.powerVa === va;
             return `
               <button type="button" 
-                class="btn-va-preset h-touch border rounded-sm type-button-sm transition-all select-none ${
+                class="btn-va-preset h-touch border rounded-sm text-xs font-semibold tabular-nums transition-all select-none ${
                   isActive 
                     ? 'border-2 border-primary bg-ink text-on-dark font-bold' 
                     : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
@@ -79,15 +79,15 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
 
       <!-- 2. Nominal Tagihan Listrik Bulanan (Rp) -->
       <div class="flex flex-col gap-xs">
-        <label for="input-res-monthly-bill" id="label-res-bill" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+        <label for="input-res-monthly-bill" id="label-res-bill" class="text-sm font-semibold text-ink">
           2. Rata-Rata Tagihan Listrik per Bulan (Rp)
         </label>
-        <p id="desc-res-monthly-bill" class="type-caption-xs text-mute">
+        <p id="desc-res-monthly-bill" class="text-xs text-mute leading-normal">
           Masukkan nominal rata-rata tagihan rekening listrik PLN setiap bulan:
         </p>
 
         <div class="relative flex items-center">
-          <span class="absolute left-md text-mute font-bold type-body-md pointer-events-none select-none">Rp</span>
+          <span class="absolute left-md text-mute font-bold text-sm pointer-events-none select-none">Rp</span>
           <input type="number" 
             id="input-res-monthly-bill" 
             name="monthlyBill"
@@ -96,7 +96,7 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
             value="${current.monthlyBill}" 
             placeholder="Contoh: 1.500.000"
             aria-describedby="desc-res-monthly-bill"
-            class="h-touch w-full border border-hairline bg-canvas pl-xxl pr-md py-input-y text-ink font-bold type-body-md rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+            class="h-touch w-full border border-hairline bg-canvas pl-xxl pr-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
         </div>
 
         <!-- Quick Chips Preset (44px min touch target) -->
@@ -105,7 +105,7 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
             const isChipActive = current.monthlyBill === chip.value;
             return `
               <button type="button" 
-                class="btn-bill-chip min-h-touch min-w-[44px] px-sm py-xs border rounded-sm type-caption-xs font-bold transition-all select-none ${
+                class="btn-bill-chip min-h-touch min-w-[44px] px-sm py-xs border rounded-sm text-xs font-semibold tabular-nums transition-all select-none ${
                   isChipActive 
                     ? 'border-2 border-primary bg-primary text-on-primary' 
                     : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
@@ -122,10 +122,10 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
 
       <!-- 3. Pola Konsumsi Siang Hari (Radio Cards) -->
       <div class="flex flex-col gap-xs">
-        <label id="label-res-daytime" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+        <label id="label-res-daytime" class="text-sm font-semibold text-ink">
           3. Pola Aktivitas Penggunaan Listrik Siang Hari
         </label>
-        <p class="type-caption-xs text-mute">
+        <p class="text-xs text-mute leading-normal">
           Berdasarkan Permen ESDM No. 2/2024, listrik surya dioptimalkan untuk swakonsumsi langsung:
         </p>
 
@@ -139,7 +139,7 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
                   : 'border-hairline bg-canvas hover:border-hairline-strong'
               }">
                 <div class="flex items-center justify-between">
-                  <span class="type-caption-sm font-bold text-ink">${pattern.label}</span>
+                  <span class="text-sm font-semibold text-ink">${pattern.label}</span>
                   <input type="radio" 
                     id="radio-daytime-${pattern.id}"
                     name="daytimeActivity" 
@@ -148,7 +148,7 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
                     aria-label="${pattern.label}: ${pattern.description}"
                     ${isSelected ? 'checked' : ''}>
                 </div>
-                <span class="type-caption-xs text-mute">${pattern.description}</span>
+                <span class="text-xs text-mute leading-normal">${pattern.description}</span>
               </label>
             `;
           }).join('')}
@@ -157,10 +157,10 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
 
       <!-- 4. Opsi Baterai Cadangan Hybrid LiFePO4 -->
       <div class="flex flex-col gap-xs">
-        <label id="label-res-battery" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+        <label id="label-res-battery" class="text-sm font-semibold text-ink">
           4. Opsi Penyimpanan Baterai Hybrid (LiFePO4)
         </label>
-        <p class="type-caption-xs text-mute">
+        <p class="text-xs text-mute leading-normal">
           Menyimpan kelebihan daya surya untuk malam hari dan menjaga listrik tetap menyala saat PLN padam:
         </p>
 
@@ -175,10 +175,10 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
               }">
                 <div class="flex flex-col gap-xxs">
                   <div class="flex items-center gap-xs">
-                    <span class="type-caption-sm font-bold text-ink">${opt.label}</span>
-                    ${opt.capacityKwh > 0 ? '<span class="type-caption-xs px-xs py-xxs bg-surface-elevated text-primary font-bold rounded-sm">ANTI-PADAM</span>' : ''}
+                    <span class="text-sm font-semibold text-ink">${opt.label}</span>
+                    ${opt.capacityKwh > 0 ? '<span class="text-[11px] px-xs py-xxs bg-surface-elevated text-primary font-bold rounded-sm uppercase">Anti-Padam</span>' : ''}
                   </div>
-                  <span class="type-caption-xs text-mute">${opt.description}</span>
+                  <span class="text-xs text-mute leading-normal">${opt.description}</span>
                 </div>
                 <input type="radio" 
                   id="radio-battery-${opt.id}"
@@ -198,13 +198,13 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
         
         <!-- Dropdown Wilayah -->
         <div class="flex flex-col gap-xs">
-          <label for="select-res-region" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+          <label for="select-res-region" class="text-sm font-semibold text-ink">
             5. Wilayah Lokasi Proyek
           </label>
           <select id="select-res-region" 
             name="region" 
             aria-label="Pilih Wilayah Lokasi Proyek"
-            class="h-touch border border-hairline bg-canvas px-md py-input-y text-ink font-bold type-body-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+            class="h-touch border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
             ${Object.values(REGIONS_PSH).map(reg => `
               <option value="${reg.id}" ${current.region === reg.id ? 'selected' : ''}>
                 ${reg.label} (${reg.psh} PSH)
@@ -216,10 +216,10 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
         <!-- Input Luas Atap -->
         <div class="flex flex-col gap-xs">
           <div class="flex items-center justify-between">
-            <label for="input-res-roof-area" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+            <label for="input-res-roof-area" class="text-sm font-semibold text-ink">
               6. Estimasi Luas Atap
             </label>
-            <span class="type-caption-xs text-mute">Min ~6.0 m²/kWp</span>
+            <span class="text-xs text-mute">Min ~6.0 m²/kWp</span>
           </div>
           <div class="relative flex items-center">
             <input type="number" 
@@ -230,8 +230,8 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
               value="${current.roofArea}" 
               placeholder="30"
               aria-label="Estimasi Luas Atap dalam meter persegi"
-              class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-bold type-body-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
-            <span class="absolute right-md text-mute font-bold type-body-sm pointer-events-none">m²</span>
+              class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+            <span class="absolute right-md text-mute font-bold text-sm pointer-events-none">m²</span>
           </div>
         </div>
 
@@ -257,12 +257,11 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
     btn.addEventListener('click', () => {
       const va = Number(btn.getAttribute('data-va')) || 2200;
       current.powerVa = va;
-      // Update UI active buttons
       container.querySelectorAll('.btn-va-preset').forEach(b => {
-        b.className = 'btn-va-preset h-touch border border-hairline bg-surface-soft text-ink rounded-sm type-button-sm transition-all select-none hover:border-hairline-strong';
+        b.className = 'btn-va-preset h-touch border border-hairline bg-surface-soft text-ink rounded-sm text-xs font-semibold tabular-nums transition-all select-none hover:border-hairline-strong';
         b.setAttribute('aria-pressed', 'false');
       });
-      btn.className = 'btn-va-preset h-touch border-2 border-primary bg-ink text-on-dark font-bold rounded-sm type-button-sm transition-all select-none';
+      btn.className = 'btn-va-preset h-touch border-2 border-primary bg-ink text-on-dark font-bold rounded-sm text-xs tabular-nums transition-all select-none';
       btn.setAttribute('aria-pressed', 'true');
       const displayVa = container.querySelector('#display-power-va');
       if (displayVa) displayVa.textContent = `${va.toLocaleString('id-ID')} VA`;
@@ -274,14 +273,13 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
   if (billInput) {
     billInput.addEventListener('input', () => {
       current.monthlyBill = Math.max(0, Number(billInput.value) || 0);
-      // Reset chips active state jika nominal kustom
       container.querySelectorAll('.btn-bill-chip').forEach(chip => {
         const val = Number(chip.getAttribute('data-bill'));
         if (val === current.monthlyBill) {
-          chip.className = 'btn-bill-chip min-h-touch min-w-[44px] px-sm py-xs border-2 border-primary bg-primary text-on-primary rounded-sm type-caption-xs font-bold transition-all select-none';
+          chip.className = 'btn-bill-chip min-h-touch min-w-[44px] px-sm py-xs border-2 border-primary bg-primary text-on-primary rounded-sm text-xs font-semibold tabular-nums transition-all select-none';
           chip.setAttribute('aria-pressed', 'true');
         } else {
-          chip.className = 'btn-bill-chip min-h-touch min-w-[44px] px-sm py-xs border border-hairline bg-surface-soft text-ink rounded-sm type-caption-xs font-bold transition-all select-none hover:border-hairline-strong';
+          chip.className = 'btn-bill-chip min-h-touch min-w-[44px] px-sm py-xs border border-hairline bg-surface-soft text-ink rounded-sm text-xs font-semibold tabular-nums transition-all select-none hover:border-hairline-strong';
           chip.setAttribute('aria-pressed', 'false');
         }
       });
@@ -295,10 +293,10 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
       current.monthlyBill = val;
       if (billInput) billInput.value = val;
       container.querySelectorAll('.btn-bill-chip').forEach(c => {
-        c.className = 'btn-bill-chip min-h-touch min-w-[44px] px-sm py-xs border border-hairline bg-surface-soft text-ink rounded-sm type-caption-xs font-bold transition-all select-none hover:border-hairline-strong';
+        c.className = 'btn-bill-chip min-h-touch min-w-[44px] px-sm py-xs border border-hairline bg-surface-soft text-ink rounded-sm text-xs font-semibold tabular-nums transition-all select-none hover:border-hairline-strong';
         c.setAttribute('aria-pressed', 'false');
       });
-      chip.className = 'btn-bill-chip min-h-touch min-w-[44px] px-sm py-xs border-2 border-primary bg-primary text-on-primary rounded-sm type-caption-xs font-bold transition-all select-none';
+      chip.className = 'btn-bill-chip min-h-touch min-w-[44px] px-sm py-xs border-2 border-primary bg-primary text-on-primary rounded-sm text-xs font-semibold tabular-nums transition-all select-none';
       chip.setAttribute('aria-pressed', 'true');
       emitChange();
     });

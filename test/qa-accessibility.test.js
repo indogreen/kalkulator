@@ -44,11 +44,12 @@ describe('Phase 8: Accessibility & WCAG 2.1 AA Audit', () => {
     assert.ok(indexHtml.includes('aria-label="Tutup Dialog Modal"'), 'Close buttons must have accessible label');
   });
 
-  test('3. Mobile drawer navigation: accessible hamburger button and touch-friendly links', () => {
-    assert.ok(indexHtml.includes('id="btn-mobile-menu"'), 'Must have hamburger button');
-    assert.ok(indexHtml.includes('aria-expanded="false"'), 'Hamburger must have aria-expanded initial state');
-    assert.ok(indexHtml.includes('aria-controls="mobile-drawer"'), 'Hamburger must control mobile drawer');
-    assert.ok(indexHtml.includes('min-h-touch flex items-center'), 'Drawer links must have minimum 44px touch height');
+  test('3. Header action toolbar: accessible reset, barcode, and WhatsApp hotline buttons', () => {
+    assert.ok(indexHtml.includes('id="btn-reset"'), 'Must have reset button');
+    assert.ok(indexHtml.includes('id="btn-qr"'), 'Must have barcode sales button');
+    assert.ok(indexHtml.includes('id="btn-header-wa"'), 'Must have header WhatsApp button');
+    assert.ok(indexHtml.includes('0817-0092-221'), 'Must display official hotline number');
+    assert.ok(indexHtml.includes('aria-label="Reset parameter formulir ke nilai awal"'), 'Reset button must have accessible label');
   });
 
   test('4. Color contrast: primary buttons strictly use black text (#000000 / text-on-primary) on green (#00b100)', () => {
@@ -100,12 +101,12 @@ describe('Phase 8: Responsive Layout & Viewport Audit', () => {
     assert.ok(indexHtml.includes('overflow-x-hidden'), 'Body must contain overflow-x-hidden');
   });
 
-  test('2. Navigation adapts smoothly: full CTA hidden on narrow mobile (<480px) to prevent navbar overflow', () => {
-    assert.ok(indexHtml.includes('hidden mobile:inline-flex'), 'Navbar WhatsApp button must hide on narrow screens (<480px)');
+  test('2. Navigation adapts smoothly: labels adapt on mobile to prevent navbar overflow', () => {
+    assert.ok(indexHtml.includes('hidden tablet:inline'), 'Navbar text must adapt smoothly on mobile screens');
   });
 
-  test('3. Hero quick action buttons stack or wrap cleanly on narrow mobile', () => {
-    assert.ok(indexHtml.includes('w-full mobile:w-auto justify-center'), 'Hero action buttons must adapt width on mobile');
+  test('3. Header action buttons adapt cleanly on mobile', () => {
+    assert.ok(indexHtml.includes('hidden mobile:inline'), 'Header action buttons must adapt label on mobile');
   });
 
   test('4. Segmented tabs stack cleanly on narrow mobile without clipping text', () => {

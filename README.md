@@ -131,7 +131,7 @@ Menjalankan 64 pengujian otomatis mencakup:
    - Geser slider atau ubah nominal tagihan/daya: panel kanan akan memperbarui angka penghematan bulanan, bar perbandingan, timeline payback 25 tahun, dan spesifikasi sistem secara seketika (*real-time*).
 2. **Konsultasi WhatsApp:**
    - Klik tombol hijau **"Konsultasikan via WhatsApp"**.
-   - Sistem membuka aplikasi WhatsApp dengan pesan rekayasa terstruktur yang merangkum parameter teknis dan estimasi investasi Anda ke tim sales engineer PT. Indogreen (+62 813-9916-890).
+   - Sistem membuka aplikasi WhatsApp dengan pesan rekayasa terstruktur yang merangkum parameter teknis dan estimasi investasi Anda ke tim sales engineer PT. Indogreen (+62 817-0092-221 / 08170092221).
 3. **Barcode Sales (Kiosk Mode):**
    - Klik tombol **"Buka Barcode Sales"** di header atau di kartu konversi hasil.
    - Pindai kode QR vektor SVG yang muncul di layar menggunakan kamera ponsel pengunjung untuk langsung mentransfer hasil simulasi ke WhatsApp ponsel mereka.

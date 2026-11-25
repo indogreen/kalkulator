@@ -41,14 +41,14 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
       <!-- 1. Jumlah Titik Tiang Lampu -->
       <div class="flex flex-col gap-xs">
         <div class="flex items-center justify-between">
-          <label for="input-pjuts-pole-count" id="label-pjuts-pole" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+          <label for="input-pjuts-pole-count" id="label-pjuts-pole" class="text-sm font-semibold text-ink">
             1. Jumlah Titik Tiang Lampu Jalan
           </label>
-          <span id="display-pole-count" class="type-caption-sm font-bold text-primary-dark">
+          <span id="display-pole-count" class="text-sm font-bold text-primary-dark tabular-nums">
             ${current.poleCount} Titik Tiang
           </span>
         </div>
-        <p id="desc-pjuts-pole" class="type-caption-xs text-mute">
+        <p id="desc-pjuts-pole" class="text-xs text-mute leading-normal">
           Masukkan total titik tiang lampu penerangan jalan yang direncanakan:
         </p>
 
@@ -62,8 +62,8 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
             value="${current.poleCount}" 
             placeholder="10"
             aria-describedby="desc-pjuts-pole"
-            class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-bold type-body-md rounded-sm focus:border-2 focus:border-primary focus:outline-none">
-          <span class="absolute right-md text-mute font-bold type-body-md pointer-events-none select-none">Tiang</span>
+            class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+          <span class="absolute right-md text-mute font-bold text-sm pointer-events-none select-none">Tiang</span>
         </div>
 
         <!-- Quick Pole Chips (44px min touch target) -->
@@ -72,7 +72,7 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
             const isChipActive = current.poleCount === count;
             return `
               <button type="button" 
-                class="btn-pole-chip min-h-touch min-w-[44px] px-sm py-xs border rounded-sm type-caption-xs font-bold transition-all select-none ${
+                class="btn-pole-chip min-h-touch min-w-[44px] px-sm py-xs border rounded-sm text-xs font-semibold tabular-nums transition-all select-none ${
                   isChipActive 
                     ? 'border-2 border-primary bg-primary text-on-primary' 
                     : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
@@ -89,10 +89,10 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
 
       <!-- 2. Daya Lampu LED (Watt) -->
       <div class="flex flex-col gap-xs">
-        <label id="label-pjuts-watt" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+        <label id="label-pjuts-watt" class="text-sm font-semibold text-ink">
           2. Daya Lampu LED PJU (Watt)
         </label>
-        <p class="type-caption-xs text-mute">
+        <p class="text-xs text-mute leading-normal">
           Pilih rating lumen efisiensi tinggi lampu LED jalan standar SNI:
         </p>
 
@@ -101,7 +101,7 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
             const isActive = current.lampWattage === watt;
             return `
               <button type="button" 
-                class="btn-watt-preset h-touch border rounded-sm type-button-sm transition-all select-none ${
+                class="btn-watt-preset h-touch border rounded-sm text-xs font-semibold tabular-nums transition-all select-none ${
                   isActive 
                     ? 'border-2 border-primary bg-ink text-on-dark font-bold' 
                     : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
@@ -120,10 +120,10 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
       <div class="border border-hairline bg-surface-soft p-md rounded-sm flex items-center justify-between gap-md select-none">
         <div class="flex flex-col gap-xxs max-w-sm">
           <div class="flex items-center gap-xs">
-            <span class="type-caption-sm font-bold text-ink uppercase">Smart Dimming Otomatis</span>
-            <span class="type-caption-xs px-xs py-xxs bg-primary text-on-primary font-bold rounded-sm">HEMAT ~30%</span>
+            <span class="text-sm font-semibold text-ink">Smart Dimming Otomatis</span>
+            <span class="text-[11px] px-xs py-xxs bg-primary text-on-primary font-bold rounded-sm uppercase">Hemat ~30%</span>
           </div>
-          <p class="type-caption-xs text-mute">
+          <p class="text-xs text-mute leading-normal">
             100% daya pada 5 jam awal (18:00 - 23:00) saat ramai, kemudian otomatis 50% daya (23:00 - 06:00) saat sepi.
           </p>
         </div>
@@ -141,10 +141,10 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
 
       <!-- 4. Hari Otonomi Cuaca Mendung / Hujan -->
       <div class="flex flex-col gap-xs">
-        <label id="label-pjuts-autonomy" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+        <label id="label-pjuts-autonomy" class="text-sm font-semibold text-ink">
           4. Cadangan Hari Otonomi (Cuaca Hujan/Mendung)
         </label>
-        <p class="type-caption-xs text-mute">
+        <p class="text-xs text-mute leading-normal">
           Menjamin lampu jalan tetap menyala normal saat matahari tertutup awan berturut-turut:
         </p>
 
@@ -153,7 +153,7 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
             const isActive = current.autonomyDays === days;
             return `
               <button type="button" 
-                class="btn-autonomy-preset h-touch border rounded-sm type-button-sm transition-all select-none ${
+                class="btn-autonomy-preset h-touch border rounded-sm text-xs font-semibold tabular-nums transition-all select-none ${
                   isActive 
                     ? 'border-2 border-primary bg-ink text-on-dark font-bold' 
                     : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
@@ -173,7 +173,7 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
         
         <!-- Durasi Malam -->
         <div class="flex flex-col gap-xs">
-          <label for="input-pjuts-night-hours" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+          <label for="input-pjuts-night-hours" class="text-sm font-semibold text-ink">
             5. Durasi Nyala per Malam
           </label>
           <div class="relative flex items-center">
@@ -185,20 +185,20 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
               value="${current.nightHours}" 
               placeholder="12"
               aria-label="Durasi Nyala Lampu per Malam dalam jam"
-              class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-bold type-body-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
-            <span class="absolute right-md text-mute font-bold type-body-sm pointer-events-none">Jam/Malam</span>
+              class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+            <span class="absolute right-md text-mute font-bold text-sm pointer-events-none">Jam/Malam</span>
           </div>
         </div>
 
         <!-- Wilayah Radiasi -->
         <div class="flex flex-col gap-xs">
-          <label for="select-pjuts-region" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+          <label for="select-pjuts-region" class="text-sm font-semibold text-ink">
             6. Wilayah Lokasi Pemasangan
           </label>
           <select id="select-pjuts-region" 
             name="region" 
             aria-label="Pilih Wilayah Lokasi Pemasangan PJUTS"
-            class="h-touch border border-hairline bg-canvas px-md py-input-y text-ink font-bold type-body-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+            class="h-touch border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
             ${Object.values(REGIONS_PSH).map(reg => `
               <option value="${reg.id}" ${current.region === reg.id ? 'selected' : ''}>
                 ${reg.label} (${reg.psh} PSH)
@@ -235,10 +235,10 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
     container.querySelectorAll('.btn-pole-chip').forEach(chip => {
       const chipVal = Number(chip.getAttribute('data-poles'));
       if (chipVal === num) {
-        chip.className = 'btn-pole-chip min-h-touch min-w-[44px] px-sm py-xs border-2 border-primary bg-primary text-on-primary rounded-sm type-caption-xs font-bold transition-all select-none';
+        chip.className = 'btn-pole-chip min-h-touch min-w-[44px] px-sm py-xs border-2 border-primary bg-primary text-on-primary rounded-sm text-xs font-semibold tabular-nums transition-all select-none';
         chip.setAttribute('aria-pressed', 'true');
       } else {
-        chip.className = 'btn-pole-chip min-h-touch min-w-[44px] px-sm py-xs border border-hairline bg-surface-soft text-ink rounded-sm type-caption-xs font-bold transition-all select-none hover:border-hairline-strong';
+        chip.className = 'btn-pole-chip min-h-touch min-w-[44px] px-sm py-xs border border-hairline bg-surface-soft text-ink rounded-sm text-xs font-semibold tabular-nums transition-all select-none hover:border-hairline-strong';
         chip.setAttribute('aria-pressed', 'false');
       }
     });
@@ -262,10 +262,10 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
       const w = Number(btn.getAttribute('data-watt')) || 60;
       current.lampWattage = w;
       container.querySelectorAll('.btn-watt-preset').forEach(b => {
-        b.className = 'btn-watt-preset h-touch border border-hairline bg-surface-soft text-ink rounded-sm type-button-sm transition-all select-none hover:border-hairline-strong';
+        b.className = 'btn-watt-preset h-touch border border-hairline bg-surface-soft text-ink rounded-sm text-xs font-semibold tabular-nums transition-all select-none hover:border-hairline-strong';
         b.setAttribute('aria-pressed', 'false');
       });
-      btn.className = 'btn-watt-preset h-touch border-2 border-primary bg-ink text-on-dark font-bold rounded-sm type-button-sm transition-all select-none';
+      btn.className = 'btn-watt-preset h-touch border-2 border-primary bg-ink text-on-dark font-bold rounded-sm text-xs tabular-nums transition-all select-none';
       btn.setAttribute('aria-pressed', 'true');
       emitChange();
     });
@@ -285,10 +285,10 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
       const days = Number(btn.getAttribute('data-days')) || 2;
       current.autonomyDays = days;
       container.querySelectorAll('.btn-autonomy-preset').forEach(b => {
-        b.className = 'btn-autonomy-preset h-touch border border-hairline bg-surface-soft text-ink rounded-sm type-button-sm transition-all select-none hover:border-hairline-strong';
+        b.className = 'btn-autonomy-preset h-touch border border-hairline bg-surface-soft text-ink rounded-sm text-xs font-semibold tabular-nums transition-all select-none hover:border-hairline-strong';
         b.setAttribute('aria-pressed', 'false');
       });
-      btn.className = 'btn-autonomy-preset h-touch border-2 border-primary bg-ink text-on-dark font-bold rounded-sm type-button-sm transition-all select-none';
+      btn.className = 'btn-autonomy-preset h-touch border-2 border-primary bg-ink text-on-dark font-bold rounded-sm text-xs tabular-nums transition-all select-none';
       btn.setAttribute('aria-pressed', 'true');
       emitChange();
     });

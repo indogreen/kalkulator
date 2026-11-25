@@ -197,7 +197,7 @@ master implementation plan (docs/IMPLEMENTATION_PLAN.md), agent guidelines
   - Deterministic dan mudah diuji secara otomatis via unit test.
 - **Zero-Dependency Utilities (`src/js/utils/`):**
   - Generator QR Code SVG murni (`qrcode.js`): Mengembalikan elemen atau string SVG terukur dan tajam tanpa dependensi npm pihak ketiga.
-  - Generator URL WhatsApp (`whatsapp.js`): Menyusun ringkasan kalkulasi teknis dan estimasi investasi ke nomor WhatsApp sales resmi PT. Indogreen (+62 813-9916-890).
+  - Generator URL WhatsApp (`whatsapp.js`): Menyusun ringkasan kalkulasi teknis dan estimasi investasi ke nomor WhatsApp sales resmi PT. Indogreen (+62 817-0092-221 / 08170092221).
   - Formatter (`formatter.js`): Memformat mata uang IDR (`Rp 1.450.000`), desimal kWp (`3.60 kWp`), unit modul, dan angka persentase.
 - **State Management Reaktif (`src/js/app.js`):**
   - Memperbarui hasil kalkulasi dan tampilan secara real-time pada event input (`input`, `change`, `click`).

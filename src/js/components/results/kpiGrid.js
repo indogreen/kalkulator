@@ -211,13 +211,13 @@ export function getKpiGridHtml({ mode, input, result }) {
     <div class="grid grid-cols-1 mobile:grid-cols-2 tablet:grid-cols-4 gap-sm" role="region" aria-label="Grid 4 Metrik Kunci Kinerja Sistem (KPI)">
       ${cards.map(card => `
         <div class="p-sm bg-canvas border border-hairline rounded-sm flex flex-col gap-xxs hover:border-hairline-strong transition-colors">
-          <span class="type-caption-xs text-mute font-bold uppercase tracking-wide truncate">
+          <span class="text-xs text-mute font-medium truncate">
             ${card.title}
           </span>
-          <span class="type-heading-sm font-bold ${card.isHighlight ? 'text-primary' : 'text-ink'} truncate mt-xxs">
+          <span class="text-base tablet:text-lg font-bold ${card.isHighlight ? 'text-primary' : 'text-ink'} truncate mt-xxs tabular-nums">
             ${card.value}
           </span>
-          <span class="type-caption-xs text-mute truncate">
+          <span class="text-xs text-mute truncate leading-normal">
             ${card.sub}
           </span>
         </div>

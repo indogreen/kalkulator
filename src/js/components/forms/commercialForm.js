@@ -45,17 +45,17 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
       
       <!-- 1. Dropdown Golongan Tarif PLN -->
       <div class="flex flex-col gap-xs">
-        <label for="select-com-tariff" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+        <label for="select-com-tariff" class="text-sm font-semibold text-ink">
           1. Golongan Tarif Listrik PLN Komersial / Industri
         </label>
-        <p class="type-caption-xs text-mute">
+        <p class="text-xs text-mute leading-normal">
           Pilih golongan tarif sesuai rekening tagihan PLN bisnis Anda:
         </p>
 
         <select id="select-com-tariff" 
           name="tariffGroup"
           aria-label="Golongan Tarif Listrik PLN Komersial atau Industri"
-          class="h-touch border border-hairline bg-canvas px-md py-input-y text-ink font-bold type-body-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+          class="h-touch border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
           ${COMMERCIAL_TARIFF_OPTIONS.map(code => {
             const tariff = PLN_TARIFFS_2026[code];
             const isSelected = current.tariffGroup === code;
@@ -70,15 +70,15 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
 
       <!-- 2. Tagihan Listrik Bulanan (Rp) -->
       <div class="flex flex-col gap-xs">
-        <label for="input-com-monthly-bill" id="label-com-bill" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+        <label for="input-com-monthly-bill" id="label-com-bill" class="text-sm font-semibold text-ink">
           2. Rata-Rata Tagihan Listrik PLN per Bulan (Rp)
         </label>
-        <p id="desc-com-monthly-bill" class="type-caption-xs text-mute">
+        <p id="desc-com-monthly-bill" class="text-xs text-mute leading-normal">
           Masukkan nominal rata-rata tagihan rekening listrik bulanan fasilitas Anda:
         </p>
 
         <div class="relative flex items-center">
-          <span class="absolute left-md text-mute font-bold type-body-md pointer-events-none select-none">Rp</span>
+          <span class="absolute left-md text-mute font-bold text-sm pointer-events-none select-none">Rp</span>
           <input type="number" 
             id="input-com-monthly-bill" 
             name="monthlyBill"
@@ -87,7 +87,7 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
             value="${current.monthlyBill}" 
             placeholder="Contoh: 50.000.000"
             aria-describedby="desc-com-monthly-bill"
-            class="h-touch w-full border border-hairline bg-canvas pl-xxl pr-md py-input-y text-ink font-bold type-body-md rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+            class="h-touch w-full border border-hairline bg-canvas pl-xxl pr-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
         </div>
 
         <!-- Quick Chips Preset (44px min touch target) -->
@@ -96,7 +96,7 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
             const isChipActive = current.monthlyBill === chip.value;
             return `
               <button type="button" 
-                class="btn-com-bill-chip min-h-touch min-w-[44px] px-sm py-xs border rounded-sm type-caption-xs font-bold transition-all select-none ${
+                class="btn-com-bill-chip min-h-touch min-w-[44px] px-sm py-xs border rounded-sm text-xs font-semibold tabular-nums transition-all select-none ${
                   isChipActive 
                     ? 'border-2 border-primary bg-primary text-on-primary' 
                     : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
@@ -113,10 +113,10 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
 
       <!-- 3. Profil Jam Operasional Fasilitas (Radio Cards) -->
       <div class="flex flex-col gap-xs">
-        <label id="label-com-hours" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+        <label id="label-com-hours" class="text-sm font-semibold text-ink">
           3. Pola Jam Operasional & Profil Beban
         </label>
-        <p class="type-caption-xs text-mute">
+        <p class="text-xs text-mute leading-normal">
           Tingkat sinkronisasi beban fasilitas terhadap kurva radiasi matahari siang hari:
         </p>
 
@@ -130,7 +130,7 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
                   : 'border-hairline bg-canvas hover:border-hairline-strong'
               }">
                 <div class="flex items-center justify-between">
-                  <span class="type-caption-sm font-bold text-ink">${op.label}</span>
+                  <span class="text-sm font-semibold text-ink">${op.label}</span>
                   <input type="radio" 
                     id="radio-hours-${op.id}"
                     name="operationalHours" 
@@ -139,7 +139,7 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
                     aria-label="${op.label}: ${op.description}"
                     ${isSelected ? 'checked' : ''}>
                 </div>
-                <span class="type-caption-xs text-mute">${op.description}</span>
+                <span class="text-xs text-mute leading-normal">${op.description}</span>
               </label>
             `;
           }).join('')}
@@ -148,10 +148,10 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
 
       <!-- 4. Pilihan Skema Pembiayaan Utama (Radio Cards) -->
       <div class="flex flex-col gap-xs">
-        <label id="label-com-scheme" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+        <label id="label-com-scheme" class="text-sm font-semibold text-ink">
           4. Skema Finansial & Investasi Pilihan
         </label>
-        <p class="type-caption-xs text-mute">
+        <p class="text-xs text-mute leading-normal">
           Pilih model pengadaan energi surya yang sesuai dengan strategi keuangan perusahaan:
         </p>
 
@@ -166,11 +166,11 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
               }">
                 <div class="flex flex-col gap-xxs">
                   <div class="flex items-center gap-xs">
-                    <span class="type-caption-sm font-bold text-ink">${scheme.name}</span>
-                    ${scheme.id === 'opex_ppa' ? '<span class="type-caption-xs px-xs py-xxs bg-surface-elevated text-primary font-bold rounded-sm">ZERO CAPEX</span>' : ''}
-                    ${scheme.id === 'capex' ? '<span class="type-caption-xs px-xs py-xxs bg-primary text-on-primary font-bold rounded-sm">HAK MILIK HARI-1</span>' : ''}
+                    <span class="text-sm font-semibold text-ink">${scheme.name}</span>
+                    ${scheme.id === 'opex_ppa' ? '<span class="text-[11px] px-xs py-xxs bg-surface-elevated text-primary font-bold rounded-sm uppercase">Zero CAPEX</span>' : ''}
+                    ${scheme.id === 'capex' ? '<span class="text-[11px] px-xs py-xxs bg-primary text-on-primary font-bold rounded-sm uppercase">Hak Milik Hari-1</span>' : ''}
                   </div>
-                  <span class="type-caption-xs text-mute">${scheme.description}</span>
+                  <span class="text-xs text-mute leading-normal">${scheme.description}</span>
                 </div>
                 <input type="radio" 
                   id="radio-scheme-${scheme.id}"
@@ -190,13 +190,13 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
         
         <!-- Dropdown Wilayah -->
         <div class="flex flex-col gap-xs">
-          <label for="select-com-region" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+          <label for="select-com-region" class="text-sm font-semibold text-ink">
             5. Wilayah Lokasi Pabrik / Gedung
           </label>
           <select id="select-com-region" 
             name="region" 
             aria-label="Pilih Wilayah Lokasi Pabrik atau Gedung"
-            class="h-touch border border-hairline bg-canvas px-md py-input-y text-ink font-bold type-body-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+            class="h-touch border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
             ${Object.values(REGIONS_PSH).map(reg => `
               <option value="${reg.id}" ${current.region === reg.id ? 'selected' : ''}>
                 ${reg.label} (${reg.psh} PSH)
@@ -208,10 +208,10 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
         <!-- Input Luas Atap Pabrik -->
         <div class="flex flex-col gap-xs">
           <div class="flex items-center justify-between">
-            <label for="input-com-roof-area" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+            <label for="input-com-roof-area" class="text-sm font-semibold text-ink">
               6. Luas Atap Fasilitas
             </label>
-            <span class="type-caption-xs text-mute">Min ~5.5 m²/kWp</span>
+            <span class="text-xs text-mute">Min ~5.5 m²/kWp</span>
           </div>
           <div class="relative flex items-center">
             <input type="number" 
@@ -222,8 +222,8 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
               value="${current.roofArea}" 
               placeholder="300"
               aria-label="Luas Atap Fasilitas dalam meter persegi"
-              class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-bold type-body-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
-            <span class="absolute right-md text-mute font-bold type-body-sm pointer-events-none">m²</span>
+              class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+            <span class="absolute right-md text-mute font-bold text-sm pointer-events-none">m²</span>
           </div>
         </div>
 
@@ -257,10 +257,10 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
       container.querySelectorAll('.btn-com-bill-chip').forEach(chip => {
         const val = Number(chip.getAttribute('data-bill'));
         if (val === current.monthlyBill) {
-          chip.className = 'btn-com-bill-chip min-h-touch min-w-[44px] px-sm py-xs border-2 border-primary bg-primary text-on-primary rounded-sm type-caption-xs font-bold transition-all select-none';
+          chip.className = 'btn-com-bill-chip min-h-touch min-w-[44px] px-sm py-xs border-2 border-primary bg-primary text-on-primary rounded-sm text-xs font-semibold tabular-nums transition-all select-none';
           chip.setAttribute('aria-pressed', 'true');
         } else {
-          chip.className = 'btn-com-bill-chip min-h-touch min-w-[44px] px-sm py-xs border border-hairline bg-surface-soft text-ink rounded-sm type-caption-xs font-bold transition-all select-none hover:border-hairline-strong';
+          chip.className = 'btn-com-bill-chip min-h-touch min-w-[44px] px-sm py-xs border border-hairline bg-surface-soft text-ink rounded-sm text-xs font-semibold tabular-nums transition-all select-none hover:border-hairline-strong';
           chip.setAttribute('aria-pressed', 'false');
         }
       });
@@ -274,10 +274,10 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
       current.monthlyBill = val;
       if (billInput) billInput.value = val;
       container.querySelectorAll('.btn-com-bill-chip').forEach(c => {
-        c.className = 'btn-com-bill-chip min-h-touch min-w-[44px] px-sm py-xs border border-hairline bg-surface-soft text-ink rounded-sm type-caption-xs font-bold transition-all select-none hover:border-hairline-strong';
+        c.className = 'btn-com-bill-chip min-h-touch min-w-[44px] px-sm py-xs border border-hairline bg-surface-soft text-ink rounded-sm text-xs font-semibold tabular-nums transition-all select-none hover:border-hairline-strong';
         c.setAttribute('aria-pressed', 'false');
       });
-      chip.className = 'btn-com-bill-chip min-h-touch min-w-[44px] px-sm py-xs border-2 border-primary bg-primary text-on-primary rounded-sm type-caption-xs font-bold transition-all select-none';
+      chip.className = 'btn-com-bill-chip min-h-touch min-w-[44px] px-sm py-xs border-2 border-primary bg-primary text-on-primary rounded-sm text-xs font-semibold tabular-nums transition-all select-none';
       chip.setAttribute('aria-pressed', 'true');
       emitChange();
     });

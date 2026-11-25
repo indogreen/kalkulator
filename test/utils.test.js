@@ -118,7 +118,7 @@ describe('Zero-Dependency SVG QR Code Generator (qrcode.js)', () => {
   });
 
   test('generateQrSvg: menangani payload panjang (URL WhatsApp lengkap > 500 karakter)', () => {
-    const longUrl = 'https://wa.me/628139916890?text=' + encodeURIComponent(
+    const longUrl = 'https://wa.me/628170092221?text=' + encodeURIComponent(
       'Halo Tim Engineering PT. Indogreen Technology And Management,\n' +
       'Saya ingin konsultasi teknis sistem PLTS Atap Residensial:\n' +
       '- Daya PLN: 2.200 VA (Tarif R-1)\n' +
@@ -216,7 +216,7 @@ describe('WhatsApp Consultation Generator (whatsapp.js)', () => {
     assert.ok(message.includes('4 Jam'));
     assert.ok(message.includes('10,24 kWh'));
     assert.ok(message.includes('Integrasi Solar Charger: Ya'));
-    assert.ok(url.startsWith('https://wa.me/628139916890?text='));
+    assert.ok(url.startsWith('https://wa.me/628170092221?text='));
   });
 
   test('Mode PJUTS: pesan memuat tiang, watt, smart dimming, dan hari otonomi', () => {
@@ -230,7 +230,7 @@ describe('WhatsApp Consultation Generator (whatsapp.js)', () => {
     assert.ok(message.includes('60 Watt'));
     assert.ok(message.includes('Smart Dimming hemat ~29.2% energi'));
     assert.ok(message.includes('2 Hari'));
-    assert.ok(url.startsWith('https://wa.me/628139916890?text='));
+    assert.ok(url.startsWith('https://wa.me/628170092221?text='));
   });
 });
 

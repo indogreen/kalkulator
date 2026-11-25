@@ -6,7 +6,6 @@
  * 1. Reset simulation action
  * 2. Barcode modal trigger
  * 3. Native Fullscreen API toggle (kiosk booth mode)
- * 4. Mobile navigation drawer toggle with backdrop
  */
 
 /**
@@ -38,7 +37,7 @@ export function initHeader(options = {}) {
     });
   }
 
-  // 3. Tombol Layar Penuh (Fullscreen Kiosk Mode)
+  // 3. Tombol Layar Penuh (Fullscreen Kiosk Mode jika ada di DOM)
   const btnFullscreen = document.getElementById('btn-fullscreen');
   const fullscreenText = document.getElementById('fullscreen-text');
   const fullscreenIconSlot = document.getElementById('fullscreen-icon-slot');
@@ -75,53 +74,4 @@ export function initHeader(options = {}) {
 
     document.addEventListener('fullscreenchange', updateFullscreenUI);
   }
-
-  // 4. Mobile Drawer Navigation Toggle
-  const btnMobileMenu = document.getElementById('btn-mobile-menu');
-  const mobileDrawer = document.getElementById('mobile-drawer');
-  const mobileDrawerBackdrop = document.getElementById('mobile-drawer-backdrop');
-  const btnMobileDrawerClose = document.getElementById('btn-mobile-drawer-close');
-
-  function openMobileDrawer() {
-    if (mobileDrawer && mobileDrawerBackdrop) {
-      mobileDrawer.classList.remove('translate-x-full');
-      mobileDrawerBackdrop.classList.remove('hidden');
-      document.body.classList.add('overflow-hidden');
-      if (btnMobileMenu) {
-        btnMobileMenu.setAttribute('aria-expanded', 'true');
-      }
-      if (btnMobileDrawerClose) {
-        btnMobileDrawerClose.focus();
-      }
-    }
-  }
-
-  function closeMobileDrawer() {
-    if (mobileDrawer && mobileDrawerBackdrop) {
-      mobileDrawer.classList.add('translate-x-full');
-      mobileDrawerBackdrop.classList.add('hidden');
-      document.body.classList.remove('overflow-hidden');
-      if (btnMobileMenu) {
-        btnMobileMenu.setAttribute('aria-expanded', 'false');
-        btnMobileMenu.focus();
-      }
-    }
-  }
-
-  if (btnMobileMenu) {
-    btnMobileMenu.addEventListener('click', openMobileDrawer);
-  }
-  if (btnMobileDrawerClose) {
-    btnMobileDrawerClose.addEventListener('click', closeMobileDrawer);
-  }
-  if (mobileDrawerBackdrop) {
-    mobileDrawerBackdrop.addEventListener('click', closeMobileDrawer);
-  }
-
-  // Escape key closes mobile drawer
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeMobileDrawer();
-    }
-  });
 }
