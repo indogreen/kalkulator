@@ -208,7 +208,7 @@ export function getKpiGridHtml({ mode, input, result }) {
   const cards = [kpi1, kpi2, kpi3, kpi4];
 
   return `
-    <div class="grid grid-cols-2 tablet:grid-cols-4 gap-sm" role="region" aria-label="Grid 4 Metrik Kunci Kinerja Sistem (KPI)">
+    <div class="grid grid-cols-1 mobile:grid-cols-2 tablet:grid-cols-4 gap-sm" role="region" aria-label="Grid 4 Metrik Kunci Kinerja Sistem (KPI)">
       ${cards.map(card => `
         <div class="p-sm bg-canvas border border-hairline rounded-sm flex flex-col gap-xxs hover:border-hairline-strong transition-colors">
           <span class="type-caption-xs text-mute font-bold uppercase tracking-wide truncate">

@@ -38,7 +38,7 @@ export function getHeroCardHtml({ mode, input, result }) {
     badgeText = isMinApplied ? 'REKENING MIN. PLN' : 'SWAKONSUMSI OPTIMAL';
     
     mainValueHtml = `
-      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs">
+      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs break-words">
         <span>${formatRupiah(savingsRp)}</span>
         <span class="type-heading-lg text-on-dark-mute font-normal">/ bulan</span>
       </div>
@@ -84,7 +84,7 @@ export function getHeroCardHtml({ mode, input, result }) {
     badgeText = activeScheme?.id === 'opex_ppa' ? 'ZERO CAPEX (Rp 0)' : 'SKEMA AKTIF';
 
     mainValueHtml = `
-      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs">
+      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs break-words">
         <span>${formatRupiah(monthlyNetSavings)}</span>
         <span class="type-heading-lg text-on-dark-mute font-normal">/ bulan</span>
       </div>
@@ -129,7 +129,7 @@ export function getHeroCardHtml({ mode, input, result }) {
     badgeText = 'SEAMLESS UPS (<10MS)';
 
     mainValueHtml = `
-      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs">
+      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs break-words">
         <span>${actualHours} Jam</span>
         <span class="type-heading-lg text-on-dark-mute font-normal">Cadangan Penuh</span>
       </div>
@@ -170,7 +170,7 @@ export function getHeroCardHtml({ mode, input, result }) {
     badgeText = '100% OTONOM SURYA';
 
     mainValueHtml = `
-      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs">
+      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs break-words">
         <span>${formatRupiah(avoidedMonthly)}</span>
         <span class="type-heading-lg text-on-dark-mute font-normal">/ bulan</span>
       </div>
@@ -205,7 +205,7 @@ export function getHeroCardHtml({ mode, input, result }) {
   }
 
   return `
-    <article class="relative bg-surface-dark text-on-dark border border-hairline-strong p-lg rounded-sm flex flex-col gap-md select-none" aria-label="Ringkasan Estimasi Utama Hasil Simulasi">
+    <article class="relative bg-surface-dark text-on-dark border border-hairline-strong p-md tablet:p-lg rounded-sm flex flex-col gap-md select-none" aria-label="Ringkasan Estimasi Utama Hasil Simulasi">
       <!-- Header Strip: Eyebrow & Status Badge -->
       <div class="flex items-center justify-between border-b border-hairline-strong pb-xs pt-xs">
         <span class="type-caption-sm text-accent-yellow font-bold uppercase tracking-wider">

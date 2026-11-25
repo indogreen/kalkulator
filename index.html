@@ -7,7 +7,7 @@
   <meta name="description" content="Simulasi rekayasa dan estimasi penghematan sistem PLTS Atap Residensial, Komersial & Industri, BESS Baterai Cadangan, dan PJU Tenaga Surya PT. Indogreen Technology And Management.">
   <link rel="stylesheet" href="./dist/css/style.css">
 </head>
-<body class="bg-canvas text-body min-h-screen flex flex-col font-sans antialiased">
+<body class="bg-canvas text-body min-h-screen flex flex-col font-sans antialiased overflow-x-hidden">
 
   <!-- 1. Top Utility Bar (32px, Surface Dark) -->
   <header class="bg-surface-dark border-b border-hairline-strong text-on-dark h-utility flex items-center px-lg select-none">
@@ -44,7 +44,7 @@
       
       <!-- Right Action Cluster -->
       <div class="flex items-center gap-sm">
-        <a href="https://wa.me/628139916890?text=Halo%20Tim%20Engineering%20PT.%20Indogreen%2C%20saya%20ingin%20konsultasi%20solusi%20energi%20surya." target="_blank" rel="noopener noreferrer" class="btn-primary type-button-sm">
+        <a href="https://wa.me/628139916890?text=Halo%20Tim%20Engineering%20PT.%20Indogreen%2C%20saya%20ingin%20konsultasi%20solusi%20energi%20surya." target="_blank" rel="noopener noreferrer" class="btn-primary type-button-sm hidden mobile:inline-flex" aria-label="Konsultasi Rekayasa via WhatsApp">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
           </svg>
@@ -52,7 +52,7 @@
         </a>
 
         <!-- Mobile Drawer Hamburger Button -->
-        <button type="button" id="btn-mobile-menu" class="desktop:hidden h-touch w-touch flex items-center justify-center border border-hairline-strong text-on-dark rounded-sm bg-surface-elevated hover:border-primary focus:outline-none" aria-label="Buka Menu Navigasi Mobile">
+        <button type="button" id="btn-mobile-menu" class="desktop:hidden h-touch w-touch flex items-center justify-center border border-hairline-strong text-on-dark rounded-sm bg-surface-elevated hover:border-primary focus:outline-none" aria-label="Buka Menu Navigasi Mobile" aria-expanded="false" aria-controls="mobile-drawer">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <line x1="4" x2="20" y1="12" y2="12"/>
             <line x1="4" x2="20" y1="6" y2="6"/>
@@ -77,10 +77,10 @@
     </div>
 
     <div class="flex flex-col gap-md py-lg flex-1 type-body-strong text-on-dark">
-      <a href="#solusi-ebt" class="py-xs hover:text-primary border-b border-hairline-strong">Solusi EBT</a>
-      <a href="#kalkulator-simulator" class="py-xs text-primary border-b border-hairline-strong">Kalkulator Simulator</a>
-      <a href="#tentang-kami" class="py-xs hover:text-primary border-b border-hairline-strong">Tentang Kami</a>
-      <a href="#kontak" class="py-xs hover:text-primary border-b border-hairline-strong">Kontak Engineering</a>
+      <a href="#solusi-ebt" class="min-h-touch flex items-center py-xs hover:text-primary border-b border-hairline-strong">Solusi EBT</a>
+      <a href="#kalkulator-simulator" class="min-h-touch flex items-center py-xs text-primary border-b border-hairline-strong">Kalkulator Simulator</a>
+      <a href="#tentang-kami" class="min-h-touch flex items-center py-xs hover:text-primary border-b border-hairline-strong">Tentang Kami</a>
+      <a href="#kontak" class="min-h-touch flex items-center py-xs hover:text-primary border-b border-hairline-strong">Kontak Engineering</a>
     </div>
 
     <div class="border-t border-hairline-strong pt-md flex flex-col gap-sm">
@@ -119,7 +119,7 @@
         <!-- Bilah Aksi Cepat (Quick Action Bar) -->
         <div class="flex flex-wrap items-center gap-sm pt-sm">
           <!-- Tombol Reset Simulasi -->
-          <button type="button" id="btn-reset" class="btn-outline-on-dark type-button-sm gap-xs" aria-label="Reset parameter formulir ke nilai awal">
+          <button type="button" id="btn-reset" class="btn-outline-on-dark type-button-sm gap-xs w-full mobile:w-auto justify-center" aria-label="Reset parameter formulir ke nilai awal">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
               <path d="M3 3v5h5"/>
@@ -128,7 +128,7 @@
           </button>
 
           <!-- Tombol Barcode Sales -->
-          <button type="button" id="btn-qr" class="btn-outline-on-dark type-button-sm gap-xs" aria-label="Buka Barcode QR Code untuk Sales Kiosk">
+          <button type="button" id="btn-qr" class="btn-outline-on-dark type-button-sm gap-xs w-full mobile:w-auto justify-center" aria-label="Buka Barcode QR Code untuk Sales Kiosk">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <rect width="5" height="5" x="3" y="3" rx="1"/>
               <rect width="5" height="5" x="16" y="3" rx="1"/>
@@ -147,7 +147,7 @@
           </button>
 
           <!-- Tombol Layar Penuh (Kiosk Booth Mode) -->
-          <button type="button" id="btn-fullscreen" class="btn-outline-on-dark type-button-sm gap-xs" aria-label="Beralih ke mode layar penuh untuk presentasi">
+          <button type="button" id="btn-fullscreen" class="btn-outline-on-dark type-button-sm gap-xs w-full mobile:w-auto justify-center" aria-label="Beralih ke mode layar penuh untuk presentasi">
             <span id="fullscreen-icon-slot" class="text-primary">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <polyline points="15 3 21 3 21 9"/>
@@ -175,16 +175,16 @@
       </div>
 
       <div class="flex flex-wrap items-center gap-xs" role="tablist" aria-label="Mode Simulasi Kalkulator Energi">
-        <button type="button" class="pill-tab active" role="tab" aria-selected="true" data-mode="residential" id="tab-residential" aria-controls="panel-residential">
+        <button type="button" class="pill-tab active w-full mobile:w-auto text-center justify-center" role="tab" aria-selected="true" data-mode="residential" id="tab-residential" aria-controls="panel-simulator">
           PLTS Atap Residensial
         </button>
-        <button type="button" class="pill-tab" role="tab" aria-selected="false" data-mode="commercial" id="tab-commercial" aria-controls="panel-commercial">
+        <button type="button" class="pill-tab w-full mobile:w-auto text-center justify-center" role="tab" aria-selected="false" data-mode="commercial" id="tab-commercial" aria-controls="panel-simulator">
           PLTS Bisnis & Industri
         </button>
-        <button type="button" class="pill-tab" role="tab" aria-selected="false" data-mode="battery" id="tab-battery" aria-controls="panel-battery">
+        <button type="button" class="pill-tab w-full mobile:w-auto text-center justify-center" role="tab" aria-selected="false" data-mode="battery" id="tab-battery" aria-controls="panel-simulator">
           Baterai Cadangan (BESS)
         </button>
-        <button type="button" class="pill-tab" role="tab" aria-selected="false" data-mode="pjuts" id="tab-pjuts" aria-controls="panel-pjuts">
+        <button type="button" class="pill-tab w-full mobile:w-auto text-center justify-center" role="tab" aria-selected="false" data-mode="pjuts" id="tab-pjuts" aria-controls="panel-simulator">
           Penerangan Jalan (PJUTS)
         </button>
       </div>
@@ -195,7 +195,7 @@
       
       <!-- Panel Sisi Kiri: Form Input Parameter (5 Kolom di Desktop) -->
       <section class="desktop:col-span-5 flex flex-col gap-md" aria-labelledby="form-section-title">
-        <div id="form-container" class="relative border border-hairline bg-canvas p-lg rounded-sm flex flex-col gap-md">
+        <div id="form-container" class="relative border border-hairline bg-canvas p-md tablet:p-lg rounded-sm flex flex-col gap-md" role="tabpanel" id="panel-simulator" aria-labelledby="tab-residential">
 
 
           <!-- Form Header Strip -->
@@ -226,7 +226,7 @@
       <!-- Panel Sisi Kanan: Hasil Kalkulasi & Visualisasi (7 Kolom di Desktop) -->
       <section class="desktop:col-span-7 flex flex-col gap-md" aria-labelledby="results-section-title">
         <h2 id="results-section-title" class="sr-only">Hasil Kalkulasi dan Visualisasi Sistem Surya</h2>
-        <div id="results-container" class="flex flex-col gap-md">
+        <div id="results-container" class="flex flex-col gap-md" aria-live="polite">
           
           <!-- Hero Result Card Placeholder (Kanvas Hitam CAD) -->
           <div class="relative bg-surface-dark text-on-dark border border-hairline-strong p-lg rounded-sm flex flex-col gap-md">
@@ -325,7 +325,7 @@
   </main>
 
   <!-- 5. Barcode Sales Modal Dialog (Native Accessible HTML5 Dialog) -->
-  <dialog id="modal-qr-dialog" class="backdrop:bg-ink/80 backdrop:backdrop-blur-xs bg-surface-dark text-on-dark border border-hairline-strong rounded-sm p-xl max-w-md w-full select-none" aria-labelledby="modal-qr-title">
+  <dialog id="modal-qr-dialog" class="backdrop:bg-ink/80 backdrop:backdrop-blur-xs bg-surface-dark text-on-dark border border-hairline-strong rounded-sm p-lg tablet:p-xl max-w-md w-full select-none" role="dialog" aria-modal="true" aria-labelledby="modal-qr-title" aria-describedby="modal-qr-desc">
     <div class="flex flex-col gap-md">
       <div class="flex items-center justify-between border-b border-hairline-strong pb-sm">
         <div class="flex items-center gap-xs">
@@ -333,7 +333,7 @@
             Barcode Sales Konsultasi
           </h3>
         </div>
-        <button type="button" id="btn-modal-close" class="h-touch w-touch flex items-center justify-center border border-hairline-strong text-on-dark rounded-sm hover:border-primary" aria-label="Tutup Dialog Modal">
+        <button type="button" id="btn-modal-close" class="h-touch w-touch flex items-center justify-center border border-hairline-strong text-on-dark rounded-sm hover:border-primary focus:border-primary" aria-label="Tutup Dialog Modal">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <path d="M18 6 6 18"/>
             <path d="m6 6 12 12"/>
@@ -342,7 +342,7 @@
       </div>
 
       <div class="flex flex-col items-center justify-center p-md bg-canvas rounded-sm border border-hairline">
-        <div id="qr-code-svg-slot" class="flex items-center justify-center w-64 h-64">
+        <div id="qr-code-svg-slot" class="flex items-center justify-center w-64 h-64" aria-label="Pratinjau Kode Barcode QR WhatsApp">
           <!-- Placeholder SVG QR Code yang diinjeksi via JavaScript -->
           <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-mute animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
@@ -352,12 +352,12 @@
         </div>
       </div>
 
-      <p class="type-body-sm text-on-dark-mute text-center">
+      <p id="modal-qr-desc" class="type-body-sm text-on-dark-mute text-center">
         Pindai kode QR di atas menggunakan kamera ponsel atau WhatsApp untuk membuka ringkasan teknis simulasi ini secara langsung.
       </p>
 
       <div class="flex items-center justify-end border-t border-hairline-strong pt-sm">
-        <button type="button" onclick="document.getElementById('modal-qr-dialog').close()" class="btn-outline-on-dark type-button-sm">
+        <button type="button" id="btn-modal-close-bottom" onclick="document.getElementById('modal-qr-dialog').close()" class="btn-outline-on-dark type-button-sm min-h-touch" aria-label="Tutup Dialog Modal">
           <span>Tutup</span>
         </button>
       </div>

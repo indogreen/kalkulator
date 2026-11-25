@@ -14,9 +14,11 @@ import { generateQrSvg } from '../utils/qrcode.js';
 
 let dialogElement = null;
 let closeButtonElement = null;
+let closeBottomButtonElement = null;
 let qrSlotElement = null;
 let currentPayloadUrl = '';
 let currentBoundDialog = null;
+let previousActiveElement = null;
 
 /**
  * Inisialisasi modal dialog QR Code Barcode Sales
@@ -39,6 +41,10 @@ export function initModalQr(options = {}) {
     ? options.closeButton
     : (typeof document !== 'undefined' ? document.getElementById(closeBtnId) : null);
 
+  closeBottomButtonElement = typeof document !== 'undefined'
+    ? document.getElementById('btn-modal-close-bottom')
+    : null;
+
   qrSlotElement = typeof options.qrSlot === 'object' && options.qrSlot !== null
     ? options.qrSlot
     : (typeof document !== 'undefined' ? document.getElementById(qrSlotId) : null);
@@ -56,9 +62,15 @@ export function initModalQr(options = {}) {
   if (currentBoundDialog !== dialogElement) {
     currentBoundDialog = dialogElement;
 
-    // 1. Tombol Tutup (X)
+    // 1. Tombol Tutup (X) & Tombol Tutup Bawah
     if (closeButtonElement) {
       closeButtonElement.addEventListener('click', () => {
+        closeModalQr();
+      });
+    }
+
+    if (closeBottomButtonElement) {
+      closeBottomButtonElement.addEventListener('click', () => {
         closeModalQr();
       });
     }
@@ -136,6 +148,10 @@ export function updateModalQrSvg(payloadUrl) {
  * @param {string} [payloadUrl] - URL WhatsApp opsional jika ingin langsung diperbarui
  */
 export function openModalQr(payloadUrl) {
+  if (typeof document !== 'undefined') {
+    previousActiveElement = document.activeElement;
+  }
+
   if (payloadUrl) {
     updateModalQrSvg(payloadUrl);
   } else if (!qrSlotElement?.querySelector('svg') && currentPayloadUrl) {
@@ -149,6 +165,9 @@ export function openModalQr(payloadUrl) {
   if (dialogElement && typeof dialogElement.showModal === 'function') {
     if (!dialogElement.open) {
       dialogElement.showModal();
+      if (closeButtonElement && typeof closeButtonElement.focus === 'function') {
+        closeButtonElement.focus();
+      }
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('app:modal-qr-opened', {
           detail: { payloadUrl: currentPayloadUrl }
@@ -169,6 +188,11 @@ export function closeModalQr() {
   if (dialogElement && typeof dialogElement.close === 'function') {
     if (dialogElement.open) {
       dialogElement.close();
+      if (previousActiveElement && typeof previousActiveElement.focus === 'function') {
+        try {
+          previousActiveElement.focus();
+        } catch (_) {}
+      }
       if (typeof window !== 'undefined') {
         window.dispatchEvent(new CustomEvent('app:modal-qr-closed'));
       }

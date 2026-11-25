@@ -41,14 +41,14 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
       <!-- 1. Jumlah Titik Tiang Lampu -->
       <div class="flex flex-col gap-xs">
         <div class="flex items-center justify-between">
-          <label for="input-pjuts-pole-count" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+          <label for="input-pjuts-pole-count" id="label-pjuts-pole" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
             1. Jumlah Titik Tiang Lampu Jalan
           </label>
-          <span id="display-pole-count" class="type-caption-sm font-bold text-primary">
+          <span id="display-pole-count" class="type-caption-sm font-bold text-primary-dark">
             ${current.poleCount} Titik Tiang
           </span>
         </div>
-        <p class="type-caption-xs text-mute">
+        <p id="desc-pjuts-pole" class="type-caption-xs text-mute">
           Masukkan total titik tiang lampu penerangan jalan yang direncanakan:
         </p>
 
@@ -61,22 +61,25 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
             step="1"
             value="${current.poleCount}" 
             placeholder="10"
+            aria-describedby="desc-pjuts-pole"
             class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-bold type-body-md rounded-sm focus:border-2 focus:border-primary focus:outline-none">
           <span class="absolute right-md text-mute font-bold type-body-md pointer-events-none select-none">Tiang</span>
         </div>
 
-        <!-- Quick Pole Chips -->
-        <div class="flex flex-wrap items-center gap-xs pt-xxs">
+        <!-- Quick Pole Chips (44px min touch target) -->
+        <div class="flex flex-wrap items-center gap-xs pt-xxs" role="group" aria-label="Preset cepat jumlah tiang lampu jalan">
           ${PJUTS_POLE_CHIPS.map(count => {
             const isChipActive = current.poleCount === count;
             return `
               <button type="button" 
-                class="btn-pole-chip px-sm py-xxs border rounded-sm type-caption-xs font-bold transition-all ${
+                class="btn-pole-chip min-h-touch min-w-[44px] px-sm py-xs border rounded-sm type-caption-xs font-bold transition-all select-none ${
                   isChipActive 
                     ? 'border-2 border-primary bg-primary text-on-primary' 
                     : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
                 }" 
-                data-poles="${count}">
+                data-poles="${count}"
+                aria-pressed="${isChipActive ? 'true' : 'false'}"
+                aria-label="Pilih ${count} Tiang">
                 ${count} Tiang
               </button>
             `;
@@ -86,14 +89,14 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
 
       <!-- 2. Daya Lampu LED (Watt) -->
       <div class="flex flex-col gap-xs">
-        <label class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+        <label id="label-pjuts-watt" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
           2. Daya Lampu LED PJU (Watt)
         </label>
         <p class="type-caption-xs text-mute">
           Pilih rating lumen efisiensi tinggi lampu LED jalan standar SNI:
         </p>
 
-        <div class="grid grid-cols-4 tablet:grid-cols-8 gap-xs pt-xxs">
+        <div class="grid grid-cols-4 tablet:grid-cols-8 gap-xs pt-xxs" role="group" aria-labelledby="label-pjuts-watt">
           ${PJUTS_WATT_OPTIONS.map(watt => {
             const isActive = current.lampWattage === watt;
             return `
@@ -103,7 +106,9 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
                     ? 'border-2 border-primary bg-ink text-on-dark font-bold' 
                     : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
                 }" 
-                data-watt="${watt}">
+                data-watt="${watt}"
+                aria-pressed="${isActive ? 'true' : 'false'}"
+                aria-label="Pilih daya lampu ${watt} Watt">
                 ${watt}W
               </button>
             `;
@@ -123,26 +128,27 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
           </p>
         </div>
 
-        <label class="relative inline-flex items-center cursor-pointer">
+        <label class="relative min-h-touch min-w-touch inline-flex items-center justify-center cursor-pointer p-1">
           <input type="checkbox" 
             id="toggle-smart-dimming" 
             name="smartDimming" 
             class="sr-only peer" 
+            aria-label="Aktifkan Fitur Smart Dimming Otomatis"
             ${current.smartDimming ? 'checked' : ''}>
-          <div class="w-12 h-6 bg-hairline peer-focus:outline-none rounded-sm peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-hairline after:border after:rounded-sm after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+          <div class="w-12 h-6 bg-hairline peer-focus:outline-none rounded-sm peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[13px] after:left-[7px] after:bg-white after:border-hairline after:border after:rounded-sm after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
         </label>
       </div>
 
       <!-- 4. Hari Otonomi Cuaca Mendung / Hujan -->
       <div class="flex flex-col gap-xs">
-        <label class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+        <label id="label-pjuts-autonomy" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
           4. Cadangan Hari Otonomi (Cuaca Hujan/Mendung)
         </label>
         <p class="type-caption-xs text-mute">
           Menjamin lampu jalan tetap menyala normal saat matahari tertutup awan berturut-turut:
         </p>
 
-        <div class="grid grid-cols-3 gap-xs pt-xxs">
+        <div class="grid grid-cols-3 gap-xs pt-xxs" role="group" aria-labelledby="label-pjuts-autonomy">
           ${PJUTS_AUTONOMY_OPTIONS.map(days => {
             const isActive = current.autonomyDays === days;
             return `
@@ -152,8 +158,10 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
                     ? 'border-2 border-primary bg-ink text-on-dark font-bold' 
                     : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
                 }" 
-                data-days="${days}">
-                ${days} Hari Otonomi
+                data-days="${days}"
+                aria-pressed="${isActive ? 'true' : 'false'}"
+                aria-label="Cadangan ${days} Hari Otonomi">
+                ${days} Hari <span class="hidden mobile:inline">Otonomi</span>
               </button>
             `;
           }).join('')}
@@ -176,6 +184,7 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
               max="16" 
               value="${current.nightHours}" 
               placeholder="12"
+              aria-label="Durasi Nyala Lampu per Malam dalam jam"
               class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-bold type-body-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
             <span class="absolute right-md text-mute font-bold type-body-sm pointer-events-none">Jam/Malam</span>
           </div>
@@ -188,6 +197,7 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
           </label>
           <select id="select-pjuts-region" 
             name="region" 
+            aria-label="Pilih Wilayah Lokasi Pemasangan PJUTS"
             class="h-touch border border-hairline bg-canvas px-md py-input-y text-ink font-bold type-body-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
             ${Object.values(REGIONS_PSH).map(reg => `
               <option value="${reg.id}" ${current.region === reg.id ? 'selected' : ''}>
@@ -225,9 +235,11 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
     container.querySelectorAll('.btn-pole-chip').forEach(chip => {
       const chipVal = Number(chip.getAttribute('data-poles'));
       if (chipVal === num) {
-        chip.className = 'btn-pole-chip px-sm py-xxs border-2 border-primary bg-primary text-on-primary rounded-sm type-caption-xs font-bold transition-all';
+        chip.className = 'btn-pole-chip min-h-touch min-w-[44px] px-sm py-xs border-2 border-primary bg-primary text-on-primary rounded-sm type-caption-xs font-bold transition-all select-none';
+        chip.setAttribute('aria-pressed', 'true');
       } else {
-        chip.className = 'btn-pole-chip px-sm py-xxs border border-hairline bg-surface-soft text-ink rounded-sm type-caption-xs font-bold transition-all hover:border-hairline-strong';
+        chip.className = 'btn-pole-chip min-h-touch min-w-[44px] px-sm py-xs border border-hairline bg-surface-soft text-ink rounded-sm type-caption-xs font-bold transition-all select-none hover:border-hairline-strong';
+        chip.setAttribute('aria-pressed', 'false');
       }
     });
     emitChange();
@@ -251,8 +263,10 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
       current.lampWattage = w;
       container.querySelectorAll('.btn-watt-preset').forEach(b => {
         b.className = 'btn-watt-preset h-touch border border-hairline bg-surface-soft text-ink rounded-sm type-button-sm transition-all select-none hover:border-hairline-strong';
+        b.setAttribute('aria-pressed', 'false');
       });
       btn.className = 'btn-watt-preset h-touch border-2 border-primary bg-ink text-on-dark font-bold rounded-sm type-button-sm transition-all select-none';
+      btn.setAttribute('aria-pressed', 'true');
       emitChange();
     });
   });
@@ -272,8 +286,10 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
       current.autonomyDays = days;
       container.querySelectorAll('.btn-autonomy-preset').forEach(b => {
         b.className = 'btn-autonomy-preset h-touch border border-hairline bg-surface-soft text-ink rounded-sm type-button-sm transition-all select-none hover:border-hairline-strong';
+        b.setAttribute('aria-pressed', 'false');
       });
       btn.className = 'btn-autonomy-preset h-touch border-2 border-primary bg-ink text-on-dark font-bold rounded-sm type-button-sm transition-all select-none';
+      btn.setAttribute('aria-pressed', 'true');
       emitChange();
     });
   });

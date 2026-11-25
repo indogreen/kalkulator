@@ -157,6 +157,12 @@ export function mountActiveForm() {
     badgeMode.textContent = labels[mode] || mode.toUpperCase();
   }
 
+  // Update tabpanel accessible label
+  const formContainer = document.getElementById('form-container');
+  if (formContainer) {
+    formContainer.setAttribute('aria-labelledby', `tab-${mode}`);
+  }
+
   // Callback debounced state updater
   const handleFormChange = (updatedState) => {
     appState.modes[mode] = updatedState;

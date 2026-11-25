@@ -33,6 +33,11 @@ export function setActiveTab(mode) {
       tab.setAttribute('tabindex', '-1');
     }
   });
+
+  const tabpanel = document.querySelector('[role="tabpanel"]');
+  if (tabpanel) {
+    tabpanel.setAttribute('aria-labelledby', `tab-${mode}`);
+  }
 }
 
 /**

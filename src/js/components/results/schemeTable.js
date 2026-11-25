@@ -42,7 +42,10 @@ export function getSchemeTableHtml({ mode, input, result }) {
 
       <!-- Responsive Table Container -->
       <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse border border-hairline type-body-sm" role="table">
+        <div class="tablet:hidden pb-xs">
+          <span class="type-caption-xs text-mute font-bold">Geser tabel ke samping untuk melihat seluruh kolom &rarr;</span>
+        </div>
+        <table class="w-full min-w-[560px] text-left border-collapse border border-hairline type-body-sm" role="table">
           <thead>
             <tr class="bg-surface-soft border-b border-hairline">
               <th scope="col" class="p-sm type-caption-xs text-mute font-bold uppercase w-1/4 border-r border-hairline">

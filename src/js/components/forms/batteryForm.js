@@ -44,21 +44,23 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
       
       <!-- 1. Pilihan Sektor Kebutuhan -->
       <div class="flex flex-col gap-xs">
-        <label class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+        <label id="label-bat-sector" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
           1. Sektor Kebutuhan Fasilitas
         </label>
         <p class="type-caption-xs text-mute">
           Pilih kategori lokasi pemasangan sistem baterai cadangan:
         </p>
 
-        <div class="grid grid-cols-2 gap-xs pt-xxs">
+        <div class="grid grid-cols-2 gap-xs pt-xxs" role="group" aria-labelledby="label-bat-sector">
           <button type="button" 
             class="btn-sector h-touch border rounded-sm type-button-sm transition-all select-none ${
               current.sector === 'residential' 
                 ? 'border-2 border-primary bg-ink text-on-dark font-bold' 
                 : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
             }" 
-            data-sector="residential">
+            data-sector="residential"
+            aria-pressed="${current.sector === 'residential' ? 'true' : 'false'}"
+            aria-label="Pilih Sektor Rumah Tangga">
             Rumah Tangga
           </button>
           <button type="button" 
@@ -67,7 +69,9 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
                 ? 'border-2 border-primary bg-ink text-on-dark font-bold' 
                 : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
             }" 
-            data-sector="commercial">
+            data-sector="commercial"
+            aria-pressed="${current.sector === 'commercial' ? 'true' : 'false'}"
+            aria-label="Pilih Sektor Bisnis dan Industri">
             Bisnis & Industri
           </button>
         </div>
@@ -76,14 +80,14 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
       <!-- 2. Daya Beban Kritis (kW) -->
       <div class="flex flex-col gap-xs">
         <div class="flex items-center justify-between">
-          <label for="input-bat-critical-load" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+          <label for="input-bat-critical-load" id="label-bat-load" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
             2. Daya Beban Kritis yang Dibackup
           </label>
-          <span id="display-critical-load" class="type-caption-sm font-bold text-primary">
+          <span id="display-critical-load" class="type-caption-sm font-bold text-primary-dark">
             ${current.criticalLoadKw.toFixed(2)} kW
           </span>
         </div>
-        <p class="type-caption-xs text-mute">
+        <p id="desc-bat-load" class="type-caption-xs text-mute">
           Total daya peralatan esensial yang wajib terus menyala saat listrik PLN padam (AC, lemari pendingin, server, pompa, lampu):
         </p>
 
@@ -96,6 +100,7 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
             step="0.5"
             value="${current.criticalLoadKw}" 
             placeholder="2.0"
+            aria-describedby="desc-bat-load"
             class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-bold type-body-md rounded-sm focus:border-2 focus:border-primary focus:outline-none">
           <span class="absolute right-md text-mute font-bold type-body-md pointer-events-none select-none">kW</span>
         </div>
@@ -108,21 +113,28 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
             max="25" 
             step="0.5" 
             value="${current.criticalLoadKw}" 
+            aria-label="Slider Daya Beban Kritis (kW)"
+            aria-valuemin="0.5"
+            aria-valuemax="25"
+            aria-valuenow="${current.criticalLoadKw}"
+            aria-valuetext="${current.criticalLoadKw.toFixed(1)} kW"
             class="w-full accent-primary h-2 bg-surface-soft rounded-sm cursor-pointer">
         </div>
 
-        <!-- Quick Load Chips -->
-        <div class="flex flex-wrap items-center gap-xs pt-xxs">
+        <!-- Quick Load Chips (44px min touch target) -->
+        <div class="flex flex-wrap items-center gap-xs pt-xxs" role="group" aria-label="Preset cepat daya beban kritis">
           ${BATTERY_LOAD_CHIPS.map(chip => {
             const isChipActive = Math.abs(current.criticalLoadKw - chip.value) < 0.05;
             return `
               <button type="button" 
-                class="btn-load-chip px-sm py-xxs border rounded-sm type-caption-xs font-bold transition-all ${
+                class="btn-load-chip min-h-touch min-w-[44px] px-sm py-xs border rounded-sm type-caption-xs font-bold transition-all select-none ${
                   isChipActive 
                     ? 'border-2 border-primary bg-primary text-on-primary' 
                     : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
                 }" 
-                data-load="${chip.value}">
+                data-load="${chip.value}"
+                aria-pressed="${isChipActive ? 'true' : 'false'}"
+                aria-label="Preset beban ${chip.label}">
                 ${chip.label}
               </button>
             `;
@@ -132,14 +144,14 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
 
       <!-- 3. Durasi Cadangan Padam (Jam) -->
       <div class="flex flex-col gap-xs">
-        <label class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+        <label id="label-bat-hours" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
           3. Durasi Cadangan Darurat (Jam Backup)
         </label>
         <p class="type-caption-xs text-mute">
           Berapa jam sistem baterai LiFePO4 diharapkan menopang beban kritis tanpa pasokan PLN:
         </p>
 
-        <div class="grid grid-cols-5 gap-xs pt-xxs">
+        <div class="grid grid-cols-3 mobile:grid-cols-5 gap-xs pt-xxs" role="group" aria-labelledby="label-bat-hours">
           ${BATTERY_DURATION_PRESETS.map(hrs => {
             const isActive = current.backupHours === hrs;
             return `
@@ -149,7 +161,9 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
                     ? 'border-2 border-primary bg-ink text-on-dark font-bold' 
                     : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
                 }" 
-                data-hours="${hrs}">
+                data-hours="${hrs}"
+                aria-pressed="${isActive ? 'true' : 'false'}"
+                aria-label="Pilih cadangan ${hrs} Jam">
                 ${hrs} Jam
               </button>
             `;
@@ -169,13 +183,14 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
           </p>
         </div>
 
-        <label class="relative inline-flex items-center cursor-pointer">
+        <label class="relative min-h-touch min-w-touch inline-flex items-center justify-center cursor-pointer p-1">
           <input type="checkbox" 
             id="toggle-solar-charger" 
             name="includeSolarCharger" 
             class="sr-only peer" 
+            aria-label="Integrasi Pengisian Solar PV Charger"
             ${current.includeSolarCharger ? 'checked' : ''}>
-          <div class="w-12 h-6 bg-hairline peer-focus:outline-none rounded-sm peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-hairline after:border after:rounded-sm after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+          <div class="w-12 h-6 bg-hairline peer-focus:outline-none rounded-sm peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[13px] after:left-[7px] after:bg-white after:border-hairline after:border after:rounded-sm after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
         </label>
       </div>
 
@@ -190,6 +205,7 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
 
         <select id="select-bat-region" 
           name="region" 
+          aria-label="Pilih Wilayah Lokasi Pemasangan BESS"
           class="h-touch border border-hairline bg-canvas px-md py-input-y text-ink font-bold type-body-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
           ${Object.values(REGIONS_PSH).map(reg => `
             <option value="${reg.id}" ${current.region === reg.id ? 'selected' : ''}>
@@ -223,8 +239,10 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
       current.sector = sec;
       container.querySelectorAll('.btn-sector').forEach(b => {
         b.className = 'btn-sector h-touch border border-hairline bg-surface-soft text-ink rounded-sm type-button-sm transition-all select-none hover:border-hairline-strong';
+        b.setAttribute('aria-pressed', 'false');
       });
       btn.className = 'btn-sector h-touch border-2 border-primary bg-ink text-on-dark font-bold rounded-sm type-button-sm transition-all select-none';
+      btn.setAttribute('aria-pressed', 'true');
       emitChange();
     });
   });
@@ -234,15 +252,21 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
     const num = Math.max(0.5, Number(val) || 0.5);
     current.criticalLoadKw = num;
     if (loadInput) loadInput.value = num;
-    if (loadRange) loadRange.value = num;
+    if (loadRange) {
+      loadRange.value = num;
+      loadRange.setAttribute('aria-valuenow', num);
+      loadRange.setAttribute('aria-valuetext', `${num.toFixed(1)} kW`);
+    }
     if (displayLoad) displayLoad.textContent = `${num.toFixed(2)} kW`;
 
     container.querySelectorAll('.btn-load-chip').forEach(chip => {
       const chipVal = Number(chip.getAttribute('data-load'));
       if (Math.abs(chipVal - num) < 0.05) {
-        chip.className = 'btn-load-chip px-sm py-xxs border-2 border-primary bg-primary text-on-primary rounded-sm type-caption-xs font-bold transition-all';
+        chip.className = 'btn-load-chip min-h-touch min-w-[44px] px-sm py-xs border-2 border-primary bg-primary text-on-primary rounded-sm type-caption-xs font-bold transition-all select-none';
+        chip.setAttribute('aria-pressed', 'true');
       } else {
-        chip.className = 'btn-load-chip px-sm py-xxs border border-hairline bg-surface-soft text-ink rounded-sm type-caption-xs font-bold transition-all hover:border-hairline-strong';
+        chip.className = 'btn-load-chip min-h-touch min-w-[44px] px-sm py-xs border border-hairline bg-surface-soft text-ink rounded-sm type-caption-xs font-bold transition-all select-none hover:border-hairline-strong';
+        chip.setAttribute('aria-pressed', 'false');
       }
     });
     emitChange();
@@ -269,8 +293,10 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
       current.backupHours = hrs;
       container.querySelectorAll('.btn-duration-preset').forEach(b => {
         b.className = 'btn-duration-preset h-touch border border-hairline bg-surface-soft text-ink rounded-sm type-button-sm transition-all select-none hover:border-hairline-strong';
+        b.setAttribute('aria-pressed', 'false');
       });
       btn.className = 'btn-duration-preset h-touch border-2 border-primary bg-ink text-on-dark font-bold rounded-sm type-button-sm transition-all select-none';
+      btn.setAttribute('aria-pressed', 'true');
       emitChange();
     });
   });

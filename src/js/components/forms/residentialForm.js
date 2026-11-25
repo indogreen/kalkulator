@@ -46,18 +46,18 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
       <!-- 1. Preset Daya Listrik PLN (VA) -->
       <div class="flex flex-col gap-xs">
         <div class="flex items-center justify-between">
-          <label class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+          <label id="label-res-power" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
             1. Daya Listrik PLN Terpasang
           </label>
-          <span id="display-power-va" class="type-caption-sm font-bold text-primary">
+          <span id="display-power-va" class="type-caption-sm font-bold text-primary-dark">
             ${current.powerVa.toLocaleString('id-ID')} VA
           </span>
         </div>
-        <p class="type-caption-xs text-mute">
+        <p id="desc-res-power" class="type-caption-xs text-mute">
           Pilih batas daya sambungan meteran PLN di rumah Anda:
         </p>
 
-        <div class="grid grid-cols-3 tablet:grid-cols-5 gap-xs pt-xxs">
+        <div class="grid grid-cols-3 tablet:grid-cols-5 gap-xs pt-xxs" role="group" aria-labelledby="label-res-power">
           ${RESIDENTIAL_POWER_PRESETS.map(va => {
             const isActive = current.powerVa === va;
             return `
@@ -67,7 +67,9 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
                     ? 'border-2 border-primary bg-ink text-on-dark font-bold' 
                     : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
                 }" 
-                data-va="${va}">
+                data-va="${va}"
+                aria-pressed="${isActive ? 'true' : 'false'}"
+                aria-label="Pilih daya ${va.toLocaleString('id-ID')} VA">
                 ${va.toLocaleString('id-ID')} VA
               </button>
             `;
@@ -77,10 +79,10 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
 
       <!-- 2. Nominal Tagihan Listrik Bulanan (Rp) -->
       <div class="flex flex-col gap-xs">
-        <label for="input-res-monthly-bill" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+        <label for="input-res-monthly-bill" id="label-res-bill" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
           2. Rata-Rata Tagihan Listrik per Bulan (Rp)
         </label>
-        <p class="type-caption-xs text-mute">
+        <p id="desc-res-monthly-bill" class="type-caption-xs text-mute">
           Masukkan nominal rata-rata tagihan rekening listrik PLN setiap bulan:
         </p>
 
@@ -93,21 +95,24 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
             step="50000"
             value="${current.monthlyBill}" 
             placeholder="Contoh: 1.500.000"
+            aria-describedby="desc-res-monthly-bill"
             class="h-touch w-full border border-hairline bg-canvas pl-xxl pr-md py-input-y text-ink font-bold type-body-md rounded-sm focus:border-2 focus:border-primary focus:outline-none">
         </div>
 
-        <!-- Quick Chips Preset -->
-        <div class="flex flex-wrap items-center gap-xs pt-xxs">
+        <!-- Quick Chips Preset (44px min touch target) -->
+        <div class="flex flex-wrap items-center gap-xs pt-xxs" role="group" aria-label="Preset cepat tagihan listrik bulanan">
           ${RESIDENTIAL_BILL_CHIPS.map(chip => {
             const isChipActive = current.monthlyBill === chip.value;
             return `
               <button type="button" 
-                class="btn-bill-chip px-sm py-xxs border rounded-sm type-caption-xs font-bold transition-all ${
+                class="btn-bill-chip min-h-touch min-w-[44px] px-sm py-xs border rounded-sm type-caption-xs font-bold transition-all select-none ${
                   isChipActive 
                     ? 'border-2 border-primary bg-primary text-on-primary' 
                     : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
                 }" 
-                data-bill="${chip.value}">
+                data-bill="${chip.value}"
+                aria-pressed="${isChipActive ? 'true' : 'false'}"
+                aria-label="Preset tagihan ${chip.label}">
                 ${chip.label}
               </button>
             `;
@@ -117,14 +122,14 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
 
       <!-- 3. Pola Konsumsi Siang Hari (Radio Cards) -->
       <div class="flex flex-col gap-xs">
-        <label class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+        <label id="label-res-daytime" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
           3. Pola Aktivitas Penggunaan Listrik Siang Hari
         </label>
         <p class="type-caption-xs text-mute">
           Berdasarkan Permen ESDM No. 2/2024, listrik surya dioptimalkan untuk swakonsumsi langsung:
         </p>
 
-        <div class="grid grid-cols-1 tablet:grid-cols-3 gap-xs pt-xxs">
+        <div class="grid grid-cols-1 tablet:grid-cols-3 gap-xs pt-xxs" role="radiogroup" aria-labelledby="label-res-daytime">
           ${Object.values(DAYTIME_ACTIVITY_PATTERNS).map(pattern => {
             const isSelected = current.daytimeActivity === pattern.id;
             return `
@@ -136,9 +141,11 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
                 <div class="flex items-center justify-between">
                   <span class="type-caption-sm font-bold text-ink">${pattern.label}</span>
                   <input type="radio" 
+                    id="radio-daytime-${pattern.id}"
                     name="daytimeActivity" 
                     value="${pattern.id}" 
-                    class="accent-primary" 
+                    class="accent-primary h-4 w-4" 
+                    aria-label="${pattern.label}: ${pattern.description}"
                     ${isSelected ? 'checked' : ''}>
                 </div>
                 <span class="type-caption-xs text-mute">${pattern.description}</span>
@@ -150,14 +157,14 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
 
       <!-- 4. Opsi Baterai Cadangan Hybrid LiFePO4 -->
       <div class="flex flex-col gap-xs">
-        <label class="type-caption-sm font-bold text-ink uppercase tracking-wider">
+        <label id="label-res-battery" class="type-caption-sm font-bold text-ink uppercase tracking-wider">
           4. Opsi Penyimpanan Baterai Hybrid (LiFePO4)
         </label>
         <p class="type-caption-xs text-mute">
           Menyimpan kelebihan daya surya untuk malam hari dan menjaga listrik tetap menyala saat PLN padam:
         </p>
 
-        <div class="grid grid-cols-1 gap-xs pt-xxs">
+        <div class="grid grid-cols-1 gap-xs pt-xxs" role="radiogroup" aria-labelledby="label-res-battery">
           ${Object.values(BATTERY_HYBRID_OPTIONS).map(opt => {
             const isSelected = current.batteryOption === opt.id;
             return `
@@ -174,9 +181,11 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
                   <span class="type-caption-xs text-mute">${opt.description}</span>
                 </div>
                 <input type="radio" 
+                  id="radio-battery-${opt.id}"
                   name="batteryOption" 
                   value="${opt.id}" 
                   class="accent-primary h-4 w-4" 
+                  aria-label="${opt.label}: ${opt.description}"
                   ${isSelected ? 'checked' : ''}>
               </label>
             `;
@@ -194,6 +203,7 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
           </label>
           <select id="select-res-region" 
             name="region" 
+            aria-label="Pilih Wilayah Lokasi Proyek"
             class="h-touch border border-hairline bg-canvas px-md py-input-y text-ink font-bold type-body-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
             ${Object.values(REGIONS_PSH).map(reg => `
               <option value="${reg.id}" ${current.region === reg.id ? 'selected' : ''}>
@@ -219,6 +229,7 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
               step="5"
               value="${current.roofArea}" 
               placeholder="30"
+              aria-label="Estimasi Luas Atap dalam meter persegi"
               class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-bold type-body-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
             <span class="absolute right-md text-mute font-bold type-body-sm pointer-events-none">m²</span>
           </div>
@@ -249,8 +260,10 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
       // Update UI active buttons
       container.querySelectorAll('.btn-va-preset').forEach(b => {
         b.className = 'btn-va-preset h-touch border border-hairline bg-surface-soft text-ink rounded-sm type-button-sm transition-all select-none hover:border-hairline-strong';
+        b.setAttribute('aria-pressed', 'false');
       });
       btn.className = 'btn-va-preset h-touch border-2 border-primary bg-ink text-on-dark font-bold rounded-sm type-button-sm transition-all select-none';
+      btn.setAttribute('aria-pressed', 'true');
       const displayVa = container.querySelector('#display-power-va');
       if (displayVa) displayVa.textContent = `${va.toLocaleString('id-ID')} VA`;
       emitChange();
@@ -265,9 +278,11 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
       container.querySelectorAll('.btn-bill-chip').forEach(chip => {
         const val = Number(chip.getAttribute('data-bill'));
         if (val === current.monthlyBill) {
-          chip.className = 'btn-bill-chip px-sm py-xxs border-2 border-primary bg-primary text-on-primary rounded-sm type-caption-xs font-bold transition-all';
+          chip.className = 'btn-bill-chip min-h-touch min-w-[44px] px-sm py-xs border-2 border-primary bg-primary text-on-primary rounded-sm type-caption-xs font-bold transition-all select-none';
+          chip.setAttribute('aria-pressed', 'true');
         } else {
-          chip.className = 'btn-bill-chip px-sm py-xxs border border-hairline bg-surface-soft text-ink rounded-sm type-caption-xs font-bold transition-all hover:border-hairline-strong';
+          chip.className = 'btn-bill-chip min-h-touch min-w-[44px] px-sm py-xs border border-hairline bg-surface-soft text-ink rounded-sm type-caption-xs font-bold transition-all select-none hover:border-hairline-strong';
+          chip.setAttribute('aria-pressed', 'false');
         }
       });
       emitChange();
@@ -280,9 +295,11 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
       current.monthlyBill = val;
       if (billInput) billInput.value = val;
       container.querySelectorAll('.btn-bill-chip').forEach(c => {
-        c.className = 'btn-bill-chip px-sm py-xxs border border-hairline bg-surface-soft text-ink rounded-sm type-caption-xs font-bold transition-all hover:border-hairline-strong';
+        c.className = 'btn-bill-chip min-h-touch min-w-[44px] px-sm py-xs border border-hairline bg-surface-soft text-ink rounded-sm type-caption-xs font-bold transition-all select-none hover:border-hairline-strong';
+        c.setAttribute('aria-pressed', 'false');
       });
-      chip.className = 'btn-bill-chip px-sm py-xxs border-2 border-primary bg-primary text-on-primary rounded-sm type-caption-xs font-bold transition-all';
+      chip.className = 'btn-bill-chip min-h-touch min-w-[44px] px-sm py-xs border-2 border-primary bg-primary text-on-primary rounded-sm type-caption-xs font-bold transition-all select-none';
+      chip.setAttribute('aria-pressed', 'true');
       emitChange();
     });
   });

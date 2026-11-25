@@ -87,6 +87,12 @@ export function initHeader(options = {}) {
       mobileDrawer.classList.remove('translate-x-full');
       mobileDrawerBackdrop.classList.remove('hidden');
       document.body.classList.add('overflow-hidden');
+      if (btnMobileMenu) {
+        btnMobileMenu.setAttribute('aria-expanded', 'true');
+      }
+      if (btnMobileDrawerClose) {
+        btnMobileDrawerClose.focus();
+      }
     }
   }
 
@@ -95,6 +101,10 @@ export function initHeader(options = {}) {
       mobileDrawer.classList.add('translate-x-full');
       mobileDrawerBackdrop.classList.add('hidden');
       document.body.classList.remove('overflow-hidden');
+      if (btnMobileMenu) {
+        btnMobileMenu.setAttribute('aria-expanded', 'false');
+        btnMobileMenu.focus();
+      }
     }
   }
 
