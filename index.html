@@ -9,7 +9,7 @@
 </head>
 <body class="bg-canvas text-body min-h-screen flex flex-col font-sans antialiased">
 
-  <!-- Top Utility Bar (32px, Surface Dark) -->
+  <!-- 1. Top Utility Bar (32px, Surface Dark) -->
   <header class="bg-surface-dark border-b border-hairline-strong text-on-dark h-utility flex items-center px-lg select-none">
     <div class="max-w-7xl w-full mx-auto flex items-center justify-between text-mute">
       <div class="flex items-center gap-sm">
@@ -18,212 +18,417 @@
         <span class="type-caption-sm hidden tablet:inline text-on-dark-mute">Permen ESDM No. 2/2024 Compliant</span>
       </div>
       <div class="flex items-center gap-md">
-        <span class="type-caption-sm text-on-dark-mute hidden mobile:inline">Engineering Hotline: <strong class="text-on-dark">+62 813-9916-890</strong></span>
+        <span class="type-caption-sm text-on-dark-mute hidden mobile:inline">Engineering Hotline: <a href="https://wa.me/628139916890" target="_blank" rel="noopener noreferrer" class="text-on-dark font-bold hover:text-primary transition-colors">+62 813-9916-890</a></span>
       </div>
     </div>
   </header>
 
-  <!-- Primary Navigation (64px, Surface Dark) -->
+  <!-- 2. Primary Navigation (64px, Surface Dark) -->
   <nav class="bg-surface-dark border-b border-hairline-strong text-on-dark h-nav sticky top-0 z-40 px-lg select-none">
     <div class="max-w-7xl w-full mx-auto h-full flex items-center justify-between">
-      <div class="flex items-center gap-md">
-        <img src="./assets/images/indogreen.png" alt="PT. Indogreen Technology And Management" class="h-8 w-auto object-contain">
+      
+      <!-- Brand Logo Lockup -->
+      <a href="#" class="flex items-center gap-md" aria-label="Beranda PT. Indogreen Technology And Management">
+        <img src="./assets/images/indogreen.png" alt="Logo PT. Indogreen Technology And Management" class="h-8 w-auto object-contain">
         <div class="h-5 w-px bg-hairline-strong hidden tablet:block"></div>
         <span class="type-caption-md tracking-wider text-on-dark uppercase font-bold hidden tablet:inline">Kalkulator Energi Surya</span>
+      </a>
+
+      <!-- Centered Navigation Links (Desktop) -->
+      <div class="hidden desktop:flex items-center gap-xl type-body-strong text-on-dark">
+        <a href="#solusi-ebt" class="hover:text-primary transition-colors">Solusi EBT</a>
+        <a href="#kalkulator-simulator" class="text-primary border-b-2 border-primary py-xs">Kalkulator Simulator</a>
+        <a href="#tentang-kami" class="hover:text-primary transition-colors">Tentang Kami</a>
+        <a href="#kontak" class="hover:text-primary transition-colors">Kontak Engineering</a>
       </div>
       
-      <!-- Nav Actions -->
+      <!-- Right Action Cluster -->
       <div class="flex items-center gap-sm">
-        <a href="https://wa.me/628139916890" target="_blank" rel="noopener noreferrer" class="btn-primary type-button-sm">
+        <a href="https://wa.me/628139916890?text=Halo%20Tim%20Engineering%20PT.%20Indogreen%2C%20saya%20ingin%20konsultasi%20solusi%20energi%20surya." target="_blank" rel="noopener noreferrer" class="btn-primary type-button-sm">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
           <span>Konsultasi Rekayasa</span>
         </a>
+
+        <!-- Mobile Drawer Hamburger Button -->
+        <button type="button" id="btn-mobile-menu" class="desktop:hidden h-touch w-touch flex items-center justify-center border border-hairline-strong text-on-dark rounded-sm bg-surface-elevated hover:border-primary focus:outline-none" aria-label="Buka Menu Navigasi Mobile">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <line x1="4" x2="20" y1="12" y2="12"/>
+            <line x1="4" x2="20" y1="6" y2="6"/>
+            <line x1="4" x2="20" y1="18" y2="18"/>
+          </svg>
+        </button>
       </div>
     </div>
   </nav>
 
-  <!-- Hero Section (Surface Dark) -->
-  <section class="bg-surface-dark text-on-dark border-b border-hairline-strong py-xl px-lg">
-    <div class="max-w-7xl mx-auto relative">
-      <div class="corner-square top-0 left-0"></div>
+  <!-- Mobile Navigation Drawer -->
+  <div id="mobile-drawer-backdrop" class="fixed inset-0 bg-ink/75 backdrop-blur-xs z-50 hidden transition-opacity" aria-hidden="true"></div>
+  <aside id="mobile-drawer" class="fixed top-0 right-0 bottom-0 w-80 max-w-[85vw] bg-surface-dark border-l border-hairline-strong z-50 transform translate-x-full transition-transform duration-200 ease-in-out flex flex-col p-lg select-none" aria-label="Menu Mobile">
+    <div class="flex items-center justify-between border-b border-hairline-strong pb-md">
+      <span class="type-caption-md font-bold text-on-dark uppercase">Menu Navigasi</span>
+      <button type="button" id="btn-mobile-drawer-close" class="h-touch w-touch flex items-center justify-center border border-hairline-strong text-on-dark rounded-sm hover:border-primary" aria-label="Tutup Menu">
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 6 6 18"/>
+          <path d="m6 6 12 12"/>
+        </svg>
+      </button>
+    </div>
 
-      <div class="pt-sm pb-md flex flex-col gap-sm">
-        <div class="flex items-center gap-xs">
-          <span class="bg-surface-elevated text-accent-yellow border border-hairline-strong px-sm py-xxs type-caption-xs font-bold rounded-sm uppercase">
+    <div class="flex flex-col gap-md py-lg flex-1 type-body-strong text-on-dark">
+      <a href="#solusi-ebt" class="py-xs hover:text-primary border-b border-hairline-strong">Solusi EBT</a>
+      <a href="#kalkulator-simulator" class="py-xs text-primary border-b border-hairline-strong">Kalkulator Simulator</a>
+      <a href="#tentang-kami" class="py-xs hover:text-primary border-b border-hairline-strong">Tentang Kami</a>
+      <a href="#kontak" class="py-xs hover:text-primary border-b border-hairline-strong">Kontak Engineering</a>
+    </div>
+
+    <div class="border-t border-hairline-strong pt-md flex flex-col gap-sm">
+      <span class="type-caption-sm text-on-dark-mute">Hotline WhatsApp Sales:</span>
+      <a href="https://wa.me/628139916890" target="_blank" rel="noopener noreferrer" class="btn-primary type-button-sm w-full text-center">
+        <span>Hubungi +62 813-9916-890</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- 3. Hero Chapter (hero-card-dark, Surface Dark) -->
+  <section id="kalkulator-simulator" class="bg-surface-dark text-on-dark border-b border-hairline-strong py-xl px-lg select-none">
+    <div class="max-w-7xl mx-auto relative">
+      <!-- Signature Ornamental Corner Square (12x12px solid green) -->
+      <div class="corner-square top-0 left-0" aria-hidden="true"></div>
+
+      <div class="pt-sm pb-xs flex flex-col gap-sm">
+        
+        <!-- Status & Badge Specimen -->
+        <div class="flex flex-wrap items-center gap-xs">
+          <span class="bg-surface-elevated text-accent-yellow border border-hairline-strong px-sm py-xxs type-caption-xs font-bold rounded-sm uppercase tracking-wider">
             SIMULATOR INTERAKTIF V1.0
           </span>
-          <span class="text-on-dark-mute type-caption-sm">Terkalibrasi Standar SNI & ESDM</span>
+          <span class="text-on-dark-mute type-caption-sm">Terkalibrasi Standar ESDM & SNI</span>
         </div>
 
-        <h1 class="type-display-xl font-bold text-on-dark max-w-4xl">
+        <!-- Headline Display-XL -->
+        <h1 class="type-display-xl font-bold text-on-dark max-w-4xl tracking-tight">
           Kalkulator Energi Surya Interaktif
         </h1>
 
+        <!-- Subhead Heading-LG -->
         <p class="type-heading-lg text-on-dark-mute max-w-3xl">
           Simulasikan estimasi kapasitas, penghematan tagihan listrik PLN, proteksi rekening minimum, dan kelayakan investasi PLTS serta sistem baterai cadangan anti-padam dalam hitungan detik.
         </p>
 
-        <!-- Quick Action Bar -->
+        <!-- Bilah Aksi Cepat (Quick Action Bar) -->
         <div class="flex flex-wrap items-center gap-sm pt-sm">
-          <button type="button" id="btn-reset" class="btn-outline-on-dark type-button-sm">
+          <!-- Tombol Reset Simulasi -->
+          <button type="button" id="btn-reset" class="btn-outline-on-dark type-button-sm gap-xs" aria-label="Reset parameter formulir ke nilai awal">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+              <path d="M3 3v5h5"/>
+            </svg>
             <span>Reset Simulasi</span>
           </button>
-          <button type="button" id="btn-qr" class="btn-outline-on-dark type-button-sm">
+
+          <!-- Tombol Barcode Sales -->
+          <button type="button" id="btn-qr" class="btn-outline-on-dark type-button-sm gap-xs" aria-label="Buka Barcode QR Code untuk Sales Kiosk">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="5" height="5" x="3" y="3" rx="1"/>
+              <rect width="5" height="5" x="16" y="3" rx="1"/>
+              <rect width="5" height="5" x="3" y="16" rx="1"/>
+              <path d="M21 16h-3a2 2 0 0 0-2 2v3"/>
+              <path d="M21 21v.01"/>
+              <path d="M12 7v3a2 2 0 0 1-2 2H7"/>
+              <path d="M3 12h.01"/>
+              <path d="M12 3h.01"/>
+              <path d="M12 16v.01"/>
+              <path d="M16 12h1"/>
+              <path d="M21 12v.01"/>
+              <path d="M12 21v-1"/>
+            </svg>
             <span>Buka Barcode Sales</span>
           </button>
-          <button type="button" id="btn-fullscreen" class="btn-outline-on-dark type-button-sm">
-            <span>Layar Penuh</span>
+
+          <!-- Tombol Layar Penuh (Kiosk Booth Mode) -->
+          <button type="button" id="btn-fullscreen" class="btn-outline-on-dark type-button-sm gap-xs" aria-label="Beralih ke mode layar penuh untuk presentasi">
+            <span id="fullscreen-icon-slot" class="text-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="15 3 21 3 21 9"/>
+                <polyline points="9 21 3 21 3 15"/>
+                <polyline points="21 15 21 21 15 21"/>
+                <polyline points="3 9 3 3 9 3"/>
+              </svg>
+            </span>
+            <span id="fullscreen-text">Layar Penuh</span>
           </button>
         </div>
+
       </div>
     </div>
   </section>
 
-  <!-- Main Container: Calculator Shell & Design System Specimen (Fase 1 Verification) -->
-  <main class="flex-1 max-w-7xl w-full mx-auto px-lg py-xl flex flex-col gap-xl">
+  <!-- 4. Main Calculator Workspace (2-Column Responsive Layout) -->
+  <main class="flex-1 max-w-7xl w-full mx-auto px-lg py-xl flex flex-col gap-lg">
 
-    <!-- Mode Selector Tabs (Segmented Controls) -->
+    <!-- Segmented Control Tabs (4 Mode Simulasi) -->
     <div class="flex flex-col gap-xs">
-      <div class="flex items-center gap-xs">
-        <span class="type-caption-md text-primary font-bold uppercase">Pilih Mode Simulasi</span>
+      <div class="flex items-center justify-between">
+        <span class="type-caption-md text-primary font-bold uppercase tracking-wider">PILIH MODE SIMULASI ENERGI SURYA</span>
+        <span class="type-caption-xs text-mute hidden tablet:inline">Pilih sektor sistem yang ingin Anda simulasikan</span>
       </div>
-      <div class="flex flex-wrap items-center gap-xs" role="tablist" aria-label="Mode Kalkulator Energi">
-        <button type="button" class="pill-tab active" role="tab" aria-selected="true" data-mode="residential">
+
+      <div class="flex flex-wrap items-center gap-xs" role="tablist" aria-label="Mode Simulasi Kalkulator Energi">
+        <button type="button" class="pill-tab active" role="tab" aria-selected="true" data-mode="residential" id="tab-residential" aria-controls="panel-residential">
           PLTS Atap Residensial
         </button>
-        <button type="button" class="pill-tab" role="tab" aria-selected="false" data-mode="commercial">
+        <button type="button" class="pill-tab" role="tab" aria-selected="false" data-mode="commercial" id="tab-commercial" aria-controls="panel-commercial">
           PLTS Bisnis & Industri
         </button>
-        <button type="button" class="pill-tab" role="tab" aria-selected="false" data-mode="battery">
+        <button type="button" class="pill-tab" role="tab" aria-selected="false" data-mode="battery" id="tab-battery" aria-controls="panel-battery">
           Baterai Cadangan (BESS)
         </button>
-        <button type="button" class="pill-tab" role="tab" aria-selected="false" data-mode="pjuts">
+        <button type="button" class="pill-tab" role="tab" aria-selected="false" data-mode="pjuts" id="tab-pjuts" aria-controls="panel-pjuts">
           Penerangan Jalan (PJUTS)
         </button>
       </div>
     </div>
 
-    <!-- Phase 1 Verification Specimen Box -->
-    <div class="relative border border-hairline bg-canvas p-xl rounded-sm">
-      <div class="corner-square top-0 left-0"></div>
+    <!-- 2-Column Responsive Workspace Grid -->
+    <div class="grid grid-cols-1 desktop:grid-cols-12 gap-lg items-start">
+      
+      <!-- Panel Sisi Kiri: Form Input Parameter (5 Kolom di Desktop) -->
+      <section class="desktop:col-span-5 flex flex-col gap-md" aria-labelledby="form-section-title">
+        <div id="form-container" class="relative border border-hairline bg-canvas p-lg rounded-sm flex flex-col gap-md">
+          <!-- Signature Ornamental Corner Square -->
+          <div class="corner-square top-0 left-0" aria-hidden="true"></div>
 
-      <div class="flex flex-col gap-md pt-xs">
-        <div class="flex flex-wrap items-center justify-between gap-sm border-b border-hairline pb-md">
-          <div>
-            <h2 class="type-heading-xl font-bold text-ink">Fase 1: Verifikasi Sistem Desain INDOGREEN</h2>
-            <p class="type-body-md text-mute mt-xxs">
-              Pengujian integrasi token warna, skala tipografi Inter, geometri sudut 2px (rounded-sm), dan hairline border.
-            </p>
+          <!-- Form Header Strip -->
+          <div class="flex items-center justify-between border-b border-hairline pb-sm pt-xs">
+            <div>
+              <span id="active-mode-badge" class="type-caption-xs bg-surface-soft text-ink font-bold border border-hairline px-xs py-xxs rounded-sm uppercase tracking-wider">
+                PLTS ATAP RESIDENSIAL
+              </span>
+              <h2 id="form-section-title" class="type-heading-md font-bold text-ink mt-xxs">
+                Parameter Kebutuhan
+              </h2>
+            </div>
+            <span class="type-caption-xs text-mute">Panel Input</span>
           </div>
-          <span class="px-sm py-xxs bg-primary text-on-primary type-caption-xs font-bold rounded-sm">
-            TOOLING ACTIVE
-          </span>
-        </div>
 
-        <!-- Token Palette Verification -->
-        <div class="flex flex-col gap-sm">
-          <span class="type-caption-md font-bold text-ink uppercase">Palet Warna Terverifikasi</span>
-          <div class="grid grid-cols-2 tablet:grid-cols-4 desktop:grid-cols-6 gap-sm">
-            <div class="p-sm bg-primary text-on-primary rounded-sm border border-hairline flex flex-col">
-              <span class="type-caption-xs font-bold">PRIMARY</span>
-              <span class="type-caption-sm">#00b100</span>
-            </div>
-            <div class="p-sm bg-surface-dark text-on-dark rounded-sm border border-hairline-strong flex flex-col">
-              <span class="type-caption-xs font-bold">SURFACE DARK</span>
-              <span class="type-caption-sm">#000000</span>
-            </div>
-            <div class="p-sm bg-surface-soft text-ink rounded-sm border border-hairline flex flex-col">
-              <span class="type-caption-xs font-bold">SURFACE SOFT</span>
-              <span class="type-caption-sm">#f7f7f7</span>
-            </div>
-            <div class="p-sm bg-accent-yellow text-ink rounded-sm border border-hairline flex flex-col">
-              <span class="type-caption-xs font-bold">ACCENT YELLOW</span>
-              <span class="type-caption-sm">#ffff00</span>
-            </div>
-            <div class="p-sm bg-canvas text-ink rounded-sm border border-hairline flex flex-col">
-              <span class="type-caption-xs font-bold">HAIRLINE BORDER</span>
-              <span class="type-caption-sm">#cccccc</span>
-            </div>
-            <div class="p-sm bg-error text-on-dark rounded-sm border border-hairline flex flex-col">
-              <span class="type-caption-xs font-bold">ERROR</span>
-              <span class="type-caption-sm">#e52020</span>
+          <!-- Form Dynamic Slot (Diisi secara reaktif oleh komponen form Fase 5) -->
+          <div id="form-slot" class="flex flex-col gap-md">
+            <div class="p-lg bg-surface-soft border border-hairline rounded-sm flex flex-col gap-xs text-center">
+              <span class="type-heading-sm text-ink font-bold">Formulir Parameter Siap Terhubung</span>
+              <p class="type-body-sm text-mute">
+                Panel input interaktif akan diinjeksi pada Fase 5 untuk mode Residensial, Komersial, BESS, dan PJUTS.
+              </p>
             </div>
           </div>
         </div>
+      </section>
 
-        <!-- Button System Verification -->
-        <div class="flex flex-col gap-sm pt-sm border-t border-hairline">
-          <span class="type-caption-md font-bold text-ink uppercase">Varian Tombol & Touch Target (44px)</span>
-          <div class="flex flex-wrap items-center gap-md">
-            <button type="button" class="btn-primary">
-              Button Primary (Green)
-            </button>
-            <button type="button" class="btn-outline">
-              Button Outline (2px Green)
-            </button>
-            <button type="button" class="btn-ghost-link">
-              <span>Button Ghost Link</span>
-              <span class="ml-xs">→</span>
-            </button>
+      <!-- Panel Sisi Kanan: Hasil Kalkulasi & Visualisasi (7 Kolom di Desktop) -->
+      <section class="desktop:col-span-7 flex flex-col gap-md" aria-labelledby="results-section-title">
+        <div id="results-container" class="flex flex-col gap-md">
+          
+          <!-- Hero Result Card Placeholder (Kanvas Hitam CAD) -->
+          <div class="relative bg-surface-dark text-on-dark border border-hairline-strong p-lg rounded-sm flex flex-col gap-md">
+            <!-- Signature Ornamental Corner Square -->
+            <div class="corner-square top-0 left-0" aria-hidden="true"></div>
+
+            <div class="flex items-center justify-between border-b border-hairline-strong pb-xs pt-xs">
+              <span class="type-caption-sm text-accent-yellow font-bold uppercase tracking-wider">
+                ESTIMASI PENGHEMATAN BULANAN
+              </span>
+              <span class="type-caption-xs bg-surface-elevated text-primary border border-hairline-strong px-xs py-xxs rounded-sm uppercase font-bold">
+                HASIL INSTAN
+              </span>
+            </div>
+
+            <div class="flex flex-col gap-xxs">
+              <div class="type-display-xl font-bold text-primary">
+                Rp 480.000 <span class="type-heading-lg text-on-dark-mute">/ bulan</span>
+              </div>
+              <span class="type-body-sm text-on-dark-mute">
+                Pemotongan ~32.0% dari tagihan listrik awal dengan proteksi rekening minimum PLN.
+              </span>
+            </div>
+
+            <!-- Strip Spesifikasi Ringkas -->
+            <div class="grid grid-cols-2 tablet:grid-cols-4 gap-xs pt-xs border-t border-hairline-strong">
+              <div class="flex flex-col p-xs bg-surface-elevated rounded-sm border border-hairline-strong">
+                <span class="type-caption-xs text-on-dark-mute">KAPASITAS</span>
+                <span class="type-caption-md font-bold text-on-dark">2.40 kWp</span>
+              </div>
+              <div class="flex flex-col p-xs bg-surface-elevated rounded-sm border border-hairline-strong">
+                <span class="type-caption-xs text-on-dark-mute">JUMLAH MODUL</span>
+                <span class="type-caption-md font-bold text-on-dark">4 Modul 600Wp</span>
+              </div>
+              <div class="flex flex-col p-xs bg-surface-elevated rounded-sm border border-hairline-strong">
+                <span class="type-caption-xs text-on-dark-mute">BATERAI LIFEPO4</span>
+                <span class="type-caption-md font-bold text-on-dark">5.12 kWh</span>
+              </div>
+              <div class="flex flex-col p-xs bg-surface-elevated rounded-sm border border-hairline-strong">
+                <span class="type-caption-xs text-on-dark-mute">LUAS ATAP</span>
+                <span class="type-caption-md font-bold text-on-dark">14.4 m²</span>
+              </div>
+            </div>
           </div>
-        </div>
 
-        <!-- Form Inputs Verification -->
-        <div class="flex flex-col gap-sm pt-sm border-t border-hairline">
-          <span class="type-caption-md font-bold text-ink uppercase">Elemen Input & Focus Ring (2px Green)</span>
-          <div class="grid grid-cols-1 tablet:grid-cols-3 gap-md">
-            <div class="flex flex-col gap-xs">
-              <label for="input-sample-1" class="type-caption-sm font-bold text-ink">Input Normal</label>
-              <input id="input-sample-1" type="text" placeholder="Masukkan angka..." class="h-touch border border-hairline bg-canvas px-input-x py-input-y text-ink rounded-sm">
+          <!-- KPI & Visual Breakdown Dynamic Slot (Diisi secara reaktif oleh Fase 6) -->
+          <div id="results-slot" class="flex flex-col gap-md">
+            <!-- Grid 4 Metrik KPI Ringkas -->
+            <div class="grid grid-cols-2 tablet:grid-cols-4 gap-sm">
+              <div class="p-sm bg-canvas border border-hairline rounded-sm flex flex-col gap-xxs">
+                <span class="type-caption-xs text-mute font-bold uppercase">TOTAL INVESTASI</span>
+                <span class="type-heading-sm font-bold text-ink">Rp 38.628.000</span>
+                <span class="type-caption-xs text-mute">Turnkey + PPN 11%</span>
+              </div>
+              <div class="p-sm bg-canvas border border-hairline rounded-sm flex flex-col gap-xxs">
+                <span class="type-caption-xs text-mute font-bold uppercase">% HEMAT LISTRIK</span>
+                <span class="type-heading-sm font-bold text-primary">32.0%</span>
+                <span class="type-caption-xs text-mute">Per bulan</span>
+              </div>
+              <div class="p-sm bg-canvas border border-hairline rounded-sm flex flex-col gap-xxs">
+                <span class="type-caption-xs text-mute font-bold uppercase">PAYBACK PERIOD</span>
+                <span class="type-heading-sm font-bold text-ink">6.7 Tahun</span>
+                <span class="type-caption-xs text-mute">Titik Impas</span>
+              </div>
+              <div class="p-sm bg-canvas border border-hairline rounded-sm flex flex-col gap-xxs">
+                <span class="type-caption-xs text-mute font-bold uppercase">REDUKSI CO₂</span>
+                <span class="type-heading-sm font-bold text-ink">2.645 kg</span>
+                <span class="type-caption-xs text-mute">Ekuivalen 121 pohon</span>
+              </div>
             </div>
-            <div class="flex flex-col gap-xs">
-              <label for="select-sample-1" class="type-caption-sm font-bold text-ink">Dropdown Wilayah</label>
-              <select id="select-sample-1" class="h-touch border border-hairline bg-canvas px-input-x py-input-y text-ink rounded-sm">
-                <option>DKI Jakarta, Jabar & Banten (4.4 PSH)</option>
-                <option>Jawa Timur (4.8 PSH)</option>
-                <option>Bali & NTB (5.1 PSH)</option>
-              </select>
+
+            <!-- Kartu Aksi Konversi WhatsApp & Barcode -->
+            <div class="border border-hairline bg-surface-soft p-md rounded-sm flex flex-wrap items-center justify-between gap-md">
+              <div class="flex flex-col gap-xxs max-w-md">
+                <span class="type-heading-sm font-bold text-ink">Bawa Pulang Hasil Simulasi</span>
+                <p class="type-body-sm text-mute">
+                  Konsultasikan hasil spesifikasi ini langsung dengan tim engineering resmi PT. Indogreen.
+                </p>
+              </div>
+              <div class="flex flex-wrap items-center gap-sm">
+                <button type="button" id="btn-result-qr" class="btn-outline type-button-sm">
+                  <span>Buka Barcode</span>
+                </button>
+                <a id="btn-result-wa" href="https://wa.me/628139916890" target="_blank" rel="noopener noreferrer" class="btn-primary type-button-sm">
+                  <span>Konsultasi WhatsApp</span>
+                </a>
+              </div>
             </div>
-            <div class="flex flex-col gap-xs">
-              <label for="input-sample-2" class="type-caption-sm font-bold text-ink">Input Focused/Active</label>
-              <input id="input-sample-2" type="text" value="Terhubung Sistem" class="h-touch border-2 border-primary bg-canvas px-input-x py-input-y text-ink rounded-sm">
-            </div>
+
           </div>
-        </div>
 
-      </div>
+        </div>
+      </section>
+
     </div>
 
   </main>
 
-  <!-- Technical Footer (Surface Dark) -->
-  <footer class="bg-surface-dark text-on-dark-mute border-t border-hairline-strong py-xl px-lg mt-auto select-none">
-    <div class="max-w-7xl mx-auto flex flex-col gap-lg">
-      <div class="flex flex-wrap items-start justify-between gap-xl">
-        <div class="flex flex-col gap-xs max-w-sm">
-          <img src="./assets/images/indogreen.png" alt="INDOGREEN Logo" class="h-7 w-auto object-contain self-start">
-          <p class="type-body-sm text-on-dark-mute mt-xs">
-            PT. Indogreen Technology And Management adalah perusahaan pengembang dan rekayasa Energi Baru dan Terbarukan (EBT) di Indonesia.
-          </p>
+  <!-- 5. Barcode Sales Modal Dialog (Native Accessible HTML5 Dialog) -->
+  <dialog id="modal-qr-dialog" class="backdrop:bg-ink/80 backdrop:backdrop-blur-xs bg-surface-dark text-on-dark border border-hairline-strong rounded-sm p-xl max-w-md w-full select-none" aria-labelledby="modal-qr-title">
+    <div class="flex flex-col gap-md">
+      <div class="flex items-center justify-between border-b border-hairline-strong pb-sm">
+        <div class="flex items-center gap-xs">
+          <span class="corner-square top-0 left-0" aria-hidden="true"></span>
+          <h3 id="modal-qr-title" class="type-heading-md text-on-dark font-bold">
+            Barcode Sales Konsultasi
+          </h3>
         </div>
-        <div class="flex flex-col gap-xs">
-          <span class="type-body-strong text-on-dark">Regulasi & Kepatuhan</span>
-          <span class="type-body-sm text-on-dark-mute">Permen ESDM No. 2/2024</span>
-          <span class="type-body-sm text-on-dark-mute">Standar SNI & IEC 61215</span>
-          <span class="type-body-sm text-on-dark-mute">Tingkat Komponen Dalam Negeri (TKDN)</span>
-        </div>
-        <div class="flex flex-col gap-xs">
-          <span class="type-body-strong text-on-dark">Kontak Rekayasa</span>
-          <span class="type-body-sm text-on-dark-mute">WhatsApp: +62 813-9916-890</span>
-          <span class="type-body-sm text-on-dark-mute">Email: sales@indogreen.id</span>
+        <button type="button" id="btn-modal-close" class="h-touch w-touch flex items-center justify-center border border-hairline-strong text-on-dark rounded-sm hover:border-primary" aria-label="Tutup Dialog Modal">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M18 6 6 18"/>
+            <path d="m6 6 12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex flex-col items-center justify-center p-md bg-canvas rounded-sm border border-hairline">
+        <div id="qr-code-svg-slot" class="flex items-center justify-center w-64 h-64">
+          <!-- Placeholder SVG QR Code yang diinjeksi via JavaScript -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-16 h-16 text-mute animate-pulse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect width="18" height="18" x="3" y="3" rx="2" ry="2"/>
+            <line x1="3" x2="21" y1="9" y2="9"/>
+            <line x1="9" x2="9" y1="21" y2="9"/>
+          </svg>
         </div>
       </div>
 
-      <div class="border-t border-hairline-strong pt-md flex flex-wrap items-center justify-between gap-sm text-mute">
-        <span class="type-utility-xs">© 2026 PT. INDOGREEN TECHNOLOGY AND MANAGEMENT. HAK CIPTA DILINDUNGI.</span>
-        <span class="type-utility-xs">DESAIN TEKNIS RESMI BERDASARKAN DESIGN.MD V1.0</span>
+      <p class="type-body-sm text-on-dark-mute text-center">
+        Pindai kode QR di atas menggunakan kamera ponsel atau WhatsApp untuk membuka ringkasan teknis simulasi ini secara langsung.
+      </p>
+
+      <div class="flex items-center justify-end border-t border-hairline-strong pt-sm">
+        <button type="button" onclick="document.getElementById('modal-qr-dialog').close()" class="btn-outline-on-dark type-button-sm">
+          <span>Tutup</span>
+        </button>
       </div>
     </div>
+  </dialog>
+
+  <!-- 6. Technical Footer Chapter (Surface Dark) -->
+  <footer id="tentang-kami" class="bg-surface-dark text-on-dark-mute border-t border-hairline-strong py-xxl px-lg mt-auto select-none">
+    <div class="max-w-7xl mx-auto flex flex-col gap-xl">
+      
+      <!-- 4-Column Technical Links Grid -->
+      <div class="grid grid-cols-1 tablet:grid-cols-2 desktop:grid-cols-4 gap-xl">
+        
+        <!-- Kolom 1: Profil Perusahaan -->
+        <div class="flex flex-col gap-sm">
+          <img src="./assets/images/indogreen.png" alt="INDOGREEN Logo" class="h-8 w-auto object-contain self-start">
+          <p class="type-body-sm text-on-dark-mute">
+            PT. Indogreen Technology And Management adalah perusahaan rekayasa dan pengembang Energi Baru dan Terbarukan (EBT) terkemuka di Indonesia.
+          </p>
+          <div class="flex items-center gap-xs mt-xs">
+            <span class="type-caption-xs text-accent-yellow font-bold">ISO 9001:2015</span>
+            <span class="text-hairline-strong">|</span>
+            <span class="type-caption-xs text-primary font-bold">EPC EBT TERSERTIFIKASI</span>
+          </div>
+        </div>
+
+        <!-- Kolom 2: Regulasi & Standar Kepatuhan -->
+        <div class="flex flex-col gap-xs">
+          <span class="type-body-strong text-on-dark border-b border-hairline-strong pb-xs uppercase tracking-wider">Regulasi & Legalitas</span>
+          <span class="type-body-sm text-on-dark-mute">Permen ESDM No. 2/2024 (PLTS Atap)</span>
+          <span class="type-body-sm text-on-dark-mute">Aturan Rekening Minimum 40 Jam Nyala</span>
+          <span class="type-body-sm text-on-dark-mute">Standar Modul Tier-1 IEC 61215</span>
+          <span class="type-body-sm text-on-dark-mute">Sertifikasi Laik Operasi (SLO) PLN</span>
+          <span class="type-body-sm text-on-dark-mute">Kepatuhan Nilai TKDN Nasional</span>
+        </div>
+
+        <!-- Kolom 3: 4 Solusi Rekayasa EBT -->
+        <div class="flex flex-col gap-xs" id="solusi-ebt">
+          <span class="type-body-strong text-on-dark border-b border-hairline-strong pb-xs uppercase tracking-wider">Solusi Rekayasa EBT</span>
+          <span class="type-body-sm text-on-dark-mute">PLTS Atap Residensial (On-Grid/Hybrid)</span>
+          <span class="type-body-sm text-on-dark-mute">PLTS Bisnis & Industri (CAPEX/OPEX PPA)</span>
+          <span class="type-body-sm text-on-dark-mute">BESS Cadangan Anti-Padam (LiFePO4)</span>
+          <span class="type-body-sm text-on-dark-mute">Penerangan Jalan Umum Tenaga Surya (PJUTS)</span>
+          <span class="type-body-sm text-on-dark-mute">Survei Teknis & Drone Lidar Mapping</span>
+        </div>
+
+        <!-- Kolom 4: Kontak Rekayasa & Hotline -->
+        <div class="flex flex-col gap-xs" id="kontak">
+          <span class="type-body-strong text-on-dark border-b border-hairline-strong pb-xs uppercase tracking-wider">Kontak Engineering</span>
+          <span class="type-body-sm text-on-dark-mute">Hotline WhatsApp: <strong class="text-on-dark">+62 813-9916-890</strong></span>
+          <span class="type-body-sm text-on-dark-mute">Email: sales@indogreen.id</span>
+          <span class="type-body-sm text-on-dark-mute">Kantor Pusat: Jakarta Selatan, DKI Jakarta</span>
+          <span class="type-body-sm text-on-dark-mute">Jam Operasional: Senin - Jumat (08:30 - 17:30 WIB)</span>
+        </div>
+
+      </div>
+
+      <!-- Fine-Print Baris Hak Cipta & Disclaimer -->
+      <div class="border-t border-hairline-strong pt-md flex flex-wrap items-center justify-between gap-sm text-mute">
+        <span class="type-utility-xs">© 2026 PT. INDOGREEN TECHNOLOGY AND MANAGEMENT. SELURUH HAK CIPTA DILINDUNGI.</span>
+        <span class="type-utility-xs">DISCLAIMER: ESTIMASI SIMULASI MENGGUNAKAN DATA METEOROLOGI DAN ATURAN TARIF LISTRIK ESDM 2026.</span>
+      </div>
+
+    </div>
   </footer>
+
+  <!-- Application Entry Point (ES Modules) -->
+  <script type="module" src="./src/js/app.js"></script>
 
 </body>
 </html>
