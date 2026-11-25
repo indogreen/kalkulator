@@ -1,0 +1,287 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    font-family: 'Inter', Arial, sans-serif;
+    color: #1a1a1a;
+    background-color: #ffffff;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Accessible focus indicators: 2px solid INDOGREEN Green with 2px offset */
+  *:focus-visible {
+    outline: 2px solid #00b100;
+    outline-offset: 2px;
+  }
+
+  /* Form inputs styling */
+  input, select, textarea {
+    font-family: inherit;
+    border-radius: 2px;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: #00b100;
+    border-width: 2px;
+  }
+}
+
+@layer utilities {
+  /* Typography scale matching DESIGN.md */
+  .type-display-xl {
+    font-size: 48px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  .type-display-lg {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  .type-heading-xl {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  .type-heading-lg {
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 1.75;
+    letter-spacing: 0;
+  }
+
+  .type-heading-md {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  .type-heading-sm {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: 0;
+  }
+
+  .type-card-title {
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.47;
+    letter-spacing: 0;
+  }
+
+  .type-body-md {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  .type-body-strong {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  .type-body-sm {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.67;
+    letter-spacing: 0;
+  }
+
+  .type-button-lg {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  .type-button-md {
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  .type-button-sm {
+    font-size: 14.4px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0.144px;
+  }
+
+  .type-link-md {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: 0;
+  }
+
+  .type-caption-md {
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.43;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .type-caption-sm {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.25;
+    letter-spacing: 0;
+  }
+
+  .type-caption-xs {
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+
+  .type-utility-xs {
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: 0;
+    text-transform: uppercase;
+  }
+}
+
+@layer components {
+  /* Button system */
+  .btn-primary {
+    background-color: #00b100;
+    color: #000000;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.25;
+    border-radius: 2px;
+    padding: 11px 24px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.15s ease;
+    user-select: none;
+  }
+
+  .btn-primary:active, .btn-primary-active {
+    background-color: #008a00;
+    color: #000000;
+  }
+
+  .btn-outline {
+    background-color: transparent;
+    color: #000000;
+    border: 2px solid #00b100;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.25;
+    border-radius: 2px;
+    padding: 11px 24px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    user-select: none;
+  }
+
+  .btn-outline-on-dark {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.25;
+    border-radius: 2px;
+    padding: 11px 24px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    user-select: none;
+  }
+
+  .btn-ghost-link {
+    background-color: transparent;
+    color: #00b100;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 1.25;
+    border: none;
+    border-radius: 0px;
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+    padding: 0;
+  }
+
+  /* Pill tabs (Segmented controls) */
+  .pill-tab {
+    background-color: transparent;
+    color: #000000;
+    font-size: 14.4px;
+    font-weight: 700;
+    line-height: 1;
+    border: 1px solid #cccccc;
+    border-radius: 2px;
+    padding: 10px 18px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    user-select: none;
+  }
+
+  .pill-tab.active, .pill-tab-active {
+    background-color: #000000;
+    color: #ffffff;
+    border-color: #00b100;
+  }
+
+  /* Signature Corner Square */
+  .corner-square {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: #00b100;
+    pointer-events: none;
+  }
+
+  .corner-square-lg {
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    background-color: #00b100;
+    pointer-events: none;
+  }
+}
