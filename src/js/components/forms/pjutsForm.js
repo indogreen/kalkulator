@@ -36,10 +36,10 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
   };
 
   container.innerHTML = `
-    <form id="form-pjuts" class="flex flex-col gap-lg" onsubmit="return false;">
+    <form id="form-pjuts" class="flex flex-col gap-6" onsubmit="return false;">
       
       <!-- 1. Jumlah Titik Tiang Lampu -->
-      <div class="flex flex-col gap-xs">
+      <div class="flex flex-col gap-2.5">
         <div class="flex items-center justify-between">
           <label for="input-pjuts-pole-count" id="label-pjuts-pole" class="text-sm font-semibold text-ink">
             1. Jumlah Titik Tiang Lampu Jalan
@@ -48,9 +48,6 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
             ${current.poleCount} Titik Tiang
           </span>
         </div>
-        <p id="desc-pjuts-pole" class="text-xs text-mute leading-normal">
-          Masukkan total titik tiang lampu penerangan jalan yang direncanakan:
-        </p>
 
         <div class="relative flex items-center">
           <input type="number" 
@@ -61,13 +58,12 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
             step="1"
             value="${current.poleCount}" 
             placeholder="10"
-            aria-describedby="desc-pjuts-pole"
             class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
           <span class="absolute right-md text-mute font-bold text-sm pointer-events-none select-none">Tiang</span>
         </div>
 
         <!-- Quick Pole Chips (44px min touch target) -->
-        <div class="flex flex-wrap items-center gap-xs pt-xxs" role="group" aria-label="Preset cepat jumlah tiang lampu jalan">
+        <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Preset cepat jumlah tiang lampu jalan">
           ${PJUTS_POLE_CHIPS.map(count => {
             const isChipActive = current.poleCount === count;
             return `
@@ -88,15 +84,12 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
       </div>
 
       <!-- 2. Daya Lampu LED (Watt) -->
-      <div class="flex flex-col gap-xs">
+      <div class="flex flex-col gap-2.5">
         <label id="label-pjuts-watt" class="text-sm font-semibold text-ink">
           2. Daya Lampu LED PJU (Watt)
         </label>
-        <p class="text-xs text-mute leading-normal">
-          Pilih rating lumen efisiensi tinggi lampu LED jalan standar SNI:
-        </p>
 
-        <div class="grid grid-cols-4 tablet:grid-cols-8 gap-xs pt-xxs" role="group" aria-labelledby="label-pjuts-watt">
+        <div class="grid grid-cols-4 tablet:grid-cols-8 gap-2" role="group" aria-labelledby="label-pjuts-watt">
           ${PJUTS_WATT_OPTIONS.map(watt => {
             const isActive = current.lampWattage === watt;
             return `
@@ -117,11 +110,11 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
       </div>
 
       <!-- 3. Fitur Smart Dimming Otomatis -->
-      <div class="border border-hairline bg-surface-soft p-md rounded-sm flex items-center justify-between gap-md select-none">
-        <div class="flex flex-col gap-xxs max-w-sm">
-          <div class="flex items-center gap-xs">
+      <div class="border border-hairline bg-surface-soft p-4 rounded-sm flex items-center justify-between gap-4 select-none">
+        <div class="flex flex-col gap-1 max-w-sm">
+          <div class="flex items-center gap-2">
             <span class="text-sm font-semibold text-ink">Smart Dimming Otomatis</span>
-            <span class="text-[11px] px-xs py-xxs bg-primary text-on-primary font-bold rounded-sm uppercase">Hemat ~30%</span>
+            <span class="text-[11px] px-2 py-0.5 bg-primary text-on-primary font-bold rounded-sm uppercase">Hemat ~30%</span>
           </div>
           <p class="text-xs text-mute leading-normal">
             100% daya pada 5 jam awal (18:00 - 23:00) saat ramai, kemudian otomatis 50% daya (23:00 - 06:00) saat sepi.
@@ -140,15 +133,12 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
       </div>
 
       <!-- 4. Hari Otonomi Cuaca Mendung / Hujan -->
-      <div class="flex flex-col gap-xs">
+      <div class="flex flex-col gap-2.5">
         <label id="label-pjuts-autonomy" class="text-sm font-semibold text-ink">
           4. Cadangan Hari Otonomi (Cuaca Hujan/Mendung)
         </label>
-        <p class="text-xs text-mute leading-normal">
-          Menjamin lampu jalan tetap menyala normal saat matahari tertutup awan berturut-turut:
-        </p>
 
-        <div class="grid grid-cols-3 gap-xs pt-xxs" role="group" aria-labelledby="label-pjuts-autonomy">
+        <div class="grid grid-cols-3 gap-2" role="group" aria-labelledby="label-pjuts-autonomy">
           ${PJUTS_AUTONOMY_OPTIONS.map(days => {
             const isActive = current.autonomyDays === days;
             return `
@@ -169,10 +159,10 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
       </div>
 
       <!-- 5. Durasi Operasional Malam & Wilayah PSH -->
-      <div class="grid grid-cols-1 tablet:grid-cols-2 gap-md pt-xxs border-t border-hairline">
+      <div class="grid grid-cols-1 tablet:grid-cols-2 gap-4 tablet:gap-6 pt-4 border-t border-hairline">
         
         <!-- Durasi Malam -->
-        <div class="flex flex-col gap-xs">
+        <div class="flex flex-col gap-2.5">
           <label for="input-pjuts-night-hours" class="text-sm font-semibold text-ink">
             5. Durasi Nyala per Malam
           </label>
@@ -191,7 +181,7 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
         </div>
 
         <!-- Wilayah Radiasi -->
-        <div class="flex flex-col gap-xs">
+        <div class="flex flex-col gap-2.5">
           <label for="select-pjuts-region" class="text-sm font-semibold text-ink">
             6. Wilayah Lokasi Pemasangan
           </label>

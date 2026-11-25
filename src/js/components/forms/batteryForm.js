@@ -40,18 +40,15 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
   };
 
   container.innerHTML = `
-    <form id="form-battery" class="flex flex-col gap-lg" onsubmit="return false;">
+    <form id="form-battery" class="flex flex-col gap-6" onsubmit="return false;">
       
       <!-- 1. Pilihan Sektor Kebutuhan -->
-      <div class="flex flex-col gap-xs">
+      <div class="flex flex-col gap-2.5">
         <label id="label-bat-sector" class="text-sm font-semibold text-ink">
           1. Sektor Kebutuhan Fasilitas
         </label>
-        <p class="text-xs text-mute leading-normal">
-          Pilih kategori lokasi pemasangan sistem baterai cadangan:
-        </p>
 
-        <div class="grid grid-cols-2 gap-xs pt-xxs" role="group" aria-labelledby="label-bat-sector">
+        <div class="grid grid-cols-2 gap-2" role="group" aria-labelledby="label-bat-sector">
           <button type="button" 
             class="btn-sector h-touch border rounded-sm text-sm font-semibold transition-all select-none ${
               current.sector === 'residential' 
@@ -78,7 +75,7 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
       </div>
 
       <!-- 2. Daya Beban Kritis (kW) -->
-      <div class="flex flex-col gap-xs">
+      <div class="flex flex-col gap-2.5">
         <div class="flex items-center justify-between">
           <label for="input-bat-critical-load" id="label-bat-load" class="text-sm font-semibold text-ink">
             2. Daya Beban Kritis yang Dibackup
@@ -87,9 +84,6 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
             ${current.criticalLoadKw.toFixed(2)} kW
           </span>
         </div>
-        <p id="desc-bat-load" class="text-xs text-mute leading-normal">
-          Total daya peralatan esensial yang wajib terus menyala saat listrik PLN padam (AC, lemari pendingin, server, pompa, lampu):
-        </p>
 
         <div class="relative flex items-center">
           <input type="number" 
@@ -100,13 +94,12 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
             step="0.5"
             value="${current.criticalLoadKw}" 
             placeholder="2.0"
-            aria-describedby="desc-bat-load"
             class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
           <span class="absolute right-md text-mute font-bold text-sm pointer-events-none select-none">kW</span>
         </div>
 
         <!-- Range Slider -->
-        <div class="pt-xxs">
+        <div class="pt-1">
           <input type="range" 
             id="range-bat-critical-load" 
             min="0.5" 
@@ -122,7 +115,7 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
         </div>
 
         <!-- Quick Load Chips (44px min touch target) -->
-        <div class="flex flex-wrap items-center gap-xs pt-xxs" role="group" aria-label="Preset cepat daya beban kritis">
+        <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Preset cepat daya beban kritis">
           ${BATTERY_LOAD_CHIPS.map(chip => {
             const isChipActive = Math.abs(current.criticalLoadKw - chip.value) < 0.05;
             return `
@@ -143,15 +136,12 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
       </div>
 
       <!-- 3. Durasi Cadangan Padam (Jam) -->
-      <div class="flex flex-col gap-xs">
+      <div class="flex flex-col gap-2.5">
         <label id="label-bat-hours" class="text-sm font-semibold text-ink">
           3. Durasi Cadangan Darurat (Jam Backup)
         </label>
-        <p class="text-xs text-mute leading-normal">
-          Berapa jam sistem baterai LiFePO4 diharapkan menopang beban kritis tanpa pasokan PLN:
-        </p>
 
-        <div class="grid grid-cols-3 mobile:grid-cols-5 gap-xs pt-xxs" role="group" aria-labelledby="label-bat-hours">
+        <div class="grid grid-cols-3 mobile:grid-cols-5 gap-2" role="group" aria-labelledby="label-bat-hours">
           ${BATTERY_DURATION_PRESETS.map(hrs => {
             const isActive = current.backupHours === hrs;
             return `
@@ -172,14 +162,14 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
       </div>
 
       <!-- 4. Integrasi Pengisian Tenaga Surya (Solar PV Charger) -->
-      <div class="border border-hairline bg-surface-soft p-md rounded-sm flex items-center justify-between gap-md select-none">
-        <div class="flex flex-col gap-xxs max-w-sm">
-          <div class="flex items-center gap-xs">
+      <div class="border border-hairline bg-surface-soft p-4 rounded-sm flex items-center justify-between gap-4 select-none">
+        <div class="flex flex-col gap-1 max-w-sm">
+          <div class="flex items-center gap-2">
             <span class="text-sm font-semibold text-ink">Integrasi Pengisian Solar PV</span>
-            <span class="text-[11px] px-xs py-xxs bg-surface-elevated text-primary font-bold rounded-sm uppercase">Mandiri</span>
+            <span class="text-[11px] px-2 py-0.5 bg-surface-elevated text-primary font-bold rounded-sm uppercase">Mandiri</span>
           </div>
           <p class="text-xs text-mute leading-normal">
-            Menambahkan modul surya untuk mengisi ulang baterai secara mandiri saat pemadaman berlangsung berhari-hari.
+            Menambahkan modul surya untuk mengisi ulang baterai secara mandiri saat pemadaman.
           </p>
         </div>
 
@@ -195,23 +185,20 @@ export function renderBatteryForm(container, state = {}, onChange = () => {}) {
       </div>
 
       <!-- 5. Dropdown Wilayah Radiasi Matahari -->
-      <div id="slot-bat-region" class="flex flex-col gap-xs pt-xxs border-t border-hairline ${current.includeSolarCharger ? '' : 'opacity-60'}">
+      <div id="slot-bat-region" class="flex flex-col gap-2.5 pt-4 border-t border-hairline ${current.includeSolarCharger ? '' : 'opacity-60'}">
         <label for="select-bat-region" class="text-sm font-semibold text-ink">
           5. Wilayah Lokasi Pemasangan (PSH Surya)
         </label>
-        <p class="text-xs text-mute leading-normal">
-          Diperlukan untuk memperhitungkan kecepatan pengisian ulang surya harian:
-        </p>
 
         <select id="select-bat-region" 
-          name="region" 
-          aria-label="Pilih Wilayah Lokasi Pemasangan BESS"
-          class="h-touch border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
-          ${Object.values(REGIONS_PSH).map(reg => `
-            <option value="${reg.id}" ${current.region === reg.id ? 'selected' : ''}>
-              ${reg.label} (${reg.psh} PSH)
-            </option>
-          `).join('')}
+            name="region" 
+            aria-label="Pilih Wilayah Lokasi Pemasangan BESS"
+            class="h-touch border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+            ${Object.values(REGIONS_PSH).map(reg => `
+              <option value="${reg.id}" ${current.region === reg.id ? 'selected' : ''}>
+                ${reg.label} (${reg.psh} PSH)
+              </option>
+            `).join('')}
         </select>
       </div>
 

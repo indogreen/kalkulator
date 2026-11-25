@@ -191,7 +191,7 @@ describe('Results Panel Visualizations (Phase 6)', () => {
     assert.ok(mockContainer.innerHTML.includes('result-schemes-slot'), 'Commercial mode must include schemes slot');
     assert.ok(mockContainer.innerHTML.includes('result-timeline-slot'), 'Must include timeline slot');
     assert.ok(mockContainer.innerHTML.includes('result-cta-slot'), 'Must include CTA slot');
-    assert.ok(mockContainer.innerHTML.includes('result-regulatory-slot'), 'Must include regulatory slot');
+    assert.ok(!mockContainer.innerHTML.includes('result-regulatory-slot'), 'Regulatory slot removed per UI simplification');
 
     // Simulate clicking Buka Barcode
     assert.ok(listeners['click'], 'Click listener must be registered on #btn-result-qr');

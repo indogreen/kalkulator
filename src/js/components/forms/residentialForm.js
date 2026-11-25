@@ -41,10 +41,10 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
   };
 
   container.innerHTML = `
-    <form id="form-residential" class="flex flex-col gap-lg" onsubmit="return false;">
+    <form id="form-residential" class="flex flex-col gap-6" onsubmit="return false;">
       
       <!-- 1. Preset Daya Listrik PLN (VA) -->
-      <div class="flex flex-col gap-xs">
+      <div class="flex flex-col gap-2.5">
         <div class="flex items-center justify-between">
           <label id="label-res-power" class="text-sm font-semibold text-ink">
             1. Daya Listrik PLN Terpasang
@@ -53,11 +53,8 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
             ${current.powerVa.toLocaleString('id-ID')} VA
           </span>
         </div>
-        <p id="desc-res-power" class="text-xs text-mute leading-normal">
-          Pilih batas daya sambungan meteran PLN di rumah Anda:
-        </p>
 
-        <div class="grid grid-cols-3 tablet:grid-cols-5 gap-xs pt-xxs" role="group" aria-labelledby="label-res-power">
+        <div class="grid grid-cols-3 tablet:grid-cols-5 gap-2" role="group" aria-labelledby="label-res-power">
           ${RESIDENTIAL_POWER_PRESETS.map(va => {
             const isActive = current.powerVa === va;
             return `
@@ -78,13 +75,10 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
       </div>
 
       <!-- 2. Nominal Tagihan Listrik Bulanan (Rp) -->
-      <div class="flex flex-col gap-xs">
+      <div class="flex flex-col gap-2.5">
         <label for="input-res-monthly-bill" id="label-res-bill" class="text-sm font-semibold text-ink">
           2. Rata-Rata Tagihan Listrik per Bulan (Rp)
         </label>
-        <p id="desc-res-monthly-bill" class="text-xs text-mute leading-normal">
-          Masukkan nominal rata-rata tagihan rekening listrik PLN setiap bulan:
-        </p>
 
         <div class="relative flex items-center">
           <span class="absolute left-md text-mute font-bold text-sm pointer-events-none select-none">Rp</span>
@@ -95,12 +89,11 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
             step="50000"
             value="${current.monthlyBill}" 
             placeholder="Contoh: 1.500.000"
-            aria-describedby="desc-res-monthly-bill"
             class="h-touch w-full border border-hairline bg-canvas pl-xxl pr-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
         </div>
 
         <!-- Quick Chips Preset (44px min touch target) -->
-        <div class="flex flex-wrap items-center gap-xs pt-xxs" role="group" aria-label="Preset cepat tagihan listrik bulanan">
+        <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Preset cepat tagihan listrik bulanan">
           ${RESIDENTIAL_BILL_CHIPS.map(chip => {
             const isChipActive = current.monthlyBill === chip.value;
             return `
@@ -121,19 +114,16 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
       </div>
 
       <!-- 3. Pola Konsumsi Siang Hari (Radio Cards) -->
-      <div class="flex flex-col gap-xs">
+      <div class="flex flex-col gap-2.5">
         <label id="label-res-daytime" class="text-sm font-semibold text-ink">
           3. Pola Aktivitas Penggunaan Listrik Siang Hari
         </label>
-        <p class="text-xs text-mute leading-normal">
-          Berdasarkan Permen ESDM No. 2/2024, listrik surya dioptimalkan untuk swakonsumsi langsung:
-        </p>
 
-        <div class="grid grid-cols-1 tablet:grid-cols-3 gap-xs pt-xxs" role="radiogroup" aria-labelledby="label-res-daytime">
+        <div class="grid grid-cols-1 tablet:grid-cols-3 gap-2.5" role="radiogroup" aria-labelledby="label-res-daytime">
           ${Object.values(DAYTIME_ACTIVITY_PATTERNS).map(pattern => {
             const isSelected = current.daytimeActivity === pattern.id;
             return `
-              <label class="radio-card cursor-pointer border rounded-sm p-sm flex flex-col gap-xxs transition-all select-none ${
+              <label class="radio-card cursor-pointer border rounded-sm p-3.5 flex flex-col gap-1 transition-all select-none ${
                 isSelected 
                   ? 'border-2 border-primary bg-surface-soft' 
                   : 'border-hairline bg-canvas hover:border-hairline-strong'
@@ -156,27 +146,24 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
       </div>
 
       <!-- 4. Opsi Baterai Cadangan Hybrid LiFePO4 -->
-      <div class="flex flex-col gap-xs">
+      <div class="flex flex-col gap-2.5">
         <label id="label-res-battery" class="text-sm font-semibold text-ink">
           4. Opsi Penyimpanan Baterai Hybrid (LiFePO4)
         </label>
-        <p class="text-xs text-mute leading-normal">
-          Menyimpan kelebihan daya surya untuk malam hari dan menjaga listrik tetap menyala saat PLN padam:
-        </p>
 
-        <div class="grid grid-cols-1 gap-xs pt-xxs" role="radiogroup" aria-labelledby="label-res-battery">
+        <div class="grid grid-cols-1 gap-2.5" role="radiogroup" aria-labelledby="label-res-battery">
           ${Object.values(BATTERY_HYBRID_OPTIONS).map(opt => {
             const isSelected = current.batteryOption === opt.id;
             return `
-              <label class="radio-card cursor-pointer border rounded-sm p-sm flex items-center justify-between gap-sm transition-all select-none ${
+              <label class="radio-card cursor-pointer border rounded-sm p-3.5 flex items-center justify-between gap-3 transition-all select-none ${
                 isSelected 
                   ? 'border-2 border-primary bg-surface-soft' 
                   : 'border-hairline bg-canvas hover:border-hairline-strong'
               }">
-                <div class="flex flex-col gap-xxs">
-                  <div class="flex items-center gap-xs">
+                <div class="flex flex-col gap-0.5">
+                  <div class="flex items-center gap-2">
                     <span class="text-sm font-semibold text-ink">${opt.label}</span>
-                    ${opt.capacityKwh > 0 ? '<span class="text-[11px] px-xs py-xxs bg-surface-elevated text-primary font-bold rounded-sm uppercase">Anti-Padam</span>' : ''}
+                    ${opt.capacityKwh > 0 ? '<span class="text-[11px] px-2 py-0.5 bg-surface-elevated text-primary font-bold rounded-sm uppercase">Anti-Padam</span>' : ''}
                   </div>
                   <span class="text-xs text-mute leading-normal">${opt.description}</span>
                 </div>
@@ -194,10 +181,10 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
       </div>
 
       <!-- 5. Wilayah Radiasi Matahari & Luas Atap -->
-      <div class="grid grid-cols-1 tablet:grid-cols-2 gap-md pt-xxs border-t border-hairline">
+      <div class="grid grid-cols-1 tablet:grid-cols-2 gap-4 tablet:gap-6 pt-4 border-t border-hairline">
         
         <!-- Dropdown Wilayah -->
-        <div class="flex flex-col gap-xs">
+        <div class="flex flex-col gap-2.5">
           <label for="select-res-region" class="text-sm font-semibold text-ink">
             5. Wilayah Lokasi Proyek
           </label>
@@ -214,13 +201,10 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
         </div>
 
         <!-- Input Luas Atap -->
-        <div class="flex flex-col gap-xs">
-          <div class="flex items-center justify-between">
-            <label for="input-res-roof-area" class="text-sm font-semibold text-ink">
-              6. Estimasi Luas Atap
-            </label>
-            <span class="text-xs text-mute">Min ~6.0 m²/kWp</span>
-          </div>
+        <div class="flex flex-col gap-2.5">
+          <label for="input-res-roof-area" class="text-sm font-semibold text-ink">
+            6. Estimasi Luas Atap (m²)
+          </label>
           <div class="relative flex items-center">
             <input type="number" 
               id="input-res-roof-area" 

@@ -43,21 +43,21 @@ export function getBillBarHtml({ mode, input, result }) {
 
     if (isMinApplied) {
       noteHtml = `
-        <div class="p-xs bg-surface-soft border-l-2 border-primary rounded-sm flex items-start gap-xs text-ink type-caption-xs" role="note">
+        <div class="p-3 bg-surface-soft border-l-2 border-primary rounded-sm flex items-start gap-2.5 text-ink text-xs" role="note">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 text-primary shrink-0 mt-0.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             <circle cx="12" cy="12" r="10"/>
             <line x1="12" x2="12" y1="8" y2="12"/>
             <line x1="12" x2="12.01" y1="16" y2="16"/>
           </svg>
-          <div>
+          <div class="leading-relaxed">
             <strong class="font-bold text-ink">Proteksi Rekening Minimum PLN Aktif:</strong>
-            Sesuai Permen ESDM No. 2/2024, tagihan pelanggan PLTS Atap dibatasi minimal 40 jam nyala (${formatRupiah(minBillThreshold)}/bln). Tagihan Anda tertahan aman pada batas legal ini.
+            Tagihan pelanggan PLTS Atap dibatasi minimal 40 jam nyala (${formatRupiah(minBillThreshold)}/bln). Tagihan Anda tertahan aman pada batas rekening minimum PLN.
           </div>
         </div>
       `;
     } else {
       noteHtml = `
-        <div class="flex items-center justify-between text-mute type-caption-xs border-t border-hairline pt-xs">
+        <div class="flex items-center justify-between text-mute text-xs border-t border-hairline pt-3">
           <span>Batas Rekening Minimum PLN (40 Jam Nyala): <strong>${formatRupiah(minBillThreshold)}/bln</strong></span>
           <span class="text-primary font-bold">Tagihan di atas batas minimum</span>
         </div>
@@ -91,8 +91,8 @@ export function getBillBarHtml({ mode, input, result }) {
     savingsPercent = 100;
 
     return `
-      <section class="border border-hairline bg-canvas p-md rounded-sm flex flex-col gap-sm select-none" aria-label="Visualisasi Proteksi Beban BESS">
-        <div class="flex items-center justify-between border-b border-hairline pb-xs">
+      <section class="border border-hairline bg-canvas p-5 tablet:p-6 rounded-sm flex flex-col gap-4 select-none" aria-label="Visualisasi Proteksi Beban BESS">
+        <div class="flex items-center justify-between border-b border-hairline pb-3">
           <div class="flex items-center gap-xs">
             <span class="w-2 h-2 bg-primary rounded-xs"></span>
             <h3 class="type-caption-md text-ink font-bold">${title}</h3>
@@ -159,10 +159,10 @@ export function getBillBarHtml({ mode, input, result }) {
   const minBillPct = minBillThreshold > 0 ? Math.min(100, (minBillThreshold / maxRef) * 100) : 0;
 
   return `
-    <section class="border border-hairline bg-canvas p-md rounded-sm flex flex-col gap-sm select-none" aria-label="Grafik Perbandingan Tagihan Listrik">
+    <section class="border border-hairline bg-canvas p-5 tablet:p-6 rounded-sm flex flex-col gap-4 select-none" aria-label="Grafik Perbandingan Tagihan Listrik">
       
       <!-- Section Header & Legend -->
-      <div class="flex flex-wrap items-center justify-between gap-xs border-b border-hairline pb-xs">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-hairline pb-3">
         <div class="flex items-center gap-xs">
           <span class="w-2 h-2 bg-primary rounded-xs"></span>
           <h3 class="type-caption-md text-ink font-bold">${title}</h3>

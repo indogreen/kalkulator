@@ -29,10 +29,10 @@ export function getSchemeTableHtml({ mode, input, result }) {
   const activeSchemeId = result.inputs?.activeScheme || result.activeScheme?.id || 'capex';
 
   return `
-    <section class="border border-hairline bg-canvas p-md rounded-sm flex flex-col gap-sm select-none" aria-label="Tabel Komparasi 3 Skema Pembiayaan Komersial">
+    <section class="border border-hairline bg-canvas p-5 tablet:p-6 rounded-sm flex flex-col gap-4 select-none" aria-label="Tabel Komparasi 3 Skema Pembiayaan Komersial">
       
       <!-- Section Header -->
-      <div class="flex flex-wrap items-center justify-between gap-xs border-b border-hairline pb-xs">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-hairline pb-3">
         <div class="flex items-center gap-xs">
           <span class="w-2 h-2 bg-primary rounded-xs"></span>
           <h3 class="type-caption-md text-ink font-bold">KOMPARASI 3 SKEMA FINANSIAL BISNIS & INDUSTRI</h3>

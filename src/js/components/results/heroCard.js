@@ -44,11 +44,7 @@ export function getHeroCardHtml({ mode, input, result }) {
     `;
 
     subtextHtml = `
-      Pemotongan <strong class="text-on-dark font-bold">~${formatPercent(savingsPct)}</strong> dari tagihan listrik awal. ${
-        isMinApplied
-          ? `<span class="text-accent-yellow font-bold">Batas rekening minimum PLN Permen ESDM No. 2/2024 aktif (${formatRupiah(result.billing.minimumBill)}/bln).</span>`
-          : 'Maksimalisasi penghematan dengan proteksi rekening minimum PLN.'
-      }
+      Pemotongan <strong class="text-on-dark font-bold">~${formatPercent(savingsPct)}</strong> dari tagihan listrik awal dengan proteksi rekening minimum PLN.
     `;
 
     specs = [
@@ -204,19 +200,19 @@ export function getHeroCardHtml({ mode, input, result }) {
   }
 
   return `
-    <article class="relative bg-surface-dark text-on-dark border border-hairline-strong p-md tablet:p-lg rounded-sm flex flex-col gap-md select-none" aria-label="Ringkasan Estimasi Utama Hasil Simulasi">
+    <article class="relative bg-surface-dark text-on-dark border border-hairline-strong p-5 tablet:p-7 rounded-sm flex flex-col gap-5 select-none" aria-label="Ringkasan Estimasi Utama Hasil Simulasi">
       <!-- Header Strip: Eyebrow & Status Badge -->
-      <div class="flex items-center justify-between border-b border-hairline-strong pb-xs pt-xs">
+      <div class="flex items-center justify-between border-b border-hairline-strong pb-3">
         <span class="text-xs font-semibold text-accent-yellow uppercase tracking-wider">
           ${eyebrow}
         </span>
-        <span class="text-[11px] bg-surface-elevated text-primary border border-hairline-strong px-xs py-xxs rounded-sm uppercase font-bold tracking-wider">
+        <span class="text-[11px] bg-surface-elevated text-primary border border-hairline-strong px-2 py-0.5 rounded-sm uppercase font-bold tracking-wider">
           ${badgeText}
         </span>
       </div>
 
       <!-- Main Headline Value -->
-      <div class="flex flex-col gap-xxs">
+      <div class="flex flex-col gap-1.5">
         ${mainValueHtml}
         <p class="text-sm text-on-dark-mute leading-relaxed">
           ${subtextHtml}
@@ -224,12 +220,12 @@ export function getHeroCardHtml({ mode, input, result }) {
       </div>
 
       <!-- 4-Column Technical Specification Strip -->
-      <div class="grid grid-cols-2 tablet:grid-cols-4 gap-xs pt-xs border-t border-hairline-strong">
+      <div class="grid grid-cols-2 tablet:grid-cols-4 gap-2 tablet:gap-3 pt-3 border-t border-hairline-strong">
         ${specs.map(spec => `
-          <div class="flex flex-col p-xs bg-surface-elevated rounded-sm border border-hairline-strong">
+          <div class="flex flex-col p-2.5 bg-surface-elevated rounded-sm border border-hairline-strong">
             <span class="text-[11px] text-on-dark-mute uppercase tracking-wide">${spec.label}</span>
-            <span class="text-sm font-bold text-on-dark truncate mt-0.5 tabular-nums">${spec.value}</span>
-            <span class="text-xs text-mute truncate">${spec.sub}</span>
+            <span class="text-sm font-bold text-on-dark truncate mt-1 tabular-nums">${spec.value}</span>
+            <span class="text-xs text-mute truncate mt-0.5">${spec.sub}</span>
           </div>
         `).join('')}
       </div>

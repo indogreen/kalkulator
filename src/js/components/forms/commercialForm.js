@@ -41,16 +41,13 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
   };
 
   container.innerHTML = `
-    <form id="form-commercial" class="flex flex-col gap-lg" onsubmit="return false;">
+    <form id="form-commercial" class="flex flex-col gap-6" onsubmit="return false;">
       
       <!-- 1. Dropdown Golongan Tarif PLN -->
-      <div class="flex flex-col gap-xs">
+      <div class="flex flex-col gap-2.5">
         <label for="select-com-tariff" class="text-sm font-semibold text-ink">
           1. Golongan Tarif Listrik PLN Komersial / Industri
         </label>
-        <p class="text-xs text-mute leading-normal">
-          Pilih golongan tarif sesuai rekening tagihan PLN bisnis Anda:
-        </p>
 
         <select id="select-com-tariff" 
           name="tariffGroup"
@@ -69,13 +66,10 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
       </div>
 
       <!-- 2. Tagihan Listrik Bulanan (Rp) -->
-      <div class="flex flex-col gap-xs">
+      <div class="flex flex-col gap-2.5">
         <label for="input-com-monthly-bill" id="label-com-bill" class="text-sm font-semibold text-ink">
           2. Rata-Rata Tagihan Listrik PLN per Bulan (Rp)
         </label>
-        <p id="desc-com-monthly-bill" class="text-xs text-mute leading-normal">
-          Masukkan nominal rata-rata tagihan rekening listrik bulanan fasilitas Anda:
-        </p>
 
         <div class="relative flex items-center">
           <span class="absolute left-md text-mute font-bold text-sm pointer-events-none select-none">Rp</span>
@@ -86,12 +80,11 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
             step="1000000"
             value="${current.monthlyBill}" 
             placeholder="Contoh: 50.000.000"
-            aria-describedby="desc-com-monthly-bill"
             class="h-touch w-full border border-hairline bg-canvas pl-xxl pr-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
         </div>
 
         <!-- Quick Chips Preset (44px min touch target) -->
-        <div class="flex flex-wrap items-center gap-xs pt-xxs" role="group" aria-label="Preset cepat tagihan listrik komersial">
+        <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Preset cepat tagihan listrik komersial">
           ${COMMERCIAL_BILL_CHIPS.map(chip => {
             const isChipActive = current.monthlyBill === chip.value;
             return `
@@ -112,19 +105,16 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
       </div>
 
       <!-- 3. Profil Jam Operasional Fasilitas (Radio Cards) -->
-      <div class="flex flex-col gap-xs">
+      <div class="flex flex-col gap-2.5">
         <label id="label-com-hours" class="text-sm font-semibold text-ink">
           3. Pola Jam Operasional & Profil Beban
         </label>
-        <p class="text-xs text-mute leading-normal">
-          Tingkat sinkronisasi beban fasilitas terhadap kurva radiasi matahari siang hari:
-        </p>
 
-        <div class="grid grid-cols-1 tablet:grid-cols-2 gap-xs pt-xxs" role="radiogroup" aria-labelledby="label-com-hours">
+        <div class="grid grid-cols-1 tablet:grid-cols-2 gap-2.5" role="radiogroup" aria-labelledby="label-com-hours">
           ${Object.values(COMMERCIAL_OPERATIONAL_HOURS).map(op => {
             const isSelected = current.operationalHours === op.id;
             return `
-              <label class="radio-card cursor-pointer border rounded-sm p-sm flex flex-col gap-xxs transition-all select-none ${
+              <label class="radio-card cursor-pointer border rounded-sm p-3.5 flex flex-col gap-1 transition-all select-none ${
                 isSelected 
                   ? 'border-2 border-primary bg-surface-soft' 
                   : 'border-hairline bg-canvas hover:border-hairline-strong'
@@ -147,28 +137,25 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
       </div>
 
       <!-- 4. Pilihan Skema Pembiayaan Utama (Radio Cards) -->
-      <div class="flex flex-col gap-xs">
+      <div class="flex flex-col gap-2.5">
         <label id="label-com-scheme" class="text-sm font-semibold text-ink">
           4. Skema Finansial & Investasi Pilihan
         </label>
-        <p class="text-xs text-mute leading-normal">
-          Pilih model pengadaan energi surya yang sesuai dengan strategi keuangan perusahaan:
-        </p>
 
-        <div class="grid grid-cols-1 gap-xs pt-xxs" role="radiogroup" aria-labelledby="label-com-scheme">
+        <div class="grid grid-cols-1 gap-2.5" role="radiogroup" aria-labelledby="label-com-scheme">
           ${Object.values(COMMERCIAL_SCHEMES).map(scheme => {
             const isSelected = current.activeScheme === scheme.id;
             return `
-              <label class="radio-card cursor-pointer border rounded-sm p-sm flex items-center justify-between gap-sm transition-all select-none ${
+              <label class="radio-card cursor-pointer border rounded-sm p-3.5 flex items-center justify-between gap-3 transition-all select-none ${
                 isSelected 
                   ? 'border-2 border-primary bg-surface-soft' 
                   : 'border-hairline bg-canvas hover:border-hairline-strong'
               }">
-                <div class="flex flex-col gap-xxs">
-                  <div class="flex items-center gap-xs">
+                <div class="flex flex-col gap-0.5">
+                  <div class="flex items-center gap-2">
                     <span class="text-sm font-semibold text-ink">${scheme.name}</span>
-                    ${scheme.id === 'opex_ppa' ? '<span class="text-[11px] px-xs py-xxs bg-surface-elevated text-primary font-bold rounded-sm uppercase">Zero CAPEX</span>' : ''}
-                    ${scheme.id === 'capex' ? '<span class="text-[11px] px-xs py-xxs bg-primary text-on-primary font-bold rounded-sm uppercase">Hak Milik Hari-1</span>' : ''}
+                    ${scheme.id === 'opex_ppa' ? '<span class="text-[11px] px-2 py-0.5 bg-surface-elevated text-primary font-bold rounded-sm uppercase">Zero CAPEX</span>' : ''}
+                    ${scheme.id === 'capex' ? '<span class="text-[11px] px-2 py-0.5 bg-primary text-on-primary font-bold rounded-sm uppercase">Hak Milik Hari-1</span>' : ''}
                   </div>
                   <span class="text-xs text-mute leading-normal">${scheme.description}</span>
                 </div>
@@ -186,10 +173,10 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
       </div>
 
       <!-- 5. Wilayah Radiasi Matahari & Luas Atap Industri -->
-      <div class="grid grid-cols-1 tablet:grid-cols-2 gap-md pt-xxs border-t border-hairline">
+      <div class="grid grid-cols-1 tablet:grid-cols-2 gap-4 tablet:gap-6 pt-4 border-t border-hairline">
         
         <!-- Dropdown Wilayah -->
-        <div class="flex flex-col gap-xs">
+        <div class="flex flex-col gap-2.5">
           <label for="select-com-region" class="text-sm font-semibold text-ink">
             5. Wilayah Lokasi Pabrik / Gedung
           </label>
@@ -206,13 +193,10 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
         </div>
 
         <!-- Input Luas Atap Pabrik -->
-        <div class="flex flex-col gap-xs">
-          <div class="flex items-center justify-between">
-            <label for="input-com-roof-area" class="text-sm font-semibold text-ink">
-              6. Luas Atap Fasilitas
-            </label>
-            <span class="text-xs text-mute">Min ~5.5 m²/kWp</span>
-          </div>
+        <div class="flex flex-col gap-2.5">
+          <label for="input-com-roof-area" class="text-sm font-semibold text-ink">
+            6. Luas Atap Fasilitas (m²)
+          </label>
           <div class="relative flex items-center">
             <input type="number" 
               id="input-com-roof-area" 

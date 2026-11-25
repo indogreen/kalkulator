@@ -75,11 +75,6 @@ export function renderResults(container, { mode, input, result, waUrl, onOpenQr 
     <div id="result-cta-slot">
       ${getConversionCtaHtml({ waUrl })}
     </div>
-
-    <!-- 7. Catatan Regulasi Permen ESDM No. 2/2024 & Disclaimer -->
-    <div id="result-regulatory-slot">
-      ${getRegulatoryNoteHtml({ mode })}
-    </div>
   `;
 
   container.innerHTML = html;

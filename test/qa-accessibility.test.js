@@ -106,11 +106,11 @@ describe('Phase 8: Responsive Layout & Viewport Audit', () => {
   });
 
   test('3. Header action buttons adapt cleanly on mobile', () => {
-    assert.ok(indexHtml.includes('hidden mobile:inline'), 'Header action buttons must adapt label on mobile');
+    assert.ok(indexHtml.includes('hidden tablet:inline') || indexHtml.includes('hidden mobile:inline'), 'Header action buttons must adapt label on mobile');
   });
 
   test('4. Segmented tabs stack cleanly on narrow mobile without clipping text', () => {
-    assert.ok(indexHtml.includes('pill-tab active w-full mobile:w-auto text-center justify-center'), 'Tabs must be full-width on mobile');
+    assert.ok(indexHtml.includes('pill-tab active flex-1 tablet:flex-initial text-center justify-center') || indexHtml.includes('pill-tab active w-full mobile:w-auto text-center justify-center'), 'Tabs must be full-width or flex-1 on mobile');
   });
 
   test('5. KPI Metric Grid stacks cleanly: 1 column on 320px mobile, 2 on 480px mobile, 4 on tablet+', () => {

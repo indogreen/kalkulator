@@ -27,8 +27,8 @@ export function getTimelineHtml({ mode, input, result }) {
   // Mode Battery: Tampilkan timeline siklus hidup LiFePO4
   if (mode === 'battery') {
     return `
-      <section class="border border-hairline bg-canvas p-md rounded-sm flex flex-col gap-sm select-none" aria-label="Timeline Siklus Hidup Baterai LiFePO4">
-        <div class="flex items-center justify-between border-b border-hairline pb-xs">
+      <section class="border border-hairline bg-canvas p-5 tablet:p-6 rounded-sm flex flex-col gap-4 select-none" aria-label="Timeline Siklus Hidup Baterai LiFePO4">
+        <div class="flex items-center justify-between border-b border-hairline pb-3">
           <div class="flex items-center gap-xs">
             <span class="w-2 h-2 bg-primary rounded-xs"></span>
             <h3 class="type-caption-md text-ink font-bold">TIMELINE DAYA TAHAN & SIKLUS HIDUP LIFEPO4</h3>
@@ -130,10 +130,10 @@ export function getTimelineHtml({ mode, input, result }) {
   const profitPct = 100 - paybackPct;
 
   return `
-    <section class="border border-hairline bg-canvas p-md rounded-sm flex flex-col gap-sm select-none" aria-label="Visualisasi Timeline 25 Tahun dan Titik Impas">
+    <section class="border border-hairline bg-canvas p-5 tablet:p-6 rounded-sm flex flex-col gap-4 select-none" aria-label="Visualisasi Timeline 25 Tahun dan Titik Impas">
       
       <!-- Section Header -->
-      <div class="flex flex-wrap items-center justify-between gap-xs border-b border-hairline pb-xs">
+      <div class="flex flex-wrap items-center justify-between gap-2 border-b border-hairline pb-3">
         <div class="flex items-center gap-xs">
           <span class="w-2 h-2 bg-primary rounded-xs"></span>
           <h3 class="type-caption-md text-ink font-bold">${title}</h3>
