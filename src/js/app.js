@@ -16,6 +16,7 @@ import { renderResidentialForm } from './components/forms/residentialForm.js';
 import { renderCommercialForm } from './components/forms/commercialForm.js';
 import { renderBatteryForm } from './components/forms/batteryForm.js';
 import { renderPjutsForm } from './components/forms/pjutsForm.js';
+import { renderResults } from './components/results/index.js';
 
 import { calculateResidential } from './calculator/residential.js';
 import { calculateCommercial } from './calculator/commercial.js';
@@ -148,6 +149,23 @@ function updateCalculation() {
   const qrSlot = document.getElementById('qr-code-svg-slot');
   if (qrSlot) {
     qrSlot.innerHTML = generateQrSvg(waUrl, { size: 256, ecc: 'L' });
+  }
+
+  // Render Right Panel Visualizations (Fase 6)
+  const resultsContainer = document.getElementById('results-container');
+  if (resultsContainer) {
+    renderResults(resultsContainer, {
+      mode,
+      input,
+      result,
+      waUrl,
+      onOpenQr: () => {
+        const dialog = document.getElementById('modal-qr-dialog');
+        if (dialog && typeof dialog.showModal === 'function') {
+          dialog.showModal();
+        }
+      }
+    });
   }
 
   // Dispatch global event untuk kesiapan Fase 6 visualisasi
