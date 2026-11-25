@@ -1,0 +1,70 @@
+name: CI Quality Gate
+
+on:
+  push:
+    branches:
+      - main
+      - 'phase/**'
+      - 'feature/**'
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  foundation-check:
+    name: Documentation & Foundation Verification
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Verify Core Documents
+        run: |
+          echo "Verifying core foundation documents..."
+          test -f docs/IMPLEMENTATION_PLAN.md || (echo "Missing docs/IMPLEMENTATION_PLAN.md" && exit 1)
+          test -f DESIGN.md || (echo "Missing DESIGN.md" && exit 1)
+          test -f AGENTS.md || (echo "Missing AGENTS.md" && exit 1)
+          test -f CLAUDE.md || (echo "Missing CLAUDE.md" && exit 1)
+          test -f .gitignore || (echo "Missing .gitignore" && exit 1)
+          echo "All core foundation documents verified."
+
+  build-and-test:
+    name: Build & Test Suite
+    needs: foundation-check
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 24
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+
+      - name: Check Tooling & Build CSS
+        run: |
+          if [ -f "package.json" ]; then
+            echo "Installing dependencies..."
+            npm ci || npm install
+            if grep -q '"build:css"' package.json; then
+              echo "Building Tailwind CSS..."
+              npm run build:css
+            fi
+          else
+            echo "package.json not created yet (pre-Phase 1). Skipping build."
+          fi
+
+      - name: Run Tests
+        run: |
+          if [ -f "test/calculator.test.js" ]; then
+            echo "Running calculator unit tests..."
+            node test/calculator.test.js
+          fi
+          if [ -f "test/utils.test.js" ]; then
+            echo "Running utils unit tests..."
+            node test/utils.test.js
+          fi
