@@ -152,6 +152,50 @@ describe('Zero-Dependency SVG QR Code Generator (qrcode.js)', () => {
     assert.ok(svg.includes('fill="#000000"'), 'Harus menyertakan latar belakang kustom');
     assert.ok(svg.includes('width="400"'));
   });
+
+  test('createQrMatrix: format bits dan version bits sesuai spesifikasi ISO/IEC 18004', () => {
+    // 1. Uji QR standar (Version 2)
+    const m2 = createQrMatrix('https://indogreen.id', 'M');
+    const size2 = m2.size;
+    const mat2 = m2.matrix;
+
+    // Baca copy 1 (sekitar top-left finder)
+    let bits1 = 0;
+    for (let i = 0; i <= 5; i++) bits1 |= (mat2[i][8] << i);
+    bits1 |= (mat2[7][8] << 6);
+    bits1 |= (mat2[8][8] << 7);
+    bits1 |= (mat2[8][7] << 8);
+    for (let i = 9; i < 15; i++) bits1 |= (mat2[8][14 - i] << i);
+
+    // Baca copy 2 (sekitar top-right dan bottom-left finders)
+    let bits2 = 0;
+    for (let i = 0; i < 8; i++) bits2 |= (mat2[8][size2 - 1 - i] << i);
+    for (let i = 8; i < 15; i++) bits2 |= (mat2[size2 - 15 + i][8] << i);
+
+    assert.equal(bits1, bits2, 'Kedua salinan Format Information harus identik');
+    const unmasked = bits1 ^ 0x5412;
+    const ecBits = (unmasked >>> 13) & 0b11;
+    const mask = (unmasked >>> 10) & 0b111;
+    assert.equal(ecBits, EC_LEVEL.M.bits, 'Level koreksi error harus M (00)');
+    assert.equal(mask, m2.mask, 'Mask pattern yang didekode harus sesuai');
+
+    // 2. Uji QR payload panjang (Version >= 7 dengan Version Information)
+    const longPayload = 'https://wa.me/628170092221?text=' + encodeURIComponent('PT Indogreen Technology And Management '.repeat(10));
+    const mLong = createQrMatrix(longPayload, 'L');
+    assert.ok(mLong.version >= 7, 'Versi QR harus >= 7 untuk payload panjang');
+    const sizeLong = mLong.size;
+    const matLong = mLong.matrix;
+
+    let vBits1 = 0, vBits2 = 0;
+    for (let i = 0; i < 18; i++) {
+      const a = sizeLong - 11 + (i % 3);
+      const b = Math.floor(i / 3);
+      vBits1 |= (matLong[a][b] << i);
+      vBits2 |= (matLong[b][a] << i);
+    }
+    assert.equal(vBits1, vBits2, 'Kedua blok Version Information harus identik');
+    assert.equal(vBits1 >>> 12, mLong.version, 'Nomor versi yang didekode harus sesuai');
+  });
 });
 
 // ============================================================================

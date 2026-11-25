@@ -18,51 +18,50 @@ export const EC_LEVEL = Object.freeze({
   H: { id: 2, name: 'H', bits: 0b10, recoveryPercent: 30 }
 });
 
-// Galois Field GF(256) Tables for Reed-Solomon Code
-const GF_EXP = new Uint8Array(512);
-const GF_LOG = new Uint8Array(256);
-(function initGaloisField() {
-  let x = 1;
-  for (let i = 0; i < 255; i++) {
-    GF_EXP[i] = x;
-    GF_LOG[x] = i;
-    x <<= 1;
-    if (x & 0x100) x ^= 0x11d; // Primitive polynomial x^8 + x^4 + x^3 + x^2 + 1
+// Perkalian modulo GF(256 / 0x11D) dengan algoritma Russian Peasant
+function reedSolomonMultiply(x, y) {
+  let z = 0;
+  for (let i = 7; i >= 0; i--) {
+    z = (z << 1) ^ ((z >>> 7) * 0x11d);
+    z ^= ((y >>> i) & 1) * x;
   }
-  for (let i = 255; i < 512; i++) {
-    GF_EXP[i] = GF_EXP[i - 255];
-  }
-})();
-
-function gfMul(x, y) {
-  if (x === 0 || y === 0) return 0;
-  return GF_EXP[GF_LOG[x] + GF_LOG[y]];
+  return z;
 }
 
-function getRsGeneratorPoly(errorCount) {
-  let poly = [1];
-  for (let i = 0; i < errorCount; i++) {
-    const next = new Array(poly.length + 1).fill(0);
-    for (let j = 0; j < poly.length; j++) {
-      next[j] ^= gfMul(poly[j], GF_EXP[i]);
-      next[j + 1] ^= poly[j];
+/**
+ * Menghasilkan koefisien pembagi polinomial generator Reed-Solomon untuk derajat errorCount
+ * g(x) = (x - alpha^0)(x - alpha^1)...(x - alpha^(errorCount-1))
+ */
+function reedSolomonComputeDivisor(degree) {
+  let result = new Array(degree - 1).fill(0);
+  result.push(1);
+  let root = 1;
+  for (let i = 0; i < degree; i++) {
+    for (let j = 0; j < result.length; j++) {
+      result[j] = reedSolomonMultiply(result[j], root);
+      if (j + 1 < result.length) {
+        result[j] ^= result[j + 1];
+      }
     }
-    poly = next;
+    root = reedSolomonMultiply(root, 0x02);
   }
-  return poly;
+  return result;
 }
 
+/**
+ * Menghitung codeword koreksi error Reed-Solomon sesuai ISO/IEC 18004
+ */
 function computeReedSolomon(data, errorCount) {
-  const gen = getRsGeneratorPoly(errorCount);
-  const res = new Uint8Array(errorCount);
-  for (let i = 0; i < data.length; i++) {
-    const factor = data[i] ^ res[0];
-    for (let j = 0; j < errorCount - 1; j++) {
-      res[j] = res[j + 1] ^ gfMul(gen[j + 1], factor);
+  const divisor = reedSolomonComputeDivisor(errorCount);
+  let result = new Array(errorCount).fill(0);
+  for (const b of data) {
+    const factor = b ^ result.shift();
+    result.push(0);
+    for (let i = 0; i < divisor.length; i++) {
+      result[i] ^= reedSolomonMultiply(divisor[i], factor);
     }
-    res[errorCount - 1] = gfMul(gen[errorCount], factor);
   }
-  return res;
+  return new Uint8Array(result);
 }
 
 // Alignment Pattern Center Positions per Version
@@ -196,30 +195,21 @@ const QR_TABLE = [
   { total: 3706, L: [30, 19, 118, 6, 119], M: [28, 18, 47, 31, 48], Q: [30, 34, 24, 34, 25], H: [30, 20, 15, 61, 16] }
 ];
 
-// Format Information BCH Generator: G(x) = x^10 + x^8 + x^5 + x^4 + x^2 + x + 1 (0x537)
-const FORMAT_INFO_POLY = 0x537;
-const FORMAT_INFO_MASK = 0x5412;
-
+// Format Information: 5 data bits (2 bits EC + 3 bits mask) + 10 BCH bits ^ 0x5412
 function getFormatBits(ecLevel, mask) {
   const data = (ecLevel.bits << 3) | mask;
-  let rem = data << 10;
-  for (let i = 14; i >= 10; i--) {
-    if (rem & (1 << i)) {
-      rem ^= FORMAT_INFO_POLY << (i - 10);
-    }
+  let rem = data;
+  for (let i = 0; i < 10; i++) {
+    rem = (rem << 1) ^ ((rem >>> 9) * 0x537);
   }
-  return ((data << 10) | rem) ^ FORMAT_INFO_MASK;
+  return ((data << 10) | rem) ^ 0x5412;
 }
 
-// Version Information BCH Generator for Version >= 7: G(x) = x^12 + x^11 + x^10 + x^9 + x^8 + x^5 + x^2 + 1 (0x1F25)
-const VERSION_INFO_POLY = 0x1f25;
-
+// Version Information (Ver >= 7): 6 version bits + 12 BCH bits
 function getVersionBits(version) {
-  let rem = version << 12;
-  for (let i = 17; i >= 12; i--) {
-    if (rem & (1 << i)) {
-      rem ^= VERSION_INFO_POLY << (i - 12);
-    }
+  let rem = version;
+  for (let i = 0; i < 12; i++) {
+    rem = (rem << 1) ^ ((rem >>> 11) * 0x1f25);
   }
   return (version << 12) | rem;
 }
@@ -629,31 +619,28 @@ export function createQrMatrix(text, requestedEcLevel = 'M') {
       })
     );
 
-    // Apply Format Bits for this candidate
+    // Apply Format Bits for this candidate (ISO/IEC 18004 specification)
     const formatBits = getFormatBits(ec, mask);
-    for (let i = 0; i < 15; i++) {
-      const bit = (formatBits >>> (14 - i)) & 1;
-      // Top-left finder surrounding
-      if (i < 6) candidate[8][i] = bit;
-      else if (i === 6) candidate[8][7] = bit;
-      else if (i === 7) candidate[8][8] = bit;
-      else if (i === 8) candidate[7][8] = bit;
-      else candidate[14 - i][8] = bit;
+    // Draw first copy (around top-left finder pattern)
+    for (let i = 0; i <= 5; i++) candidate[i][8] = (formatBits >>> i) & 1;
+    candidate[7][8] = (formatBits >>> 6) & 1;
+    candidate[8][8] = (formatBits >>> 7) & 1;
+    candidate[8][7] = (formatBits >>> 8) & 1;
+    for (let i = 9; i < 15; i++) candidate[8][14 - i] = (formatBits >>> i) & 1;
 
-      // Split 2nd copy
-      if (i < 8) candidate[size - 1 - i][8] = bit;
-      else candidate[8][size - 15 + i] = bit;
-    }
+    // Draw second copy (split between top-right and bottom-left finders)
+    for (let i = 0; i < 8; i++) candidate[8][size - 1 - i] = (formatBits >>> i) & 1;
+    for (let i = 8; i < 15; i++) candidate[size - 15 + i][8] = (formatBits >>> i) & 1;
 
     // Apply Version Bits if Ver >= 7
     if (version >= 7) {
       const vBits = getVersionBits(version);
       for (let i = 0; i < 18; i++) {
         const bit = (vBits >>> i) & 1;
-        const r = Math.floor(i / 3);
-        const c = i % 3;
-        candidate[size - 11 + c][r] = bit;
-        candidate[r][size - 11 + c] = bit;
+        const a = size - 11 + (i % 3);
+        const b = Math.floor(i / 3);
+        candidate[a][b] = bit;
+        candidate[b][a] = bit;
       }
     }
 
@@ -711,7 +698,7 @@ export function generateQrSvg(text, options = {}) {
   }
 
   return [
-    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalGridSize} ${totalGridSize}" width="${svgSize}" height="${svgSize}" shape-rendering="crispEdges" role="img" aria-label="QR Code">`,
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalGridSize} ${totalGridSize}" width="${svgSize}" height="${svgSize}" class="w-full h-full max-w-full max-h-full object-contain" shape-rendering="crispEdges" role="img" aria-label="QR Code">`,
     lightColor && lightColor !== 'transparent'
       ? `  <rect width="${totalGridSize}" height="${totalGridSize}" fill="${lightColor}"/>`
       : '',

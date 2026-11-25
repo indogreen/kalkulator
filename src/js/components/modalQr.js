@@ -141,6 +141,14 @@ export function updateModalQrSvg(payloadUrl) {
       console.warn('Gagal merender QR Code SVG:', err);
     }
   }
+
+  // Sinkronkan link tombol Buka di WhatsApp jika ada di dalam modal
+  if (typeof document !== 'undefined') {
+    const directWaBtn = document.getElementById('btn-modal-wa-direct');
+    if (directWaBtn && currentPayloadUrl) {
+      directWaBtn.setAttribute('href', currentPayloadUrl);
+    }
+  }
 }
 
 /**
