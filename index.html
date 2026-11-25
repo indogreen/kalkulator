@@ -94,8 +94,7 @@
   <!-- 3. Hero Chapter (hero-card-dark, Surface Dark) -->
   <section id="kalkulator-simulator" class="bg-surface-dark text-on-dark border-b border-hairline-strong py-xl px-lg select-none">
     <div class="max-w-7xl mx-auto relative">
-      <!-- Signature Ornamental Corner Square (12x12px solid green) -->
-      <div class="corner-square top-0 left-0" aria-hidden="true"></div>
+
 
       <div class="pt-sm pb-xs flex flex-col gap-sm">
         
@@ -197,8 +196,7 @@
       <!-- Panel Sisi Kiri: Form Input Parameter (5 Kolom di Desktop) -->
       <section class="desktop:col-span-5 flex flex-col gap-md" aria-labelledby="form-section-title">
         <div id="form-container" class="relative border border-hairline bg-canvas p-lg rounded-sm flex flex-col gap-md">
-          <!-- Signature Ornamental Corner Square -->
-          <div class="corner-square top-0 left-0" aria-hidden="true"></div>
+
 
           <!-- Form Header Strip -->
           <div class="flex items-center justify-between border-b border-hairline pb-sm pt-xs">
@@ -232,8 +230,7 @@
           
           <!-- Hero Result Card Placeholder (Kanvas Hitam CAD) -->
           <div class="relative bg-surface-dark text-on-dark border border-hairline-strong p-lg rounded-sm flex flex-col gap-md">
-            <!-- Signature Ornamental Corner Square -->
-            <div class="corner-square top-0 left-0" aria-hidden="true"></div>
+
 
             <div class="flex items-center justify-between border-b border-hairline-strong pb-xs pt-xs">
               <span class="type-caption-sm text-accent-yellow font-bold uppercase tracking-wider">
@@ -332,7 +329,6 @@
     <div class="flex flex-col gap-md">
       <div class="flex items-center justify-between border-b border-hairline-strong pb-sm">
         <div class="flex items-center gap-xs">
-          <span class="corner-square top-0 left-0" aria-hidden="true"></span>
           <h3 id="modal-qr-title" class="type-heading-md text-on-dark font-bold">
             Barcode Sales Konsultasi
           </h3>
@@ -428,8 +424,8 @@
     </div>
   </footer>
 
-  <!-- Application Entry Point (ES Modules) -->
-  <script type="module" src="./src/js/app.js"></script>
+  <!-- Application Entry Point (Compatible with direct file:// opening and http servers) -->
+  <script src="./dist/js/bundle.js" defer></script>
 
 </body>
 </html>

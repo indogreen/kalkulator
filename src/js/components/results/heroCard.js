@@ -206,9 +206,6 @@ export function getHeroCardHtml({ mode, input, result }) {
 
   return `
     <article class="relative bg-surface-dark text-on-dark border border-hairline-strong p-lg rounded-sm flex flex-col gap-md select-none" aria-label="Ringkasan Estimasi Utama Hasil Simulasi">
-      <!-- Signature Ornamental Corner Square (12x12px green) -->
-      <div class="corner-square top-0 left-0" aria-hidden="true"></div>
-
       <!-- Header Strip: Eyebrow & Status Badge -->
       <div class="flex items-center justify-between border-b border-hairline-strong pb-xs pt-xs">
         <span class="type-caption-sm text-accent-yellow font-bold uppercase tracking-wider">

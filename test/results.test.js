@@ -75,7 +75,7 @@ describe('Results Panel Visualizations (Phase 6)', () => {
     // 1. Residensial
     const resHtml = getHeroCardHtml({ mode: 'residential', input: resInput, result: resResult });
     assert.ok(resHtml.includes('bg-surface-dark'), 'Hero card must have CAD black background');
-    assert.ok(resHtml.includes('corner-square'), 'Must contain signature corner square');
+    assert.ok(!resHtml.includes('corner-square'), 'Must not contain corner square per design update');
     assert.ok(resHtml.includes('type-display-xl'), 'Must contain display-xl typography');
     assert.ok(resHtml.includes('text-primary'), 'Savings number must be in primary green');
     assert.ok(resHtml.includes('KAPASITAS SURYA'), 'Must include capacity spec');

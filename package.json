@@ -6,7 +6,11 @@
   "type": "module",
   "scripts": {
     "build:css": "tailwindcss -i ./src/css/style.css -o ./dist/css/style.css --minify",
-    "dev": "tailwindcss -i ./src/css/style.css -o ./dist/css/style.css --watch",
+    "build:js": "node scripts/build.js",
+    "build": "npm run build:css && npm run build:js",
+    "serve": "node scripts/serve.js",
+    "start": "node scripts/serve.js",
+    "dev": "node scripts/serve.js",
     "test": "node --test test/*.test.js"
   },
   "devDependencies": {
