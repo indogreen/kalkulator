@@ -1,21 +1,24 @@
 /**
  * PT. Indogreen Technology And Management
- * Main Application Orchestrator & State Controller
+ * Main Application Orchestrator & Reactive State Controller (app.js)
  * 
- * Coordinates:
- * - Header toolbar (Reset, QR modal, Fullscreen)
- * - 4-Mode Simulation Tabs (Residential, Commercial, Battery, PJUTS)
- * - Left Panel: Interactive Forms mounting with state retention
- * - Real-time calculation triggers
+ * Orchestrates:
+ * 1. Reactive State Management across 4 simulation modes (state retention across tab switching)
+ * 2. Bi-directional data flow: Form Inputs (Phase 5) -> Calculation Engine (Phase 2) -> Visualizations (Phase 6)
+ * 3. Barcode Sales Modal Dialog (modalQr.js) with live WhatsApp QR Code SVG
+ * 4. Header Actions: Simulation Reset & Browser Fullscreen API (kiosk presentation mode)
+ * 5. Automatic WhatsApp link synchronization with latest simulation payload
  */
 
 import { initHeader } from './components/header.js';
 import { initTabs, setActiveTab } from './components/tabs.js';
+import { initModalQr, openModalQr, updateModalQrSvg, closeModalQr } from './components/modalQr.js';
 
 import { renderResidentialForm } from './components/forms/residentialForm.js';
 import { renderCommercialForm } from './components/forms/commercialForm.js';
 import { renderBatteryForm } from './components/forms/batteryForm.js';
 import { renderPjutsForm } from './components/forms/pjutsForm.js';
+
 import { renderResults } from './components/results/index.js';
 
 import { calculateResidential } from './calculator/residential.js';
@@ -23,12 +26,12 @@ import { calculateCommercial } from './calculator/commercial.js';
 import { calculateBattery } from './calculator/battery.js';
 import { calculatePjuts } from './calculator/pjuts.js';
 
-import { generateQrSvg } from './utils/qrcode.js';
 import { generateWhatsAppUrl } from './utils/whatsapp.js';
-import { formatRupiah, formatKwp, formatNumber, formatPercent } from './utils/formatter.js';
 
-// Default Application State for all 4 Modes
-const DEFAULT_APP_STATE = Object.freeze({
+/**
+ * Calibrated default parameters for all 4 simulator modes
+ */
+export const DEFAULT_APP_STATE = Object.freeze({
   activeMode: 'residential',
   modes: {
     residential: {
@@ -65,20 +68,84 @@ const DEFAULT_APP_STATE = Object.freeze({
   }
 });
 
-// Deep clone default state
+// Deep clone application state
 let appState = JSON.parse(JSON.stringify(DEFAULT_APP_STATE));
 
+// Debounce timer for smooth typing experience
+let debounceTimer = null;
+
 /**
- * Render formulir yang sesuai dengan mode aktif ke dalam #form-slot
+ * Get deep clone of current application state
+ * @returns {Object}
  */
-function mountActiveForm() {
+export function getAppState() {
+  return JSON.parse(JSON.stringify(appState));
+}
+
+/**
+ * Get active simulator mode ('residential' | 'commercial' | 'battery' | 'pjuts')
+ * @returns {string}
+ */
+export function getActiveMode() {
+  return appState.activeMode;
+}
+
+/**
+ * Switch active simulator mode and retain previous state values
+ * @param {string} mode - Mode name
+ */
+export function setActiveMode(mode) {
+  if (!appState.modes[mode]) return;
+  appState.activeMode = mode;
+  mountActiveForm();
+}
+
+/**
+ * Update parameters for active simulator mode
+ * @param {Object} updatedState - Partial or full updated state
+ */
+export function updateActiveModeState(updatedState) {
+  const mode = appState.activeMode;
+  appState.modes[mode] = { ...appState.modes[mode], ...updatedState };
+  updateCalculation();
+}
+
+/**
+ * Reset active simulation mode to calibrated defaults
+ */
+export function resetActiveModeState() {
+  const mode = appState.activeMode;
+  appState.modes[mode] = JSON.parse(JSON.stringify(DEFAULT_APP_STATE.modes[mode]));
+  mountActiveForm();
+}
+
+/**
+ * Calculate current simulation results
+ * @returns {Object|null}
+ */
+export function calculateCurrentResult() {
+  const mode = appState.activeMode;
+  const input = appState.modes[mode];
+
+  if (mode === 'residential') return calculateResidential(input);
+  if (mode === 'commercial') return calculateCommercial(input);
+  if (mode === 'battery') return calculateBattery(input);
+  if (mode === 'pjuts') return calculatePjuts(input);
+  return null;
+}
+
+/**
+ * Render active form into #form-slot
+ */
+export function mountActiveForm() {
+  if (typeof document === 'undefined') return;
   const formSlot = document.getElementById('form-slot');
   if (!formSlot) return;
 
   const mode = appState.activeMode;
   const currentState = appState.modes[mode];
 
-  // Update badge indikator mode pada header form
+  // Update badge indikator mode pada header panel form
   const badgeMode = document.getElementById('active-mode-badge');
   if (badgeMode) {
     const labels = {
@@ -90,147 +157,131 @@ function mountActiveForm() {
     badgeMode.textContent = labels[mode] || mode.toUpperCase();
   }
 
+  // Callback debounced state updater
+  const handleFormChange = (updatedState) => {
+    appState.modes[mode] = updatedState;
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      updateCalculation();
+    }, 30);
+  };
+
   // Render form spesifik
   if (mode === 'residential') {
-    renderResidentialForm(formSlot, currentState, (updatedState) => {
-      appState.modes.residential = updatedState;
-      updateCalculation();
-    });
+    renderResidentialForm(formSlot, currentState, handleFormChange);
   } else if (mode === 'commercial') {
-    renderCommercialForm(formSlot, currentState, (updatedState) => {
-      appState.modes.commercial = updatedState;
-      updateCalculation();
-    });
+    renderCommercialForm(formSlot, currentState, handleFormChange);
   } else if (mode === 'battery') {
-    renderBatteryForm(formSlot, currentState, (updatedState) => {
-      appState.modes.battery = updatedState;
-      updateCalculation();
-    });
+    renderBatteryForm(formSlot, currentState, handleFormChange);
   } else if (mode === 'pjuts') {
-    renderPjutsForm(formSlot, currentState, (updatedState) => {
-      appState.modes.pjuts = updatedState;
-      updateCalculation();
-    });
+    renderPjutsForm(formSlot, currentState, handleFormChange);
   }
 
+  // Trigger recalculation immediately
   updateCalculation();
 }
 
 /**
- * Eksekusi kalkulasi real-time dan sinkronkan tautan WhatsApp serta modal QR
+ * Eksekusi kalkulasi real-time dan sinkronkan tautan WhatsApp, panel visualisasi, serta modal QR
  */
-function updateCalculation() {
+export function updateCalculation() {
   const mode = appState.activeMode;
   const input = appState.modes[mode];
-  let result = null;
-
-  if (mode === 'residential') {
-    result = calculateResidential(input);
-  } else if (mode === 'commercial') {
-    result = calculateCommercial(input);
-  } else if (mode === 'battery') {
-    result = calculateBattery(input);
-  } else if (mode === 'pjuts') {
-    result = calculatePjuts(input);
-  }
+  const result = calculateCurrentResult();
 
   if (!result) return;
 
-  // Generate WhatsApp URL terkini
+  // 1. Generate live WhatsApp consultation URL
   const waUrl = generateWhatsAppUrl(mode, input, result);
 
-  // Update CTA WhatsApp Buttons
-  const btnWaResult = document.getElementById('btn-result-wa');
-  if (btnWaResult) {
-    btnWaResult.setAttribute('href', waUrl);
-  }
+  if (typeof document !== 'undefined') {
+    // 2. Update QR Code SVG di modal dialog (modalQr.js)
+    updateModalQrSvg(waUrl);
 
-  // Update QR Code SVG di slot modal dialog
-  const qrSlot = document.getElementById('qr-code-svg-slot');
-  if (qrSlot) {
-    qrSlot.innerHTML = generateQrSvg(waUrl, { size: 256, ecc: 'L' });
-  }
-
-  // Render Right Panel Visualizations (Fase 6)
-  const resultsContainer = document.getElementById('results-container');
-  if (resultsContainer) {
-    renderResults(resultsContainer, {
-      mode,
-      input,
-      result,
-      waUrl,
-      onOpenQr: () => {
-        const dialog = document.getElementById('modal-qr-dialog');
-        if (dialog && typeof dialog.showModal === 'function') {
-          dialog.showModal();
+    // 3. Render Right Panel Visualizations (Phase 6)
+    const resultsContainer = document.getElementById('results-container');
+    if (resultsContainer) {
+      renderResults(resultsContainer, {
+        mode,
+        input,
+        result,
+        waUrl,
+        onOpenQr: () => {
+          openModalQr(waUrl);
         }
-      }
-    });
+      });
+    }
+
+    // 4. Update CTA WhatsApp Button di seluruh dokumen
+    const btnWaResult = document.getElementById('btn-result-wa');
+    if (btnWaResult) {
+      btnWaResult.setAttribute('href', waUrl);
+    }
   }
 
-  // Dispatch global event untuk kesiapan Fase 6 visualisasi
-  window.dispatchEvent(new CustomEvent('app:calculation-updated', {
-    detail: { mode, input, result, waUrl }
-  }));
+  // 5. Dispatch global event untuk ekstensi dan integrasi pihak ketiga
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('app:calculation-updated', {
+      detail: { mode, input, result, waUrl }
+    }));
+  }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-  // Inisialisasi Header Toolbar
+/**
+ * Inisialisasi seluruh sistem aplikasi saat DOM siap
+ */
+export function initApp() {
+  // 1. Inisialisasi Modal QR Barcode Sales Controller
+  initModalQr({
+    dialog: 'modal-qr-dialog',
+    closeButton: 'btn-modal-close',
+    qrSlot: 'qr-code-svg-slot'
+  });
+
+  // 2. Inisialisasi Header Toolbar (Reset, Barcode, Fullscreen)
   initHeader({
     onReset: () => {
-      // Kembalikan mode aktif ke state default
-      appState.modes[appState.activeMode] = JSON.parse(JSON.stringify(DEFAULT_APP_STATE.modes[appState.activeMode]));
-      mountActiveForm();
+      resetActiveModeState();
     },
     onOpenQr: () => {
-      const dialog = document.getElementById('modal-qr-dialog');
-      if (dialog && typeof dialog.showModal === 'function') {
-        dialog.showModal();
-      }
+      const mode = appState.activeMode;
+      const input = appState.modes[mode];
+      const result = calculateCurrentResult();
+      const waUrl = result ? generateWhatsAppUrl(mode, input, result) : 'https://wa.me/628139916890';
+      openModalQr(waUrl);
     }
   });
 
-  // Hubungkan tombol QR pada kartu konversi hasil
-  const btnResultQr = document.getElementById('btn-result-qr');
-  if (btnResultQr) {
-    btnResultQr.addEventListener('click', () => {
-      const dialog = document.getElementById('modal-qr-dialog');
-      if (dialog && typeof dialog.showModal === 'function') {
-        dialog.showModal();
-      }
-    });
-  }
-
-  // Inisialisasi Tab Mode Simulator
+  // 3. Inisialisasi Tab Mode Simulator
   initTabs({
     initialMode: appState.activeMode,
     onTabChange: (newMode) => {
-      appState.activeMode = newMode;
-      mountActiveForm();
+      setActiveMode(newMode);
     }
   });
 
-  // Modal QR Dialog close listener
-  const btnCloseModal = document.getElementById('btn-modal-close');
-  const dialog = document.getElementById('modal-qr-dialog');
-  if (btnCloseModal && dialog) {
-    btnCloseModal.addEventListener('click', () => {
-      dialog.close();
-    });
-    dialog.addEventListener('click', (e) => {
-      const rect = dialog.getBoundingClientRect();
-      const isInDialog = (
-        rect.top <= e.clientY &&
-        e.clientY <= rect.top + rect.height &&
-        rect.left <= e.clientX &&
-        e.clientX <= rect.left + rect.width
-      );
-      if (!isInDialog) {
-        dialog.close();
-      }
-    });
-  }
+  // 4. Global listener untuk tombol QR sekunder
+  document.addEventListener('click', (e) => {
+    const target = e.target.closest('#btn-result-qr, #btn-qr');
+    if (target) {
+      e.preventDefault();
+      const mode = appState.activeMode;
+      const input = appState.modes[mode];
+      const result = calculateCurrentResult();
+      const waUrl = result ? generateWhatsAppUrl(mode, input, result) : 'https://wa.me/628139916890';
+      openModalQr(waUrl);
+    }
+  });
 
-  // Render initial form
+  // 5. Render formulir awal dan jalankan perhitungan perdana
   mountActiveForm();
-});
+}
+
+// Auto-run saat dokumen siap di browser
+if (typeof document !== 'undefined') {
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+  } else {
+    initApp();
+  }
+}

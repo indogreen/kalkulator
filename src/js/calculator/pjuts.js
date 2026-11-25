@@ -166,7 +166,9 @@ export function calculatePjuts(params = {}) {
       subtotalInvestment,
       ppnAmount,
       totalInvestment,
-      paybackYears
+      paybackYears,
+      avoidedCostMonthlyRp,
+      avoidedCostYearlyRp
     },
     environmental: {
       co2ReductionYearlyKg,

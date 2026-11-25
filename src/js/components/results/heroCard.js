@@ -163,7 +163,7 @@ export function getHeroCardHtml({ mode, input, result }) {
     ];
 
   } else if (mode === 'pjuts') {
-    const avoidedMonthly = result.financial?.avoidedCostMonthlyRp || 0;
+    const avoidedMonthly = result.financial?.avoidedCostMonthlyRp || result.savings?.avoidedCostMonthlyRp || 0;
     const poles = result.totalSystem?.poleCount || 0;
 
     eyebrow = 'PENGHEMATAN BIAYA LISTRIK SETARA TARIF P-3 PLN';

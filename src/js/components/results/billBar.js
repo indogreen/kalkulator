@@ -135,7 +135,7 @@ export function getBillBarHtml({ mode, input, result }) {
     `;
 
   } else if (mode === 'pjuts') {
-    beforeValue = result.financial?.avoidedCostMonthlyRp || 0;
+    beforeValue = result.financial?.avoidedCostMonthlyRp || result.savings?.avoidedCostMonthlyRp || 0;
     afterValue = 0; // Biaya PLN Rp 0
     savingsValue = beforeValue;
     savingsPercent = 100;

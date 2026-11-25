@@ -118,7 +118,7 @@ export function getTimelineHtml({ mode, input, result }) {
   } else if (mode === 'pjuts') {
     paybackYears = result.financial?.paybackYears || 0;
     totalInvestment = result.financial?.totalInvestment || 0;
-    const yearlyAvoided = result.financial?.avoidedCostYearlyRp || 0;
+    const yearlyAvoided = result.financial?.avoidedCostYearlyRp || result.savings?.avoidedCostYearlyRp || 0;
     totalNet25Years = Math.round((yearlyAvoided * 25) - totalInvestment);
     title = 'TIMELINE 25 TAHUN AVOIDED COST TARIF P-3 PLN';
   }
