@@ -1,24 +1,27 @@
 /**
  * PT. Indogreen Technology And Management
- * Form Component: Unified PLTS Hybrid Off-Grid (6-Step Input)
+ * Form Component: Unified PLTS Hybrid Off-Grid (7-Step Input)
  *
  * Compliant with:
  * - INDOGREEN Design System (DESIGN.md): 2px radius (rounded-sm), flat CAD styling, >= 44px touch targets
  * - Modern Web Guidance: Semantic <fieldset>/<legend>, type="text" + inputmode="numeric",
  *   post-interaction validation on blur, native labeled <input type="range"> with progress var sync
- * - 6 Steps:
+ * - 7 Steps:
  *   1. Kategori Peruntukan (Residential / Bisnis)
  *   2. Daya PLN (Dynamic PLN 2026 tariffs + Subsidi/Non-Subsidi badge)
  *   3. Biaya Listrik per Bulan (Formatted Rp + Quick chips + Live kWh preview)
  *   4. Persen Pemakaian Siang & Malam (Dual balanced inputs + Slider + CAD bar)
  *   5. Sistem PLTS (Hybrid Offgrid active info card)
  *   6. Support PLTS (25% / 50% / 75% / 100%)
+ *   7. Pilihan Solar Panel (550, 610, 615 Default, 620, 720 Wp)
  */
 
 import {
   HYBRID_TECH_CONFIG,
   HYBRID_PLN_TARIFFS,
-  getHybridTariffOption
+  HYBRID_SOLAR_PANELS,
+  getHybridTariffOption,
+  getHybridSolarPanel
 } from '../../calculator/constants.js';
 import { formatNumber } from '../../utils/formatter.js';
 
@@ -36,10 +39,12 @@ export const HYBRID_COVERAGE_OPTIONS = [
   { value: 100, label: '100%', sub: 'dari PLTS' }
 ];
 
+export const HYBRID_SOLAR_PANEL_OPTIONS = Object.values(HYBRID_SOLAR_PANELS);
+
 export const MIN_VALID_MONTHLY_BILL = 50000;
 
 /**
- * Render formulir 6-langkah PLTS Hybrid Off-Grid ke dalam kontainer DOM
+ * Render formulir 7-langkah PLTS Hybrid Off-Grid ke dalam kontainer DOM
  *
  * @param {HTMLElement} container - Kontainer target DOM
  * @param {Object} state - State parameter saat ini
@@ -48,6 +53,7 @@ export const MIN_VALID_MONTHLY_BILL = 50000;
 export function renderHybridForm(container, state = {}, onChange = () => {}) {
   const kategori = state.kategori === 'Bisnis' ? 'Bisnis' : 'Residential';
   const dayaObj = getHybridTariffOption(kategori, state.dayaId);
+  const panelObj = getHybridSolarPanel(state.panelWp || HYBRID_TECH_CONFIG.PANEL_WP_DEFAULT);
   const biayaBulanan = state.biayaBulanan !== undefined && state.biayaBulanan !== null
     ? Math.max(0, Number(state.biayaBulanan) || 0)
     : 1000000;
@@ -68,7 +74,8 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
     persenSiang,
     persenMalam,
     sistem: state.sistem || 'Hybrid Offgrid',
-    persenCover
+    persenCover,
+    panelWp: panelObj.wp
   };
 
   const tariffList = HYBRID_PLN_TARIFFS[current.kategori];
@@ -366,6 +373,57 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
         </fieldset>
       </div>
 
+      <!-- 7. Pilihan Solar Panel -->
+      <div class="pt-4 border-t border-hairline">
+        <fieldset class="flex flex-col gap-2.5 border-0 p-0 m-0">
+          <div class="flex items-center justify-between gap-2">
+            <legend class="text-sm font-semibold text-ink mb-0.5">
+              7. Pilihan Solar Panel
+            </legend>
+            <span class="text-[11px] font-bold px-2 py-0.5 bg-surface-soft border border-hairline rounded-sm text-primary-dark">
+              Tier-1 Modul
+            </span>
+          </div>
+
+          <div class="pl-4 flex flex-col gap-2.5">
+            <p class="text-xs text-mute">Pilihan kapasitas per modul surya (Default: 615 Wp, 1,2m × 2,4m):</p>
+
+            <div class="grid grid-cols-2 mobile:grid-cols-3 tablet:grid-cols-5 gap-2" role="radiogroup" aria-label="Pilihan Kapasitas Solar Panel">
+              ${HYBRID_SOLAR_PANEL_OPTIONS.map(panel => {
+                const isSelected = current.panelWp === panel.wp;
+                return `
+                  <label for="radio-panel-${panel.wp}" class="cursor-pointer block">
+                    <input type="radio"
+                      id="radio-panel-${panel.wp}"
+                      name="panelWp"
+                      value="${panel.wp}"
+                      class="sr-only peer"
+                      ${isSelected ? 'checked' : ''}>
+                    <div class="panel-card min-h-touch py-2.5 px-2 rounded-sm border text-center transition-all select-none peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-focus-visible:outline-offset-2 ${
+                      isSelected
+                        ? 'border-2 border-primary bg-ink text-on-dark font-bold'
+                        : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
+                    }">
+                      <div class="flex items-center justify-center gap-1">
+                        <span class="text-sm mobile:text-base font-bold block tabular-nums">${panel.label}</span>
+                        ${panel.isDefault ? `
+                          <span class="text-[9px] font-bold px-1 py-0.2 rounded-xs uppercase tracking-tight ${
+                            isSelected ? 'bg-primary text-on-primary' : 'bg-primary/20 text-primary-dark'
+                          }">Def</span>
+                        ` : ''}
+                      </div>
+                      <span class="panel-dim text-[11px] font-medium block mt-0.5 tabular-nums ${
+                        isSelected ? 'text-primary' : 'text-mute'
+                      }">${panel.widthM}m × ${panel.lengthM}m</span>
+                    </div>
+                  </label>
+                `;
+              }).join('')}
+            </div>
+          </div>
+        </fieldset>
+      </div>
+
     </form>
   `;
 
@@ -613,6 +671,30 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
         }
         if (sub) {
           sub.className = `coverage-sub text-[11px] font-medium block mt-0.5 ${
+            r.checked ? 'text-primary' : 'text-mute'
+          }`;
+        }
+      });
+      emitChange();
+    });
+  });
+
+  // 7. Pilihan Solar Panel Radio Cards
+  container.querySelectorAll('input[name="panelWp"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      current.panelWp = Number(radio.value) || 615;
+      container.querySelectorAll('input[name="panelWp"]').forEach(r => {
+        const card = r.parentElement?.querySelector('.panel-card');
+        const dim = r.parentElement?.querySelector('.panel-dim');
+        if (card) {
+          card.className = `panel-card min-h-touch py-2.5 px-2 rounded-sm border text-center transition-all select-none peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-focus-visible:outline-offset-2 ${
+            r.checked
+              ? 'border-2 border-primary bg-ink text-on-dark font-bold'
+              : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
+          }`;
+        }
+        if (dim) {
+          dim.className = `panel-dim text-[11px] font-medium block mt-0.5 tabular-nums ${
             r.checked ? 'text-primary' : 'text-mute'
           }`;
         }

@@ -213,12 +213,16 @@ describe('Results Panel Visualizations (Phase 6)', () => {
   test('Hybrid Off-Grid mode: renders Hero, 3 Technical Cards, Energy Profile, CTA without deferred price/timeline slots', () => {
     const heroHtml = getHeroCardHtml({ mode: 'hybrid', input: hybridInput, result: hybridResult });
     assert.ok(heroHtml.includes('REKOMENDASI KAPASITAS PLTS HYBRID-OFFGRID'));
-    assert.ok(heroHtml.includes('18,70 kWp'));
+    assert.ok(heroHtml.includes('19,07 kWp'));
+    assert.ok(heroHtml.includes('31 Panel @ 615 Wp'));
     assert.ok(heroHtml.includes('20 kW'));
     assert.ok(heroHtml.includes('46,08 kWh'));
+    assert.ok(heroHtml.includes('KEBUTUHAN LUAS ATAP'));
+    assert.ok(heroHtml.includes('90,2 m²'));
 
     const kpiHtml = getKpiGridHtml({ mode: 'hybrid', input: hybridInput, result: hybridResult });
     assert.ok(kpiHtml.includes('1. KAPASITAS PV'));
+    assert.ok(kpiHtml.includes('Luas ± 90,2 m²'));
     assert.ok(kpiHtml.includes('2. KAPASITAS INVERTER'));
     assert.ok(kpiHtml.includes('3. KAPASITAS BATTERY'));
     assert.ok(!kpiHtml.includes('PERKIRAAN HARGA'));
@@ -227,6 +231,10 @@ describe('Results Panel Visualizations (Phase 6)', () => {
     assert.ok(profileHtml.includes('PROFIL ENERGI PELANGGAN'));
     assert.ok(profileHtml.includes('Residential (R-1/TR 1.300 VA)'));
     assert.ok(profileHtml.includes('Non-Subsidi'));
+    assert.ok(profileHtml.includes('Spesifikasi Modul Surya'));
+    assert.ok(profileHtml.includes('615 Wp'));
+    assert.ok(profileHtml.includes('Kebutuhan Panel & Luas Atap'));
+    assert.ok(profileHtml.includes('90,2 m²'));
 
     const mockContainer = {
       innerHTML: '',

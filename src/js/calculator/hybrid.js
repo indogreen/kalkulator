@@ -10,7 +10,7 @@
  * - Pricing/Cost module intentionally deferred to next phase (pricing: null)
  */
 
-import { HYBRID_TECH_CONFIG, getHybridTariffOption } from './constants.js';
+import { HYBRID_TECH_CONFIG, getHybridTariffOption, getHybridSolarPanel } from './constants.js';
 
 /**
  * Memilih ukuran kapasitas inverter standar terdekat ke atas
@@ -35,11 +35,14 @@ function resolveStandardInverterKw(minInverterReq) {
  * @param {number} [params.persenMalam] - Opsional, dipakai jika persenSiang tidak diberikan
  * @param {string} [params.sistem='Hybrid Offgrid'] - Jenis arsitektur sistem PLTS
  * @param {number} [params.persenCover=100] - Target persentase kebutuhan listrik dicover PLTS (25, 50, 75, 100)
+ * @param {number|string} [params.panelWp=615] - Pilihan kapasitas modul surya (550, 610, 615, 620, 720 Wp)
  * @returns {Object} Hasil kalkulasi teknis terstruktur
  */
 export function calculateHybridOffGrid(params = {}) {
   const kategori = params.kategori === 'Bisnis' ? 'Bisnis' : 'Residential';
   const dayaObj = getHybridTariffOption(kategori, params.dayaId);
+  const panelConfig = getHybridSolarPanel(params.panelWp || HYBRID_TECH_CONFIG.PANEL_WP_DEFAULT);
+  const panelWp = panelConfig.wp;
 
   const rawBiaya = Number(params.biayaBulanan);
   const biayaBulanan = isNaN(rawBiaya) ? 0 : Math.max(0, rawBiaya);
@@ -70,13 +73,17 @@ export function calculateHybridOffGrid(params = {}) {
   const kwhSiangHari = targetKwhHari * siangRatio;
   const kwhMalamHari = targetKwhHari * malamRatio;
 
-  // 2. Sizing Kapasitas PV Array (550 Wp, PSH 3.8, PR 82%)
+  // 2. Sizing Kapasitas PV Array & Luas Atap (Panel Wp dinamis, Margin 1%)
   let jumlahPanel = 0;
   let kapasitasPvKwp = 0;
+  let luasNetM2 = 0;
+  let luasAtapM2 = 0;
   if (targetKwhHari > 0) {
     const rawPvKwp = targetKwhHari / (HYBRID_TECH_CONFIG.PSH_HOURS * HYBRID_TECH_CONFIG.PERFORMANCE_RATIO);
-    jumlahPanel = Math.max(1, Math.ceil((rawPvKwp * 1000) / HYBRID_TECH_CONFIG.PANEL_WP));
-    kapasitasPvKwp = Number(((jumlahPanel * HYBRID_TECH_CONFIG.PANEL_WP) / 1000).toFixed(2));
+    jumlahPanel = Math.max(1, Math.ceil((rawPvKwp * 1000) / panelWp));
+    kapasitasPvKwp = Number(((jumlahPanel * panelWp) / 1000).toFixed(2));
+    luasNetM2 = Number((jumlahPanel * panelConfig.areaM2).toFixed(2));
+    luasAtapM2 = Number((luasNetM2 * HYBRID_TECH_CONFIG.ROOF_MARGIN_FACTOR).toFixed(1));
   }
 
   // 3. Sizing Kapasitas Inverter Hybrid Off-Grid
@@ -117,7 +124,8 @@ export function calculateHybridOffGrid(params = {}) {
       persenSiang,
       persenMalam,
       sistem,
-      persenCover
+      persenCover,
+      panelWp
     },
     energy: {
       totalKwhBulan: Number(totalKwhBulan.toFixed(2)),
@@ -129,7 +137,13 @@ export function calculateHybridOffGrid(params = {}) {
     pv: {
       kapasitasPvKwp,
       jumlahPanel,
-      panelWp: HYBRID_TECH_CONFIG.PANEL_WP,
+      panelWp,
+      panelLabel: panelConfig.label,
+      panelWidthM: panelConfig.widthM,
+      panelLengthM: panelConfig.lengthM,
+      panelAreaM2: panelConfig.areaM2,
+      luasNetM2,
+      luasAtapM2,
       pshJam: HYBRID_TECH_CONFIG.PSH_HOURS,
       performanceRatio: HYBRID_TECH_CONFIG.PERFORMANCE_RATIO
     },

@@ -33,7 +33,9 @@ export function generateWhatsAppMessage(mode, input = {}, result = {}) {
     const targetKwhHari = `${formatNumber(result.energy?.targetKwhHari || 0, 2)} kWh/hari`;
     const pvKwp = `${formatNumber(result.pv?.kapasitasPvKwp || 0, 2)} kWp`;
     const jumlahPanel = result.pv?.jumlahPanel || 0;
-    const panelWp = result.pv?.panelWp || 550;
+    const panelWp = result.pv?.panelWp || 615;
+    const luasAtap = formatNumber(result.pv?.luasAtapM2 || 0, 1);
+    const panelDim = `${result.pv?.panelWidthM || 1.2}m × ${result.pv?.panelLengthM || 2.4}m`;
     const inverterKw = `${result.inverter?.kapasitasInverterKw || 0} kW`;
     const batteryKwh = `${formatNumber(result.battery?.kapasitasBatteryKwh || 0, 2)} kWh`;
     const jumlahBattery = result.battery?.jumlahModulBattery || 0;
@@ -46,6 +48,7 @@ export function generateWhatsAppMessage(mode, input = {}, result = {}) {
       `- Proporsi Beban: Siang ${persenSiang}% / Malam ${persenMalam}%`,
       `- Target Dicover PLTS: ${persenCover}% (${targetKwhHari})`,
       `- Rekomendasi Kapasitas PV: ${pvKwp} (${jumlahPanel} Panel @ ${panelWp} Wp)`,
+      `- Estimasi Kebutuhan Luas Atap: ± ${luasAtap} m² (Dimensi ${panelDim} per panel)`,
       `- Rekomendasi Hybrid Inverter: ${inverterKw}`,
       `- Rekomendasi Baterai LiFePO4: ${batteryKwh} (${jumlahBattery} Unit @ 5,12 kWh)`,
       '',

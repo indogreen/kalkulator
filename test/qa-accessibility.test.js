@@ -76,6 +76,8 @@ describe('Phase 8: Accessibility & WCAG 2.1 AA Audit', () => {
     assert.ok(mockContainer.innerHTML.includes('<fieldset') && mockContainer.innerHTML.includes('<legend'), 'Hybrid radio groups must use semantic <fieldset>/<legend>');
     assert.ok(mockContainer.innerHTML.includes('id="input-hybrid-day-percent"'), 'Hybrid day percent input must exist');
     assert.ok(mockContainer.innerHTML.includes('id="input-hybrid-night-percent"'), 'Hybrid night percent input must exist');
+    assert.ok(mockContainer.innerHTML.includes('panel-card min-h-touch'), 'Hybrid solar panel cards must have min 44px touch target');
+    assert.ok(mockContainer.innerHTML.includes('name="panelWp"'), 'Hybrid panel radio options must have name="panelWp"');
 
     // Residential form (Archived)
     renderResidentialForm(mockContainer, {});

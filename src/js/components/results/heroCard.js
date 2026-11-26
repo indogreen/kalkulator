@@ -31,7 +31,10 @@ export function getHeroCardHtml({ mode, input, result }) {
   if (mode === 'hybrid') {
     const pvKwp = result.pv?.kapasitasPvKwp || 0;
     const jumlahPanel = result.pv?.jumlahPanel || 0;
-    const panelWp = result.pv?.panelWp || 550;
+    const panelWp = result.pv?.panelWp || 615;
+    const luasAtap = result.pv?.luasAtapM2 || 0;
+    const panelWidthM = result.pv?.panelWidthM || 1.2;
+    const panelLengthM = result.pv?.panelLengthM || 2.4;
     const inverterKw = result.inverter?.kapasitasInverterKw || 0;
     const inverterW = result.inverter?.kapasitasInverterW || 0;
     const batteryKwh = result.battery?.kapasitasBatteryKwh || 0;
@@ -53,7 +56,7 @@ export function getHeroCardHtml({ mode, input, result }) {
     `;
 
     subtextHtml = `
-      Supply target <strong class="text-on-dark font-bold">${formatNumber(targetKwhHari, 2)} kWh/hari</strong> (${persenSiang}% siang / ${persenMalam}% malam) dengan Hybrid Inverter <strong class="text-on-dark font-bold">${inverterKw} kW</strong> dan Baterai <strong class="text-on-dark font-bold">${formatNumber(batteryKwh, 2)} kWh</strong>.
+      Supply target <strong class="text-on-dark font-bold">${formatNumber(targetKwhHari, 2)} kWh/hari</strong> (${persenSiang}% siang / ${persenMalam}% malam) dicover ${persenCover}% dari PLTS dengan Hybrid Inverter <strong class="text-on-dark font-bold">${inverterKw} kW</strong>, Baterai <strong class="text-on-dark font-bold">${formatNumber(batteryKwh, 2)} kWh</strong>, dan estimasi luas atap <strong class="text-on-dark font-bold">± ${formatNumber(luasAtap, 1)} m²</strong>.
     `;
 
     specs = [
@@ -63,19 +66,19 @@ export function getHeroCardHtml({ mode, input, result }) {
         sub: `${jumlahPanel} Panel @ ${panelWp} Wp`
       },
       {
-        label: '2. INVERTER HYBRID',
+        label: '2. KEBUTUHAN LUAS ATAP',
+        value: `± ${formatNumber(luasAtap, 1)} m²`,
+        sub: `${jumlahPanel} Panel (${panelWidthM}×${panelLengthM}m)`
+      },
+      {
+        label: '3. INVERTER HYBRID',
         value: `${inverterKw} kW`,
         sub: `Off-Grid (${formatNumber(inverterW)} W)`
       },
       {
-        label: '3. BATERAI LIFEPO4',
+        label: '4. BATERAI LIFEPO4',
         value: `${formatNumber(batteryKwh, 2)} kWh`,
         sub: `${jumlahModul} Unit @ ${formatNumber(batteryUnitKwh, 2)} kWh`
-      },
-      {
-        label: 'TARGET COVER',
-        value: `${persenCover}% Beban`,
-        sub: `${formatNumber(targetKwhHari, 2)} kWh / hari`
       }
     ];
   } else if (mode === 'residential') {

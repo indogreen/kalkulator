@@ -219,7 +219,9 @@ describe('WhatsApp Consultation Generator (whatsapp.js)', () => {
     assert.ok(message.includes('Residential (R-1/TR 1.300 VA)'));
     assert.ok(message.includes('Rp 2.500.000'));
     assert.ok(message.includes('Siang 40% / Malam 60%'));
-    assert.ok(message.includes('18,70 kWp'));
+    assert.ok(message.includes('19,07 kWp'));
+    assert.ok(message.includes('31 Panel @ 615 Wp'));
+    assert.ok(message.includes('Luas Atap: ± 90,2 m²'));
     assert.ok(message.includes('20 kW'));
     assert.ok(message.includes('46,08 kWh'));
     assert.ok(url.startsWith(`${WHATSAPP_BASE_URL}${OFFICIAL_WHATSAPP_NUMBER}?text=`));

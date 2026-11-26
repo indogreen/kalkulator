@@ -25,7 +25,10 @@ export function getKpiGridHtml({ mode, input, result }) {
   if (mode === 'hybrid') {
     const pvKwp = result.pv?.kapasitasPvKwp || 0;
     const jumlahPanel = result.pv?.jumlahPanel || 0;
-    const panelWp = result.pv?.panelWp || 550;
+    const panelWp = result.pv?.panelWp || 615;
+    const luasAtap = result.pv?.luasAtapM2 || 0;
+    const panelWidthM = result.pv?.panelWidthM || 1.2;
+    const panelLengthM = result.pv?.panelLengthM || 2.4;
     const pshJam = result.pv?.pshJam || 3.8;
     const prPct = Math.round((result.pv?.performanceRatio || 0.82) * 100);
 
@@ -42,8 +45,8 @@ export function getKpiGridHtml({ mode, input, result }) {
       {
         badge: '1. KAPASITAS PV',
         value: `${formatNumber(pvKwp, 2)} kWp`,
-        sub: `≈ ${jumlahPanel} lembar panel @ ${panelWp} Wp`,
-        foot: `PSH ${formatNumber(pshJam, 1)} jam/hari • PR ${prPct}%`,
+        sub: `≈ ${jumlahPanel} panel @ ${panelWp} Wp (Luas ± ${formatNumber(luasAtap, 1)} m²)`,
+        foot: `Dimensi ${panelWidthM}×${panelLengthM}m • PSH ${formatNumber(pshJam, 1)} jam/hari • PR ${prPct}%`,
         isHighlight: true
       },
       {

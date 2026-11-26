@@ -573,3 +573,35 @@ Ketika Anda siap memulai proses implementasi kode:
    - Panel hasil aktif menampilkan Hero Card kapasitas sistem, 3 Kartu Sizing Teknis (`Kapasitas PV`, `Kapasitas Inverter`, `Kapasitas Battery`), Rincian Teknis `Profil Energi Pelanggan` (`energyProfile.js`), serta CTA WhatsApp & Barcode QR.
 3. **Pengarsipan Modul Sebelumnya**:
    - Tab navigasi 4 mode pada `index.html` dinonaktifkan sementara (diarsipkan dalam komentar HTML), sedangkan berkas `residential.js`, `commercial.js`, `battery.js`, `pjuts.js` beserta form dan test unitnya tetap dipertahankan agar sewaktu-waktu dapat diaktifkan kembali.
+
+---
+
+## 7. Pembaruan Arsitektur: Field ke-7 Pilihan Solar Panel & Kalkulasi Kebutuhan Luas Atap
+
+> **Status:** Selesai Diimplementasikan (Completed) ✅
+
+1. **Penambahan Field ke-7 pada Formulir Hybrid Off-Grid (`hybridForm.js`)**:
+   - Menambahkan langkah ke-7 setelah Support PLTS dengan 5 pilihan modul surya Tier-1:
+     1. **550 Wp** (Dimensi: 1.2 m × 2.4 m)
+     2. **610 Wp** (Dimensi: 1.2 m × 2.4 m)
+     3. **615 Wp** (**Default**, Dimensi: 1.2 m × 2.4 m)
+     4. **620 Wp** (Dimensi: 1.2 m × 2.4 m)
+     5. **720 Wp** (Dimensi: 1.2 m × 2.4 m)
+   - Disertai badge `(Def)` pada opsi 615 Wp dan tampilan dimensi $1.2\text{m} \times 2.4\text{m}$ ($2.88\text{ m}^2$) pada masing-masing kartu.
+2. **Kalkulasi Teknis Modul & Luas Atap (`hybrid.js`, `constants.js`)**:
+   - Menambahkan tabel katalog `HYBRID_SOLAR_PANELS` dan konstanta `ROOF_MARGIN_FACTOR: 1.01` (margin 1%).
+   - Rumus Jumlah Panel:
+     $$\text{Jumlah Panel} = \left\lceil \frac{\text{Target kWh/hari}}{3.8 \times 0.82} \times \frac{1000}{\text{Wp terpilih}} \right\rceil$$
+   - Rumus Kapasitas Terpasang:
+     $$\text{Kapasitas PV (kWp)} = \frac{\text{Jumlah Panel} \times \text{Wp terpilih}}{1000}$$
+   - Rumus Kebutuhan Luas Atap:
+     $$\text{Luas Bersih} = \text{Jumlah Panel} \times (1.2 \times 2.4)$$
+     $$\text{Kebutuhan Luas Atap (m²)} = \text{Luas Bersih} \times 1.01$$
+3. **Pembaruan Panel Hasil & Jalur Konversi**:
+   - **Hero Card (`heroCard.js`)**: Menampilkan estimasi luas atap pada subtext utama serta kartu spesifikasi ke-2 (`2. KEBUTUHAN LUAS ATAP: ± X m²`).
+   - **KPI Grid (`kpiGrid.js`)**: Menampilkan luas atap dan dimensi per lembar pada Card 1 (KAPASITAS PV).
+   - **Profil Energi (`energyProfile.js`)**: Menambahkan baris `Spesifikasi Modul Surya` dan `Kebutuhan Panel & Luas Atap`.
+   - **WhatsApp Hotline (`whatsapp.js`)**: Menyertakan detail tipe modul dan estimasi luas atap secara otomatis pada payload konsultasi sales.
+4. **Verifikasi Kualitas & Aksesibilitas**:
+   - Seluruh 76 unit test lulus tanpa peringatan.
+   - Touch target radio card $\ge 44\text{px}$, ber-radius ketat 2px (`rounded-sm`), flat CAD styling 100% patuh `DESIGN.md`.

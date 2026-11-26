@@ -409,10 +409,60 @@ export function getPjutsCostPerPole(lampWattage) {
 }
 
 // 10. Parameter Teknis & Tarif PLN 2026 Khusus PLTS Hybrid Off-Grid
+export const HYBRID_SOLAR_PANELS = Object.freeze({
+  550: {
+    wp: 550,
+    label: '550 Wp',
+    isDefault: false,
+    widthM: 1.2,
+    lengthM: 2.4,
+    areaM2: 2.88,
+    description: 'Tier-1 Solar Module 550 Wp (1.2m × 2.4m)'
+  },
+  610: {
+    wp: 610,
+    label: '610 Wp',
+    isDefault: false,
+    widthM: 1.2,
+    lengthM: 2.4,
+    areaM2: 2.88,
+    description: 'Tier-1 Solar Module 610 Wp (1.2m × 2.4m)'
+  },
+  615: {
+    wp: 615,
+    label: '615 Wp',
+    isDefault: true,
+    widthM: 1.2,
+    lengthM: 2.4,
+    areaM2: 2.88,
+    description: 'Tier-1 Solar Module 615 Wp (Default - 1.2m × 2.4m)'
+  },
+  620: {
+    wp: 620,
+    label: '620 Wp',
+    isDefault: false,
+    widthM: 1.2,
+    lengthM: 2.4,
+    areaM2: 2.88,
+    description: 'Tier-1 Solar Module 620 Wp (1.2m × 2.4m)'
+  },
+  720: {
+    wp: 720,
+    label: '720 Wp',
+    isDefault: false,
+    widthM: 1.2,
+    lengthM: 2.4,
+    areaM2: 2.88,
+    description: 'Tier-1 Solar Module 720 Wp (1.2m × 2.4m)'
+  }
+});
+
 export const HYBRID_TECH_CONFIG = Object.freeze({
   PSH_HOURS: 3.8,               // Peak Sun Hours rata-rata Indonesia (jam/hari)
   PERFORMANCE_RATIO: 0.82,      // Efisiensi sistem keseluruhan (82%)
-  PANEL_WP: 550,                // Kapasitas per lembar panel surya (550 Wp)
+  PANEL_WP_DEFAULT: 615,        // Kapasitas default modul surya (615 Wp)
+  PANEL_WP: 615,                // Fallback default
+  ROOF_MARGIN_FACTOR: 1.01,     // Margin instalasi luas atap 1%
   BATTERY_DOD: 0.85,            // Depth of Discharge baterai Lithium LiFePO4 (85%)
   BATTERY_EFFICIENCY: 0.95,     // Efisiensi baterai & inverter (95%)
   BATTERY_MODULE_KWH: 5.12,     // Kapasitas standar 1 modul baterai (48V 100Ah = 5.12 kWh)
@@ -441,6 +491,19 @@ export const HYBRID_PLN_TARIFFS = Object.freeze({
     { id: 'B3-200KVA', label: 'B-3/TM, TT > 200 kVA (LWBP)', tariff: 1114.74, status: 'Non-Subsidi' }
   ]
 });
+
+/**
+ * Mendapatkan objek konfigurasi spesifikasi panel surya Hybrid Off-Grid
+ * @param {number|string} panelWp
+ * @returns {{ wp: number, label: string, isDefault: boolean, widthM: number, lengthM: number, areaM2: number, description: string }}
+ */
+export function getHybridSolarPanel(panelWp = 615) {
+  const wpNum = Number(panelWp);
+  if (HYBRID_SOLAR_PANELS[wpNum]) {
+    return HYBRID_SOLAR_PANELS[wpNum];
+  }
+  return HYBRID_SOLAR_PANELS[HYBRID_TECH_CONFIG.PANEL_WP_DEFAULT];
+}
 
 /**
  * Mendapatkan objek tarif PLN Hybrid Off-Grid berdasarkan kategori & ID golongan daya

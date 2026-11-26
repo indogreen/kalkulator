@@ -509,14 +509,18 @@ describe('Unified Hybrid Off-Grid Engine (hybrid.js)', () => {
     assert.equal(result.energy.kwhSiangHari, 23.07);
     assert.equal(result.energy.kwhMalamHari, 34.61);
 
-    // PV Sizing: ceil((57.6821 / (3.8 * 0.82)) * 1000 / 550) = 34 panel -> 18.70 kWp
-    assert.equal(result.pv.jumlahPanel, 34);
-    assert.equal(result.pv.kapasitasPvKwp, 18.70);
-    assert.equal(result.pv.panelWp, 550);
+    // PV Sizing: ceil((57.6821 / (3.8 * 0.82)) * 1000 / 615) = 31 panel -> 19.07 kWp
+    assert.equal(result.pv.jumlahPanel, 31);
+    assert.equal(result.pv.kapasitasPvKwp, 19.07);
+    assert.equal(result.pv.panelWp, 615);
+    assert.equal(result.pv.panelWidthM, 1.2);
+    assert.equal(result.pv.panelLengthM, 2.4);
+    assert.equal(result.pv.luasNetM2, 89.28);
+    assert.equal(result.pv.luasAtapM2, 90.2); // 89.28 * 1.01 = 90.17 -> 90.2 m²
     assert.equal(result.pv.pshJam, 3.8);
     assert.equal(result.pv.performanceRatio, 0.82);
 
-    // Inverter Sizing: max(18.70 * 0.85, 57.6821 / 4.5) = 15.895 kW -> 20 kW standar
+    // Inverter Sizing: max(19.07 * 0.85, 57.6821 / 4.5) = 16.21 kW -> 20 kW standar
     assert.equal(result.inverter.kapasitasInverterKw, 20);
     assert.equal(result.inverter.kapasitasInverterW, 20000);
 
@@ -526,6 +530,54 @@ describe('Unified Hybrid Off-Grid Engine (hybrid.js)', () => {
 
     // Pricing ditunda ke perintah selanjutnya
     assert.equal(result.pricing, null);
+  });
+
+  test('Variasi 5 Pilihan Solar Panel (550, 610, 615, 620, 720 Wp) & Kebutuhan Luas Atap', () => {
+    const baseParams = {
+      kategori: 'Residential',
+      dayaId: 'R1-1300',
+      biayaBulanan: 2500000,
+      persenSiang: 40,
+      persenCover: 100
+    };
+
+    // 1. 550 Wp
+    const res550 = calculateHybridOffGrid({ ...baseParams, panelWp: 550 });
+    assert.equal(res550.pv.panelWp, 550);
+    assert.equal(res550.pv.jumlahPanel, 34);
+    assert.equal(res550.pv.kapasitasPvKwp, 18.70);
+    assert.equal(res550.pv.luasAtapM2, 98.9);
+
+    // 2. 610 Wp (Spesifikasi eksplisit: 1.2m x 2.4m, margin 1%)
+    const res610 = calculateHybridOffGrid({ ...baseParams, panelWp: 610 });
+    assert.equal(res610.pv.panelWp, 610);
+    assert.equal(res610.pv.panelWidthM, 1.2);
+    assert.equal(res610.pv.panelLengthM, 2.4);
+    assert.equal(res610.pv.jumlahPanel, 31);
+    assert.equal(res610.pv.kapasitasPvKwp, 18.91);
+    assert.equal(res610.pv.luasNetM2, 89.28);
+    assert.equal(res610.pv.luasAtapM2, 90.2);
+
+    // 3. 615 Wp (Default)
+    const res615 = calculateHybridOffGrid({ ...baseParams, panelWp: 615 });
+    assert.equal(res615.pv.panelWp, 615);
+    assert.equal(res615.pv.jumlahPanel, 31);
+    assert.equal(res615.pv.kapasitasPvKwp, 19.07);
+    assert.equal(res615.pv.luasAtapM2, 90.2);
+
+    // 4. 620 Wp
+    const res620 = calculateHybridOffGrid({ ...baseParams, panelWp: 620 });
+    assert.equal(res620.pv.panelWp, 620);
+    assert.equal(res620.pv.jumlahPanel, 30);
+    assert.equal(res620.pv.kapasitasPvKwp, 18.60);
+    assert.equal(res620.pv.luasAtapM2, 87.3);
+
+    // 5. 720 Wp
+    const res720 = calculateHybridOffGrid({ ...baseParams, panelWp: 720 });
+    assert.equal(res720.pv.panelWp, 720);
+    assert.equal(res720.pv.jumlahPanel, 26);
+    assert.equal(res720.pv.kapasitasPvKwp, 18.72);
+    assert.equal(res720.pv.luasAtapM2, 75.6);
   });
 
   test('Kategori Bisnis & Tarif Bersubsidi / Non-Subsidi', () => {
@@ -583,7 +635,9 @@ describe('Unified Hybrid Off-Grid Engine (hybrid.js)', () => {
     // Lookup helper fallback
     assert.equal(getHybridTariffOption('Bisnis').id, 'B2-6600');
     assert.equal(getHybridTariffOption('Residential', 'INVALID').id, 'R1-1300');
-    assert.equal(HYBRID_TECH_CONFIG.PANEL_WP, 550);
+    assert.equal(HYBRID_TECH_CONFIG.PANEL_WP, 615);
+    assert.equal(HYBRID_TECH_CONFIG.PANEL_WP_DEFAULT, 615);
+    assert.equal(HYBRID_TECH_CONFIG.ROOF_MARGIN_FACTOR, 1.01);
     assert.ok(HYBRID_PLN_TARIFFS.Residential.length === 7);
     assert.ok(HYBRID_PLN_TARIFFS.Bisnis.length === 6);
   });

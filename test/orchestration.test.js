@@ -50,6 +50,7 @@ describe('Reactive State Orchestration (Phase 7)', () => {
     assert.equal(DEFAULT_APP_STATE.modes.hybrid.persenMalam, 60);
     assert.equal(DEFAULT_APP_STATE.modes.hybrid.sistem, 'Hybrid Offgrid');
     assert.equal(DEFAULT_APP_STATE.modes.hybrid.persenCover, 100);
+    assert.equal(DEFAULT_APP_STATE.modes.hybrid.panelWp, 615);
 
     // Archived Residential defaults
     assert.equal(DEFAULT_APP_STATE.modes.residential.powerVa, 2200);
@@ -88,7 +89,8 @@ describe('Reactive State Orchestration (Phase 7)', () => {
     setActiveMode('hybrid');
     const hybridResult = calculateCurrentResult();
     assert.equal(hybridResult.mode, 'hybrid');
-    assert.equal(hybridResult.pv.jumlahPanel, 14);
+    assert.equal(hybridResult.pv.jumlahPanel, 13);
+    assert.equal(hybridResult.pv.panelWp, 615);
     assert.equal(hybridResult.inverter.kapasitasInverterKw, 8);
     assert.equal(hybridResult.battery.jumlahModulBattery, 4);
 
@@ -398,6 +400,10 @@ describe('Hybrid Form Component (hybridForm.js)', () => {
     const cov100 = createMockEl('radio-cover-100', '100');
     radioGroups.persenCover = [cov50, cov100];
 
+    const panel610 = createMockEl('radio-panel-610', '610');
+    const panel615 = createMockEl('radio-panel-615', '615');
+    radioGroups.panelWp = [panel610, panel615];
+
     const mockContainer = {
       innerHTML: '',
       querySelector(selector) {
@@ -407,6 +413,7 @@ describe('Hybrid Form Component (hybridForm.js)', () => {
       querySelectorAll(selector) {
         if (selector === 'input[name="kategori"]') return radioGroups.kategori;
         if (selector === 'input[name="persenCover"]') return radioGroups.persenCover;
+        if (selector === 'input[name="panelWp"]') return radioGroups.panelWp;
         return [];
       }
     };
@@ -418,6 +425,7 @@ describe('Hybrid Form Component (hybridForm.js)', () => {
     assert.ok(mockContainer.innerHTML.includes('1. Kategori Peruntukan'));
     assert.ok(mockContainer.innerHTML.includes('5. Sistem PLTS'));
     assert.ok(mockContainer.innerHTML.includes('6. Support PLTS'));
+    assert.ok(mockContainer.innerHTML.includes('7. Pilihan Solar Panel'));
 
     // Test input siang 30% -> malam otomatis 70%, slider 30
     listeners['input-hybrid-day-percent:input']({ target: { value: '30' } });
@@ -431,6 +439,12 @@ describe('Hybrid Form Component (hybridForm.js)', () => {
     assert.equal(elements['input-hybrid-day-percent'].value, '55');
     assert.equal(elements['input-hybrid-night-percent'].value, '45');
     assert.equal(capturedState.persenSiang, 55);
+
+    // Test pilih solar panel 610 Wp
+    panel610.checked = true;
+    panel615.checked = false;
+    listeners['radio-panel-610:change']();
+    assert.equal(capturedState.panelWp, 610);
 
     // Test pindah kategori ke Bisnis -> daya otomatis B2-6600
     catBiz.checked = true;

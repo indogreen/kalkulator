@@ -31,6 +31,13 @@ export function getEnergyProfileHtml({ mode, result }) {
   const kwhSiangHari = result.energy?.kwhSiangHari || 0;
   const kwhMalamHari = result.energy?.kwhMalamHari || 0;
 
+  const panelWp = result.pv?.panelWp || 615;
+  const jumlahPanel = result.pv?.jumlahPanel || 0;
+  const luasAtap = result.pv?.luasAtapM2 || 0;
+  const panelWidthM = result.pv?.panelWidthM || 1.2;
+  const panelLengthM = result.pv?.panelLengthM || 2.4;
+  const panelAreaM2 = result.pv?.panelAreaM2 || 2.88;
+
   const rows = [
     {
       label: 'Kategori & Daya PLN',
@@ -53,6 +60,15 @@ export function getEnergyProfileHtml({ mode, result }) {
     {
       label: 'Beban Siang / Malam (PLTS)',
       value: `${formatNumber(kwhSiangHari, 2)} kWh / ${formatNumber(kwhMalamHari, 2)} kWh`
+    },
+    {
+      label: 'Spesifikasi Modul Surya',
+      value: `${panelWp} Wp (${panelWidthM}m × ${panelLengthM}m = ${formatNumber(panelAreaM2, 2)} m²/lembar)`
+    },
+    {
+      label: 'Kebutuhan Panel & Luas Atap',
+      value: `${jumlahPanel} Lembar Panel (Kebutuhan Atap: ± ${formatNumber(luasAtap, 1)} m²)`,
+      highlight: true
     }
   ];
 
