@@ -18,6 +18,8 @@ import { getKpiGridHtml } from '../src/js/components/results/kpiGrid.js';
 import { getHeroCardHtml } from '../src/js/components/results/heroCard.js';
 import { calculateHybridOffGrid } from '../src/js/calculator/hybrid.js';
 import { calculateResidential } from '../src/js/calculator/residential.js';
+import { applyCacheBustingToHtml, computeAssetHash } from '../scripts/build.js';
+import { applyNoCacheHeaders, createStaticHandler } from '../scripts/serve.js';
 
 describe('Phase 8: Accessibility & WCAG 2.1 AA Audit', () => {
   const indexHtml = fs.readFileSync(path.resolve('index.html'), 'utf8');
@@ -170,5 +172,69 @@ describe('Phase 8: Build Verification & Zero External Dependency Leak Check', ()
     const content = fs.readFileSync(cssPath, 'utf8');
     assert.ok(content.length > 5000, 'Compiled CSS must have substantive rules');
     assert.ok(content.includes('#00b100'), 'Compiled CSS must contain INDOGREEN primary green #00b100');
+  });
+
+  test('4. Cache-busting hashes in index.html match built dist assets', () => {
+    const sampleHtml = '<link rel="stylesheet" href="./dist/css/style.css"><script src="./dist/js/bundle.js"></script><img src="./assets/images/indogreen.png">';
+    const busted = applyCacheBustingToHtml(sampleHtml, { css: 'aaaa1111', js: 'bbbb2222', logo: 'cccc3333' });
+    assert.ok(busted.includes('./dist/css/style.css?v=aaaa1111'));
+    assert.ok(busted.includes('./dist/js/bundle.js?v=bbbb2222'));
+    assert.ok(busted.includes('./assets/images/indogreen.png?v=cccc3333'));
+
+    // Re-applying with new hashes replaces previous query values cleanly
+    const rebusted = applyCacheBustingToHtml(busted, { css: 'dddd4444', js: 'eeee5555' });
+    assert.ok(rebusted.includes('./dist/css/style.css?v=dddd4444'));
+    assert.ok(rebusted.includes('./dist/js/bundle.js?v=eeee5555'));
+    assert.ok(!rebusted.includes('aaaa1111'));
+
+    const indexHtml = fs.readFileSync(path.resolve('index.html'), 'utf8');
+    const cssHash = computeAssetHash('dist/css/style.css');
+    const jsHash = computeAssetHash('dist/js/bundle.js');
+    const logoHash = computeAssetHash('assets/images/indogreen.png');
+    assert.ok(indexHtml.includes(`./dist/css/style.css?v=${cssHash}`), 'index.html CSS href must include current content hash');
+    assert.ok(indexHtml.includes(`./dist/js/bundle.js?v=${jsHash}`), 'index.html JS src must include current content hash');
+    assert.ok(indexHtml.includes(`./assets/images/indogreen.png?v=${logoHash}`), 'index.html logo src must include current content hash');
+  });
+
+  test('5. Static server emits no-cache & Cloudflare CDN bypass headers', async () => {
+    const headers = {};
+    const mockRes = {
+      statusCode: 0,
+      setHeader(k, v) { headers[k.toLowerCase()] = v; },
+      end() {}
+    };
+    applyNoCacheHeaders(mockRes);
+    assert.equal(headers['cache-control'], 'no-store, no-cache, must-revalidate, proxy-revalidate');
+    assert.equal(headers['cdn-cache-control'], 'no-store');
+    assert.equal(headers['cloudflare-cdn-cache-control'], 'no-store');
+
+    const handler = createStaticHandler(process.cwd());
+
+    // Path traversal blocked
+    const secHeaders = {};
+    let secStatus = 0;
+    handler(
+      { url: '/../package.json' },
+      {
+        set statusCode(code) { secStatus = code; },
+        get statusCode() { return secStatus; },
+        setHeader(k, v) { secHeaders[k.toLowerCase()] = v; },
+        end() {}
+      }
+    );
+    assert.equal(secStatus, 403);
+
+    // Malformed URI returns 400
+    let badStatus = 0;
+    handler(
+      { url: '/%E0%A4%A' },
+      {
+        set statusCode(code) { badStatus = code; },
+        get statusCode() { return badStatus; },
+        setHeader() {},
+        end() {}
+      }
+    );
+    assert.equal(badStatus, 400);
   });
 });

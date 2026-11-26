@@ -5,7 +5,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build:css": "tailwindcss -i ./src/css/style.css -o ./dist/css/style.css --minify",
+    "build:css": "tailwindcss -i ./src/css/style.css -o ./dist/css/style.css --minify && node scripts/build.js --hash-only",
     "build:js": "node scripts/build.js",
     "build": "npm run build:css && npm run build:js",
     "serve": "node scripts/serve.js",
