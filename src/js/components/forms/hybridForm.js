@@ -386,7 +386,7 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
           </div>
 
           <div class="pl-4 flex flex-col gap-2.5">
-            <p class="text-xs text-mute">Pilihan kapasitas per modul surya (Default: 615 Wp, 1,2m × 2,4m):</p>
+            <p class="text-xs text-mute">Pilihan kapasitas per modul surya (Dimensi: 1,2m × 2,4m):</p>
 
             <div class="grid grid-cols-2 mobile:grid-cols-3 tablet:grid-cols-5 gap-2" role="radiogroup" aria-label="Pilihan Kapasitas Solar Panel">
               ${HYBRID_SOLAR_PANEL_OPTIONS.map(panel => {
@@ -404,14 +404,7 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
                         ? 'border-2 border-primary bg-ink text-on-dark font-bold'
                         : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
                     }">
-                      <div class="flex items-center justify-center gap-1">
-                        <span class="text-sm mobile:text-base font-bold block tabular-nums">${panel.label}</span>
-                        ${panel.isDefault ? `
-                          <span class="text-[9px] font-bold px-1 py-0.2 rounded-xs uppercase tracking-tight ${
-                            isSelected ? 'bg-primary text-on-primary' : 'bg-primary/20 text-primary-dark'
-                          }">Def</span>
-                        ` : ''}
-                      </div>
+                      <span class="text-sm mobile:text-base font-bold block tabular-nums">${panel.label}</span>
                       <span class="panel-dim text-[11px] font-medium block mt-0.5 tabular-nums ${
                         isSelected ? 'text-primary' : 'text-mute'
                       }">${panel.widthM}m × ${panel.lengthM}m</span>
