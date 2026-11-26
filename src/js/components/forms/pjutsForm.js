@@ -49,37 +49,39 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
           </span>
         </div>
 
-        <div class="relative flex items-center">
-          <input type="number" 
-            id="input-pjuts-pole-count" 
-            name="poleCount"
-            min="1" 
-            max="1000" 
-            step="1"
-            value="${current.poleCount}" 
-            placeholder="10"
-            class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
-          <span class="absolute right-md text-mute font-bold text-sm pointer-events-none select-none">Tiang</span>
-        </div>
+        <div class="pl-4 flex flex-col gap-2.5">
+          <div class="relative flex items-center">
+            <input type="number" 
+              id="input-pjuts-pole-count" 
+              name="poleCount"
+              min="1" 
+              max="1000" 
+              step="1"
+              value="${current.poleCount}" 
+              placeholder="10"
+              class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+            <span class="absolute right-md text-mute font-bold text-sm pointer-events-none select-none">Tiang</span>
+          </div>
 
-        <!-- Quick Pole Chips (44px min touch target) -->
-        <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Preset cepat jumlah tiang lampu jalan">
-          ${PJUTS_POLE_CHIPS.map(count => {
-            const isChipActive = current.poleCount === count;
-            return `
-              <button type="button" 
-                class="btn-pole-chip min-h-touch min-w-[44px] px-sm py-xs border rounded-sm text-xs font-semibold tabular-nums transition-all select-none ${
-                  isChipActive 
-                    ? 'border-2 border-primary bg-primary text-on-primary' 
-                    : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
-                }" 
-                data-poles="${count}"
-                aria-pressed="${isChipActive ? 'true' : 'false'}"
-                aria-label="Pilih ${count} Tiang">
-                ${count} Tiang
-              </button>
-            `;
-          }).join('')}
+          <!-- Quick Pole Chips (44px min touch target) -->
+          <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Preset cepat jumlah tiang lampu jalan">
+            ${PJUTS_POLE_CHIPS.map(count => {
+              const isChipActive = current.poleCount === count;
+              return `
+                <button type="button" 
+                  class="btn-pole-chip min-h-touch min-w-[44px] px-sm py-xs border rounded-sm text-xs font-semibold tabular-nums transition-all select-none ${
+                    isChipActive 
+                      ? 'border-2 border-primary bg-primary text-on-primary' 
+                      : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
+                  }" 
+                  data-poles="${count}"
+                  aria-pressed="${isChipActive ? 'true' : 'false'}"
+                  aria-label="Pilih ${count} Tiang">
+                  ${count} Tiang
+                </button>
+              `;
+            }).join('')}
+          </div>
         </div>
       </div>
 
@@ -89,47 +91,52 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
           2. Daya Lampu LED PJU (Watt)
         </label>
 
-        <div class="grid grid-cols-4 tablet:grid-cols-8 gap-2" role="group" aria-labelledby="label-pjuts-watt">
-          ${PJUTS_WATT_OPTIONS.map(watt => {
-            const isActive = current.lampWattage === watt;
-            return `
-              <button type="button" 
-                class="btn-watt-preset h-touch border rounded-sm text-xs font-semibold tabular-nums transition-all select-none ${
-                  isActive 
-                    ? 'border-2 border-primary bg-ink text-on-dark font-bold' 
-                    : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
-                }" 
-                data-watt="${watt}"
-                aria-pressed="${isActive ? 'true' : 'false'}"
-                aria-label="Pilih daya lampu ${watt} Watt">
-                ${watt}W
-              </button>
-            `;
-          }).join('')}
+        <div class="pl-4">
+          <div class="grid grid-cols-4 tablet:grid-cols-8 gap-2" role="group" aria-labelledby="label-pjuts-watt">
+            ${PJUTS_WATT_OPTIONS.map(watt => {
+              const isActive = current.lampWattage === watt;
+              return `
+                <button type="button" 
+                  class="btn-watt-preset h-touch border rounded-sm text-xs font-semibold tabular-nums transition-all select-none ${
+                    isActive 
+                      ? 'border-2 border-primary bg-ink text-on-dark font-bold' 
+                      : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
+                  }" 
+                  data-watt="${watt}"
+                  aria-pressed="${isActive ? 'true' : 'false'}"
+                  aria-label="Pilih daya lampu ${watt} Watt">
+                  ${watt}W
+                </button>
+              `;
+            }).join('')}
+          </div>
         </div>
       </div>
 
       <!-- 3. Fitur Smart Dimming Otomatis -->
-      <div class="border border-hairline bg-surface-soft p-4 rounded-sm flex items-center justify-between gap-4 select-none">
-        <div class="flex flex-col gap-1 max-w-sm">
-          <div class="flex items-center gap-2">
-            <span class="text-sm font-semibold text-ink">Smart Dimming Otomatis</span>
-            <span class="text-[11px] px-2 py-0.5 bg-primary text-on-primary font-bold rounded-sm uppercase">Hemat ~30%</span>
-          </div>
-          <p class="text-xs text-mute leading-normal">
-            100% daya pada 5 jam awal (18:00 - 23:00) saat ramai, kemudian otomatis 50% daya (23:00 - 06:00) saat sepi.
-          </p>
+      <div class="flex flex-col gap-2.5">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-semibold text-ink">3. Fitur Smart Dimming Otomatis</span>
+          <span class="text-[11px] px-2 py-0.5 bg-primary text-on-primary font-bold rounded-sm uppercase">Hemat ~30%</span>
         </div>
 
-        <label class="relative min-h-touch min-w-touch inline-flex items-center justify-center cursor-pointer p-1">
-          <input type="checkbox" 
-            id="toggle-smart-dimming" 
-            name="smartDimming" 
-            class="sr-only peer" 
-            aria-label="Aktifkan Fitur Smart Dimming Otomatis"
-            ${current.smartDimming ? 'checked' : ''}>
-          <div class="w-12 h-6 bg-hairline peer-focus:outline-none rounded-sm peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[13px] after:left-[7px] after:bg-white after:border-hairline after:border after:rounded-sm after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-        </label>
+        <div class="pl-4">
+          <div class="border border-hairline bg-surface-soft p-4 rounded-sm flex items-center justify-between gap-4 select-none">
+            <p class="text-xs text-mute leading-normal max-w-sm">
+              100% daya pada 5 jam awal (18:00 - 23:00) saat ramai, kemudian otomatis 50% daya (23:00 - 06:00) saat sepi.
+            </p>
+
+            <label class="relative min-h-touch min-w-touch inline-flex items-center justify-center cursor-pointer p-1">
+              <input type="checkbox" 
+                id="toggle-smart-dimming" 
+                name="smartDimming" 
+                class="sr-only peer" 
+                aria-label="Aktifkan Fitur Smart Dimming Otomatis"
+                ${current.smartDimming ? 'checked' : ''}>
+              <div class="w-12 h-6 bg-hairline peer-focus:outline-none rounded-sm peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[13px] after:left-[7px] after:bg-white after:border-hairline after:border after:rounded-sm after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+            </label>
+          </div>
+        </div>
       </div>
 
       <!-- 4. Hari Otonomi Cuaca Mendung / Hujan -->
@@ -138,23 +145,25 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
           4. Cadangan Hari Otonomi (Cuaca Hujan/Mendung)
         </label>
 
-        <div class="grid grid-cols-3 gap-2" role="group" aria-labelledby="label-pjuts-autonomy">
-          ${PJUTS_AUTONOMY_OPTIONS.map(days => {
-            const isActive = current.autonomyDays === days;
-            return `
-              <button type="button" 
-                class="btn-autonomy-preset h-touch border rounded-sm text-xs font-semibold tabular-nums transition-all select-none ${
-                  isActive 
-                    ? 'border-2 border-primary bg-ink text-on-dark font-bold' 
-                    : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
-                }" 
-                data-days="${days}"
-                aria-pressed="${isActive ? 'true' : 'false'}"
-                aria-label="Cadangan ${days} Hari Otonomi">
-                ${days} Hari <span class="hidden mobile:inline">Otonomi</span>
-              </button>
-            `;
-          }).join('')}
+        <div class="pl-4">
+          <div class="grid grid-cols-3 gap-2" role="group" aria-labelledby="label-pjuts-autonomy">
+            ${PJUTS_AUTONOMY_OPTIONS.map(days => {
+              const isActive = current.autonomyDays === days;
+              return `
+                <button type="button" 
+                  class="btn-autonomy-preset h-touch border rounded-sm text-xs font-semibold tabular-nums transition-all select-none ${
+                    isActive 
+                      ? 'border-2 border-primary bg-ink text-on-dark font-bold' 
+                      : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
+                  }" 
+                  data-days="${days}"
+                  aria-pressed="${isActive ? 'true' : 'false'}"
+                  aria-label="Cadangan ${days} Hari Otonomi">
+                  ${days} Hari <span class="hidden mobile:inline">Otonomi</span>
+                </button>
+              `;
+            }).join('')}
+          </div>
         </div>
       </div>
 
@@ -166,17 +175,19 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
           <label for="input-pjuts-night-hours" class="text-sm font-semibold text-ink">
             5. Durasi Nyala per Malam
           </label>
-          <div class="relative flex items-center">
-            <input type="number" 
-              id="input-pjuts-night-hours" 
-              name="nightHours" 
-              min="8" 
-              max="16" 
-              value="${current.nightHours}" 
-              placeholder="12"
-              aria-label="Durasi Nyala Lampu per Malam dalam jam"
-              class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
-            <span class="absolute right-md text-mute font-bold text-sm pointer-events-none">Jam/Malam</span>
+          <div class="pl-4">
+            <div class="relative flex items-center">
+              <input type="number" 
+                id="input-pjuts-night-hours" 
+                name="nightHours" 
+                min="8" 
+                max="16" 
+                value="${current.nightHours}" 
+                placeholder="12"
+                aria-label="Durasi Nyala Lampu per Malam dalam jam"
+                class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+              <span class="absolute right-md text-mute font-bold text-sm pointer-events-none">Jam/Malam</span>
+            </div>
           </div>
         </div>
 
@@ -185,16 +196,18 @@ export function renderPjutsForm(container, state = {}, onChange = () => {}) {
           <label for="select-pjuts-region" class="text-sm font-semibold text-ink">
             6. Wilayah Lokasi Pemasangan
           </label>
-          <select id="select-pjuts-region" 
-            name="region" 
-            aria-label="Pilih Wilayah Lokasi Pemasangan PJUTS"
-            class="h-touch border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
-            ${Object.values(REGIONS_PSH).map(reg => `
-              <option value="${reg.id}" ${current.region === reg.id ? 'selected' : ''}>
-                ${reg.label} (${reg.psh} PSH)
-              </option>
-            `).join('')}
-          </select>
+          <div class="pl-4">
+            <select id="select-pjuts-region" 
+              name="region" 
+              aria-label="Pilih Wilayah Lokasi Pemasangan PJUTS"
+              class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+              ${Object.values(REGIONS_PSH).map(reg => `
+                <option value="${reg.id}" ${current.region === reg.id ? 'selected' : ''}>
+                  ${reg.label} (${reg.psh} PSH)
+                </option>
+              `).join('')}
+            </select>
+          </div>
         </div>
 
       </div>

@@ -26,7 +26,7 @@ export function generateWhatsAppMessage(mode, input = {}, result = {}) {
   if (mode === 'hybrid') {
     const kategori = input.kategori || result.inputs?.kategori || 'Residential';
     const dayaLabel = result.inputs?.dayaLabel || input.dayaId || 'R-1/TR 1.300 VA';
-    const monthlyBill = formatRupiah(input.biayaBulanan || result.inputs?.biayaBulanan || 2500000);
+    const monthlyBill = formatRupiah(input.biayaBulanan || result.inputs?.biayaBulanan || 1000000);
     const persenSiang = result.inputs?.persenSiang ?? input.persenSiang ?? 40;
     const persenMalam = result.inputs?.persenMalam ?? (100 - persenSiang);
     const persenCover = result.inputs?.persenCover ?? input.persenCover ?? 100;

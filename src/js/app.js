@@ -39,7 +39,7 @@ export const DEFAULT_APP_STATE = Object.freeze({
     hybrid: {
       kategori: 'Residential',
       dayaId: 'R1-1300',
-      biayaBulanan: 2500000,
+      biayaBulanan: 1000000,
       persenSiang: 40,
       persenMalam: 60,
       sistem: 'Hybrid Offgrid',

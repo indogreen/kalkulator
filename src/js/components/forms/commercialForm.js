@@ -49,20 +49,22 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
           1. Golongan Tarif Listrik PLN Komersial / Industri
         </label>
 
-        <select id="select-com-tariff" 
-          name="tariffGroup"
-          aria-label="Golongan Tarif Listrik PLN Komersial atau Industri"
-          class="h-touch border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
-          ${COMMERCIAL_TARIFF_OPTIONS.map(code => {
-            const tariff = PLN_TARIFFS_2026[code];
-            const isSelected = current.tariffGroup === code;
-            return `
-              <option value="${code}" ${isSelected ? 'selected' : ''}>
-                ${tariff.name} — Rp ${tariff.rate.toLocaleString('id-ID', { minimumFractionDigits: 2 })}/kWh
-              </option>
-            `;
-          }).join('')}
-        </select>
+        <div class="pl-4">
+          <select id="select-com-tariff" 
+            name="tariffGroup"
+            aria-label="Golongan Tarif Listrik PLN Komersial atau Industri"
+            class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+            ${COMMERCIAL_TARIFF_OPTIONS.map(code => {
+              const tariff = PLN_TARIFFS_2026[code];
+              const isSelected = current.tariffGroup === code;
+              return `
+                <option value="${code}" ${isSelected ? 'selected' : ''}>
+                  ${tariff.name} — Rp ${tariff.rate.toLocaleString('id-ID', { minimumFractionDigits: 2 })}/kWh
+                </option>
+              `;
+            }).join('')}
+          </select>
+        </div>
       </div>
 
       <!-- 2. Tagihan Listrik Bulanan (Rp) -->
@@ -71,36 +73,38 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
           2. Rata-Rata Tagihan Listrik PLN per Bulan (Rp)
         </label>
 
-        <div class="relative flex items-center">
-          <span class="absolute left-md text-mute font-bold text-sm pointer-events-none select-none">Rp</span>
-          <input type="number" 
-            id="input-com-monthly-bill" 
-            name="monthlyBill"
-            min="1000000" 
-            step="1000000"
-            value="${current.monthlyBill}" 
-            placeholder="Contoh: 50.000.000"
-            class="h-touch w-full border border-hairline bg-canvas pl-xxl pr-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
-        </div>
+        <div class="pl-4 flex flex-col gap-2.5">
+          <div class="relative flex items-center">
+            <span class="absolute left-md text-mute font-bold text-sm pointer-events-none select-none">Rp</span>
+            <input type="number" 
+              id="input-com-monthly-bill" 
+              name="monthlyBill"
+              min="1000000" 
+              step="1000000"
+              value="${current.monthlyBill}" 
+              placeholder="Contoh: 50.000.000"
+              class="h-touch w-full border border-hairline bg-canvas pl-xxl pr-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+          </div>
 
-        <!-- Quick Chips Preset (44px min touch target) -->
-        <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Preset cepat tagihan listrik komersial">
-          ${COMMERCIAL_BILL_CHIPS.map(chip => {
-            const isChipActive = current.monthlyBill === chip.value;
-            return `
-              <button type="button" 
-                class="btn-com-bill-chip min-h-touch min-w-[44px] px-sm py-xs border rounded-sm text-xs font-semibold tabular-nums transition-all select-none ${
-                  isChipActive 
-                    ? 'border-2 border-primary bg-primary text-on-primary' 
-                    : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
-                }" 
-                data-bill="${chip.value}"
-                aria-pressed="${isChipActive ? 'true' : 'false'}"
-                aria-label="Preset tagihan ${chip.label}">
-                ${chip.label}
-              </button>
-            `;
-          }).join('')}
+          <!-- Quick Chips Preset (44px min touch target) -->
+          <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Preset cepat tagihan listrik komersial">
+            ${COMMERCIAL_BILL_CHIPS.map(chip => {
+              const isChipActive = current.monthlyBill === chip.value;
+              return `
+                <button type="button" 
+                  class="btn-com-bill-chip min-h-touch min-w-[44px] px-sm py-xs border rounded-sm text-xs font-semibold tabular-nums transition-all select-none ${
+                    isChipActive 
+                      ? 'border-2 border-primary bg-primary text-on-primary' 
+                      : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
+                  }" 
+                  data-bill="${chip.value}"
+                  aria-pressed="${isChipActive ? 'true' : 'false'}"
+                  aria-label="Preset tagihan ${chip.label}">
+                  ${chip.label}
+                </button>
+              `;
+            }).join('')}
+          </div>
         </div>
       </div>
 
@@ -110,29 +114,31 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
           3. Pola Jam Operasional & Profil Beban
         </label>
 
-        <div class="grid grid-cols-1 tablet:grid-cols-2 gap-2.5" role="radiogroup" aria-labelledby="label-com-hours">
-          ${Object.values(COMMERCIAL_OPERATIONAL_HOURS).map(op => {
-            const isSelected = current.operationalHours === op.id;
-            return `
-              <label class="radio-card cursor-pointer border rounded-sm p-3.5 flex flex-col gap-1 transition-all select-none ${
-                isSelected 
-                  ? 'border-2 border-primary bg-surface-soft' 
-                  : 'border-hairline bg-canvas hover:border-hairline-strong'
-              }">
-                <div class="flex items-center justify-between">
-                  <span class="text-sm font-semibold text-ink">${op.label}</span>
-                  <input type="radio" 
-                    id="radio-hours-${op.id}"
-                    name="operationalHours" 
-                    value="${op.id}" 
-                    class="accent-primary h-4 w-4" 
-                    aria-label="${op.label}: ${op.description}"
-                    ${isSelected ? 'checked' : ''}>
-                </div>
-                <span class="text-xs text-mute leading-normal">${op.description}</span>
-              </label>
-            `;
-          }).join('')}
+        <div class="pl-4">
+          <div class="grid grid-cols-1 tablet:grid-cols-2 gap-2.5" role="radiogroup" aria-labelledby="label-com-hours">
+            ${Object.values(COMMERCIAL_OPERATIONAL_HOURS).map(op => {
+              const isSelected = current.operationalHours === op.id;
+              return `
+                <label class="radio-card cursor-pointer border rounded-sm p-3.5 flex flex-col gap-1 transition-all select-none ${
+                  isSelected 
+                    ? 'border-2 border-primary bg-surface-soft' 
+                    : 'border-hairline bg-canvas hover:border-hairline-strong'
+                }">
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm font-semibold text-ink">${op.label}</span>
+                    <input type="radio" 
+                      id="radio-hours-${op.id}"
+                      name="operationalHours" 
+                      value="${op.id}" 
+                      class="accent-primary h-4 w-4" 
+                      aria-label="${op.label}: ${op.description}"
+                      ${isSelected ? 'checked' : ''}>
+                  </div>
+                  <span class="text-xs text-mute leading-normal">${op.description}</span>
+                </label>
+              `;
+            }).join('')}
+          </div>
         </div>
       </div>
 
@@ -142,33 +148,35 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
           4. Skema Finansial & Investasi Pilihan
         </label>
 
-        <div class="grid grid-cols-1 gap-2.5" role="radiogroup" aria-labelledby="label-com-scheme">
-          ${Object.values(COMMERCIAL_SCHEMES).map(scheme => {
-            const isSelected = current.activeScheme === scheme.id;
-            return `
-              <label class="radio-card cursor-pointer border rounded-sm p-3.5 flex items-center justify-between gap-3 transition-all select-none ${
-                isSelected 
-                  ? 'border-2 border-primary bg-surface-soft' 
-                  : 'border-hairline bg-canvas hover:border-hairline-strong'
-              }">
-                <div class="flex flex-col gap-0.5">
-                  <div class="flex items-center gap-2">
-                    <span class="text-sm font-semibold text-ink">${scheme.name}</span>
-                    ${scheme.id === 'opex_ppa' ? '<span class="text-[11px] px-2 py-0.5 bg-surface-elevated text-primary font-bold rounded-sm uppercase">Zero CAPEX</span>' : ''}
-                    ${scheme.id === 'capex' ? '<span class="text-[11px] px-2 py-0.5 bg-primary text-on-primary font-bold rounded-sm uppercase">Hak Milik Hari-1</span>' : ''}
+        <div class="pl-4">
+          <div class="grid grid-cols-1 gap-2.5" role="radiogroup" aria-labelledby="label-com-scheme">
+            ${Object.values(COMMERCIAL_SCHEMES).map(scheme => {
+              const isSelected = current.activeScheme === scheme.id;
+              return `
+                <label class="radio-card cursor-pointer border rounded-sm p-3.5 flex items-center justify-between gap-3 transition-all select-none ${
+                  isSelected 
+                    ? 'border-2 border-primary bg-surface-soft' 
+                    : 'border-hairline bg-canvas hover:border-hairline-strong'
+                }">
+                  <div class="flex flex-col gap-0.5">
+                    <div class="flex items-center gap-2">
+                      <span class="text-sm font-semibold text-ink">${scheme.name}</span>
+                      ${scheme.id === 'opex_ppa' ? '<span class="text-[11px] px-2 py-0.5 bg-surface-elevated text-primary font-bold rounded-sm uppercase">Zero CAPEX</span>' : ''}
+                      ${scheme.id === 'capex' ? '<span class="text-[11px] px-2 py-0.5 bg-primary text-on-primary font-bold rounded-sm uppercase">Hak Milik Hari-1</span>' : ''}
+                    </div>
+                    <span class="text-xs text-mute leading-normal">${scheme.description}</span>
                   </div>
-                  <span class="text-xs text-mute leading-normal">${scheme.description}</span>
-                </div>
-                <input type="radio" 
-                  id="radio-scheme-${scheme.id}"
-                  name="activeScheme" 
-                  value="${scheme.id}" 
-                  class="accent-primary h-4 w-4" 
-                  aria-label="${scheme.name}: ${scheme.description}"
-                  ${isSelected ? 'checked' : ''}>
-              </label>
-            `;
-          }).join('')}
+                  <input type="radio" 
+                    id="radio-scheme-${scheme.id}"
+                    name="activeScheme" 
+                    value="${scheme.id}" 
+                    class="accent-primary h-4 w-4" 
+                    aria-label="${scheme.name}: ${scheme.description}"
+                    ${isSelected ? 'checked' : ''}>
+                </label>
+              `;
+            }).join('')}
+          </div>
         </div>
       </div>
 
@@ -180,16 +188,18 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
           <label for="select-com-region" class="text-sm font-semibold text-ink">
             5. Wilayah Lokasi Pabrik / Gedung
           </label>
-          <select id="select-com-region" 
-            name="region" 
-            aria-label="Pilih Wilayah Lokasi Pabrik atau Gedung"
-            class="h-touch border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
-            ${Object.values(REGIONS_PSH).map(reg => `
-              <option value="${reg.id}" ${current.region === reg.id ? 'selected' : ''}>
-                ${reg.label} (${reg.psh} PSH)
-              </option>
-            `).join('')}
-          </select>
+          <div class="pl-4">
+            <select id="select-com-region" 
+              name="region" 
+              aria-label="Pilih Wilayah Lokasi Pabrik atau Gedung"
+              class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+              ${Object.values(REGIONS_PSH).map(reg => `
+                <option value="${reg.id}" ${current.region === reg.id ? 'selected' : ''}>
+                  ${reg.label} (${reg.psh} PSH)
+                </option>
+              `).join('')}
+            </select>
+          </div>
         </div>
 
         <!-- Input Luas Atap Pabrik -->
@@ -197,17 +207,19 @@ export function renderCommercialForm(container, state = {}, onChange = () => {})
           <label for="input-com-roof-area" class="text-sm font-semibold text-ink">
             6. Luas Atap Fasilitas (m²)
           </label>
-          <div class="relative flex items-center">
-            <input type="number" 
-              id="input-com-roof-area" 
-              name="roofArea" 
-              min="0" 
-              step="50"
-              value="${current.roofArea}" 
-              placeholder="300"
-              aria-label="Luas Atap Fasilitas dalam meter persegi"
-              class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
-            <span class="absolute right-md text-mute font-bold text-sm pointer-events-none">m²</span>
+          <div class="pl-4">
+            <div class="relative flex items-center">
+              <input type="number" 
+                id="input-com-roof-area" 
+                name="roofArea" 
+                min="0" 
+                step="50"
+                value="${current.roofArea}" 
+                placeholder="300"
+                aria-label="Luas Atap Fasilitas dalam meter persegi"
+                class="h-touch w-full border border-hairline bg-canvas px-md py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+              <span class="absolute right-md text-mute font-bold text-sm pointer-events-none">m²</span>
+            </div>
           </div>
         </div>
 

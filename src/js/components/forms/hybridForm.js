@@ -50,7 +50,7 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
   const dayaObj = getHybridTariffOption(kategori, state.dayaId);
   const biayaBulanan = state.biayaBulanan !== undefined && state.biayaBulanan !== null
     ? Math.max(0, Number(state.biayaBulanan) || 0)
-    : 2500000;
+    : 1000000;
 
   let persenSiang = 40;
   if (state.persenSiang !== undefined && state.persenSiang !== null && !isNaN(Number(state.persenSiang))) {
@@ -83,52 +83,47 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
         <legend class="text-sm font-semibold text-ink mb-0.5">
           1. Kategori Peruntukan
         </legend>
-        <p class="text-xs text-mute">Pilih kategori pelanggan PLN</p>
-
-        <div class="grid grid-cols-2 gap-3">
-          ${[
-            { id: 'Residential', title: 'Residential', desc: 'R-1 s/d R-3' },
-            { id: 'Bisnis', title: 'Bisnis', desc: 'B-1 s/d B-3' }
-          ].map(cat => {
-            const isSelected = current.kategori === cat.id;
-            return `
-              <label for="radio-cat-${cat.id}" class="cursor-pointer block">
-                <input type="radio"
-                  id="radio-cat-${cat.id}"
-                  name="kategori"
-                  value="${cat.id}"
-                  class="sr-only peer"
-                  ${isSelected ? 'checked' : ''}>
-                <div class="category-card min-h-touch p-3.5 border rounded-sm transition-all select-none peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-focus-visible:outline-offset-2 ${
-                  isSelected
-                    ? 'border-2 border-primary bg-surface-soft'
-                    : 'border-hairline bg-canvas hover:border-hairline-strong'
-                }">
-                  <div class="flex items-center justify-between mb-1">
-                    <span class="text-sm font-bold text-ink">${cat.title}</span>
-                    <span class="w-4 h-4 rounded-sm border border-hairline-strong flex items-center justify-center bg-canvas">
-                      <span class="cat-dot w-2 h-2 rounded-xs bg-primary transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0'}"></span>
-                    </span>
+        <div class="pl-4 flex flex-col gap-2.5">
+          <div class="grid grid-cols-2 gap-3">
+            ${[
+              { id: 'Residential', title: 'Residential', desc: 'R-1 s/d R-3' },
+              { id: 'Bisnis', title: 'Bisnis', desc: 'B-1 s/d B-3' }
+            ].map(cat => {
+              const isSelected = current.kategori === cat.id;
+              return `
+                <label for="radio-cat-${cat.id}" class="cursor-pointer block">
+                  <input type="radio"
+                    id="radio-cat-${cat.id}"
+                    name="kategori"
+                    value="${cat.id}"
+                    class="sr-only peer"
+                    ${isSelected ? 'checked' : ''}>
+                  <div class="category-card min-h-touch p-3.5 border rounded-sm transition-all select-none peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-focus-visible:outline-offset-2 ${
+                    isSelected
+                      ? 'border-2 border-primary bg-surface-soft'
+                      : 'border-hairline bg-canvas hover:border-hairline-strong'
+                  }">
+                    <div class="flex items-center justify-between mb-1">
+                      <span class="text-sm font-bold text-ink">${cat.title}</span>
+                      <span class="w-4 h-4 rounded-sm border border-hairline-strong flex items-center justify-center bg-canvas">
+                        <span class="cat-dot w-2 h-2 rounded-xs bg-primary transition-opacity ${isSelected ? 'opacity-100' : 'opacity-0'}"></span>
+                      </span>
+                    </div>
+                    <span class="block text-xs text-mute leading-snug">${cat.desc}</span>
                   </div>
-                  <span class="block text-xs text-mute leading-snug">${cat.desc}</span>
-                </div>
-              </label>
-            `;
-          }).join('')}
+                </label>
+              `;
+            }).join('')}
+          </div>
         </div>
       </fieldset>
 
       <!-- 2. Daya PLN -->
       <div class="flex flex-col gap-2.5">
         <div class="flex items-center justify-between gap-2">
-          <div>
-            <label for="select-hybrid-daya" class="text-sm font-semibold text-ink block">
-              2. Daya PLN
-            </label>
-            <span class="text-xs text-mute">
-              Golongan <strong id="label-hybrid-kategori" class="text-ink font-semibold">${current.kategori}</strong>
-            </span>
-          </div>
+          <label for="select-hybrid-daya" class="text-sm font-semibold text-ink block">
+            2. Daya PLN
+          </label>
           <span id="badge-hybrid-daya-status" class="px-2.5 py-0.5 rounded-sm text-[11px] font-bold uppercase tracking-wide border ${
             dayaObj.status === 'Bersubsidi'
               ? 'bg-accent-yellow-pale text-ink border-warning'
@@ -138,21 +133,27 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
           </span>
         </div>
 
-        <select id="select-hybrid-daya"
-          name="dayaId"
-          class="min-h-touch w-full border border-hairline bg-canvas px-md py-2.5 text-ink font-semibold text-xs mobile:text-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
-          ${tariffList.map(item => `
-            <option value="${item.id}" ${item.id === dayaObj.id ? 'selected' : ''}>
-              ${item.label}
-            </option>
-          `).join('')}
-        </select>
-
-        <div class="flex items-center justify-between px-3 py-2 rounded-sm bg-surface-soft border border-hairline text-xs">
-          <span class="text-mute font-medium">Tarif Dasar Listrik:</span>
-          <span id="display-hybrid-tariff" class="font-bold text-primary-dark tabular-nums">
-            Rp ${formatNumber(dayaObj.tariff, 2)} / kWh
+        <div class="pl-4 flex flex-col gap-2.5">
+          <span class="hidden text-xs text-mute block">
+            Golongan <strong id="label-hybrid-kategori" class="text-ink font-semibold">${current.kategori}</strong>
           </span>
+
+          <select id="select-hybrid-daya"
+            name="dayaId"
+            class="min-h-touch w-full border border-hairline bg-canvas px-md py-2.5 text-ink font-semibold text-xs mobile:text-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+            ${tariffList.map(item => `
+              <option value="${item.id}" ${item.id === dayaObj.id ? 'selected' : ''}>
+                ${item.label}
+              </option>
+            `).join('')}
+          </select>
+
+          <div class="flex items-center justify-between px-3 py-2 rounded-sm bg-surface-soft border border-hairline text-xs">
+            <span class="text-mute font-medium">Tarif Dasar Listrik:</span>
+            <span id="display-hybrid-tariff" class="font-bold text-primary-dark tabular-nums">
+              Rp ${formatNumber(dayaObj.tariff, 2)} / kWh
+            </span>
+          </div>
         </div>
       </div>
 
@@ -162,57 +163,59 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
           3. Biaya Listrik per Bulan (Rp)
         </label>
 
-        <div class="relative flex items-center">
-          <span class="absolute left-md text-mute font-bold text-sm pointer-events-none select-none">Rp</span>
-          <input type="text"
-            id="input-hybrid-bill"
-            name="biayaBulanan"
-            inputmode="numeric"
-            enterkeyhint="next"
-            value="${current.biayaBulanan > 0 ? current.biayaBulanan.toLocaleString('id-ID') : ''}"
-            placeholder="Contoh: 2.500.000"
-            aria-describedby="hint-hybrid-bill"
-            aria-invalid="false"
-            class="h-touch w-full border border-hairline bg-canvas pl-xxl pr-md py-input-y text-ink font-bold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
-        </div>
-
-        <p id="error-hybrid-bill" class="hidden text-xs font-semibold text-error flex items-center gap-1.5" role="status">
-          <span aria-hidden="true">!</span>
-          <span>Masukkan biaya listrik per bulan minimal Rp 50.000.</span>
-        </p>
-
-        <!-- Quick Chips Preset (44px min touch target) -->
-        <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Preset cepat biaya listrik bulanan">
-          ${HYBRID_BILL_CHIPS.map(chip => {
-            const isChipActive = current.biayaBulanan === chip.value;
-            return `
-              <button type="button"
-                class="btn-hybrid-bill-chip min-h-touch min-w-[44px] px-sm py-xs border rounded-sm text-xs font-semibold tabular-nums transition-all select-none ${
-                  isChipActive
-                    ? 'border-2 border-primary bg-primary text-on-primary font-bold'
-                    : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
-                }"
-                data-bill="${chip.value}"
-                aria-pressed="${isChipActive ? 'true' : 'false'}">
-                ${chip.label}
-              </button>
-            `;
-          }).join('')}
-        </div>
-
-        <!-- Live kWh Estimate -->
-        <div class="grid grid-cols-2 gap-3 p-3 rounded-sm bg-surface-soft border border-hairline">
-          <div class="flex flex-col gap-0.5">
-            <span class="text-[11px] text-mute font-semibold uppercase tracking-wide">Estimasi / Bulan</span>
-            <strong id="preview-hybrid-kwh-month" class="text-sm font-bold text-ink tabular-nums">
-              ${formatNumber(initialKwhMonth, 1)} kWh
-            </strong>
+        <div class="pl-4 flex flex-col gap-2.5">
+          <div class="relative flex items-center">
+            <span class="absolute left-md text-mute font-bold text-sm pointer-events-none select-none">Rp</span>
+            <input type="text"
+              id="input-hybrid-bill"
+              name="biayaBulanan"
+              inputmode="numeric"
+              enterkeyhint="next"
+              value="${current.biayaBulanan > 0 ? current.biayaBulanan.toLocaleString('id-ID') : ''}"
+              placeholder="Contoh: 2.500.000"
+              aria-describedby="hint-hybrid-bill"
+              aria-invalid="false"
+              class="h-touch w-full border border-hairline bg-canvas pl-xxl pr-md py-input-y text-ink font-bold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
           </div>
-          <div class="flex flex-col gap-0.5 border-l border-hairline pl-3">
-            <span class="text-[11px] text-mute font-semibold uppercase tracking-wide">Rata-Rata / Hari</span>
-            <strong id="preview-hybrid-kwh-day" class="text-sm font-bold text-primary-dark tabular-nums">
-              ${formatNumber(initialKwhDay, 2)} kWh
-            </strong>
+
+          <p id="error-hybrid-bill" class="hidden text-xs font-semibold text-error flex items-center gap-1.5" role="status">
+            <span aria-hidden="true">!</span>
+            <span>Masukkan biaya listrik per bulan minimal Rp 50.000.</span>
+          </p>
+
+          <!-- Quick Chips Preset (44px min touch target) -->
+          <div class="flex flex-wrap items-center gap-2" role="group" aria-label="Preset cepat biaya listrik bulanan">
+            ${HYBRID_BILL_CHIPS.map(chip => {
+              const isChipActive = current.biayaBulanan === chip.value;
+              return `
+                <button type="button"
+                  class="btn-hybrid-bill-chip min-h-touch min-w-[44px] px-sm py-xs border rounded-sm text-xs font-semibold tabular-nums transition-all select-none ${
+                    isChipActive
+                      ? 'border-2 border-primary bg-primary text-on-primary font-bold'
+                      : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
+                  }"
+                  data-bill="${chip.value}"
+                  aria-pressed="${isChipActive ? 'true' : 'false'}">
+                  ${chip.label}
+                </button>
+              `;
+            }).join('')}
+          </div>
+
+          <!-- Live kWh Estimate -->
+          <div class="grid grid-cols-2 gap-3 p-3 rounded-sm bg-surface-soft border border-hairline">
+            <div class="flex flex-col gap-0.5">
+              <span class="text-[11px] text-mute font-semibold uppercase tracking-wide">Estimasi / Bulan</span>
+              <strong id="preview-hybrid-kwh-month" class="text-sm font-bold text-ink tabular-nums">
+                ${formatNumber(initialKwhMonth, 1)} kWh
+              </strong>
+            </div>
+            <div class="flex flex-col gap-0.5 border-l border-hairline pl-3">
+              <span class="text-[11px] text-mute font-semibold uppercase tracking-wide">Rata-Rata / Hari</span>
+              <strong id="preview-hybrid-kwh-day" class="text-sm font-bold text-primary-dark tabular-nums">
+                ${formatNumber(initialKwhDay, 2)} kWh
+              </strong>
+            </div>
           </div>
         </div>
       </div>
@@ -228,72 +231,74 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
           </span>
         </div>
 
-        <!-- Dual Manual Inputs (Siang & Malam) -->
-        <div class="grid grid-cols-2 gap-3">
-          <div class="flex flex-col gap-1.5">
-            <label for="input-hybrid-day-percent" class="text-xs font-semibold text-ink flex items-center justify-between">
-              <span>Siang Hari</span>
-              <span class="text-[11px] text-mute font-normal hidden mobile:inline">06:00–18:00</span>
-            </label>
-            <div class="relative flex items-center">
-              <input type="text"
-                id="input-hybrid-day-percent"
-                name="persenSiang"
-                inputmode="numeric"
-                enterkeyhint="next"
-                value="${current.persenSiang}"
-                aria-describedby="hint-hybrid-ratio"
-                class="h-touch w-full border border-hairline bg-canvas px-md pr-8 py-input-y text-ink font-bold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
-              <span class="absolute right-md text-mute font-bold text-sm pointer-events-none select-none">%</span>
+        <div class="pl-4 flex flex-col gap-2.5">
+          <!-- Dual Manual Inputs (Siang & Malam) -->
+          <div class="grid grid-cols-2 gap-3">
+            <div class="flex flex-col gap-1.5">
+              <label for="input-hybrid-day-percent" class="text-xs font-semibold text-ink flex items-center justify-between">
+                <span>Siang Hari</span>
+                <span class="text-[11px] text-mute font-normal hidden mobile:inline">06:00–18:00</span>
+              </label>
+              <div class="relative flex items-center">
+                <input type="text"
+                  id="input-hybrid-day-percent"
+                  name="persenSiang"
+                  inputmode="numeric"
+                  enterkeyhint="next"
+                  value="${current.persenSiang}"
+                  aria-describedby="hint-hybrid-ratio"
+                  class="h-touch w-full border border-hairline bg-canvas px-md pr-8 py-input-y text-ink font-bold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+                <span class="absolute right-md text-mute font-bold text-sm pointer-events-none select-none">%</span>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label for="input-hybrid-night-percent" class="text-xs font-semibold text-ink flex items-center justify-between">
+                <span>Malam Hari</span>
+                <span class="text-[11px] text-mute font-normal hidden mobile:inline">18:00–06:00</span>
+              </label>
+              <div class="relative flex items-center">
+                <input type="text"
+                  id="input-hybrid-night-percent"
+                  name="persenMalam"
+                  inputmode="numeric"
+                  enterkeyhint="done"
+                  value="${current.persenMalam}"
+                  aria-describedby="hint-hybrid-ratio"
+                  class="h-touch w-full border border-hairline bg-canvas px-md pr-8 py-input-y text-ink font-bold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+                <span class="absolute right-md text-mute font-bold text-sm pointer-events-none select-none">%</span>
+              </div>
             </div>
           </div>
 
-          <div class="flex flex-col gap-1.5">
-            <label for="input-hybrid-night-percent" class="text-xs font-semibold text-ink flex items-center justify-between">
-              <span>Malam Hari</span>
-              <span class="text-[11px] text-mute font-normal hidden mobile:inline">18:00–06:00</span>
-            </label>
-            <div class="relative flex items-center">
-              <input type="text"
-                id="input-hybrid-night-percent"
-                name="persenMalam"
-                inputmode="numeric"
-                enterkeyhint="done"
-                value="${current.persenMalam}"
-                aria-describedby="hint-hybrid-ratio"
-                class="h-touch w-full border border-hairline bg-canvas px-md pr-8 py-input-y text-ink font-bold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
-              <span class="absolute right-md text-mute font-bold text-sm pointer-events-none select-none">%</span>
+          <!-- Labeled Range Slider -->
+          <div class="flex flex-col gap-1">
+            <label for="slider-hybrid-day" class="sr-only">Geser persentase pemakaian listrik siang hari</label>
+            <input type="range"
+              id="slider-hybrid-day"
+              min="0"
+              max="100"
+              step="1"
+              value="${current.persenSiang}"
+              aria-valuetext="Siang ${current.persenSiang} persen, Malam ${current.persenMalam} persen"
+              class="cad-range-slider w-full"
+              style="--attr-min: 0; --attr-max: 100; --control-value: ${current.persenSiang};">
+
+            <!-- Stacked Visual Bar (CAD Flat) -->
+            <div class="h-2.5 w-full bg-surface-soft rounded-sm overflow-hidden flex border border-hairline" aria-hidden="true">
+              <div id="bar-hybrid-day" class="bg-primary h-full transition-all duration-150" style="width: ${current.persenSiang}%"></div>
+              <div id="bar-hybrid-night" class="bg-ink h-full transition-all duration-150" style="width: ${current.persenMalam}%"></div>
             </div>
-          </div>
-        </div>
-
-        <!-- Labeled Range Slider -->
-        <div class="flex flex-col gap-1">
-          <label for="slider-hybrid-day" class="sr-only">Geser persentase pemakaian listrik siang hari</label>
-          <input type="range"
-            id="slider-hybrid-day"
-            min="0"
-            max="100"
-            step="1"
-            value="${current.persenSiang}"
-            aria-valuetext="Siang ${current.persenSiang} persen, Malam ${current.persenMalam} persen"
-            class="cad-range-slider w-full"
-            style="--attr-min: 0; --attr-max: 100; --control-value: ${current.persenSiang};">
-
-          <!-- Stacked Visual Bar (CAD Flat) -->
-          <div class="h-2.5 w-full bg-surface-soft rounded-sm overflow-hidden flex border border-hairline" aria-hidden="true">
-            <div id="bar-hybrid-day" class="bg-primary h-full transition-all duration-150" style="width: ${current.persenSiang}%"></div>
-            <div id="bar-hybrid-night" class="bg-ink h-full transition-all duration-150" style="width: ${current.persenMalam}%"></div>
-          </div>
-          <div class="flex items-center justify-between text-[11px] text-mute tabular-nums pt-0.5">
-            <span class="flex items-center gap-1.5">
-              <span class="w-2 h-2 inline-block bg-primary rounded-xs" aria-hidden="true"></span>
-              Siang: <strong id="label-hybrid-day-val" class="text-ink font-semibold">${current.persenSiang}%</strong> (PV Langsung)
-            </span>
-            <span class="flex items-center gap-1.5">
-              <span class="w-2 h-2 inline-block bg-ink rounded-xs" aria-hidden="true"></span>
-              Malam: <strong id="label-hybrid-night-val" class="text-ink font-semibold">${current.persenMalam}%</strong> (Battery)
-            </span>
+            <div class="flex items-center justify-between text-[11px] text-mute tabular-nums pt-0.5">
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 inline-block bg-primary rounded-xs" aria-hidden="true"></span>
+                Siang: <strong id="label-hybrid-day-val" class="text-ink font-semibold">${current.persenSiang}%</strong> (PV Langsung)
+              </span>
+              <span class="flex items-center gap-1.5">
+                <span class="w-2 h-2 inline-block bg-ink rounded-xs" aria-hidden="true"></span>
+                Malam: <strong id="label-hybrid-night-val" class="text-ink font-semibold">${current.persenMalam}%</strong> (Battery)
+              </span>
+            </div>
           </div>
         </div>
       </fieldset>
@@ -305,17 +310,19 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
           <span class="px-2 py-0.5 rounded-sm text-[11px] font-bold uppercase bg-primary text-on-primary">Aktif</span>
         </div>
 
-        <div class="p-3.5 rounded-sm border-2 border-primary bg-surface-soft flex items-start gap-3">
-          <div class="w-9 h-9 rounded-sm bg-ink text-primary flex items-center justify-center shrink-0 border border-hairline-strong" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>
-            </svg>
-          </div>
-          <div class="flex flex-col gap-0.5">
-            <span class="text-sm font-bold text-ink">Hybrid Offgrid</span>
-            <p class="text-xs text-mute leading-relaxed">
-              PV + <strong class="text-ink">Hybrid Inverter</strong> + <strong class="text-ink">Baterai LiFePO4</strong> untuk suplai siang &amp; malam hari, dengan PLN sebagai backup otomatis (<em>Zero Export</em>).
-            </p>
+        <div class="pl-4">
+          <div class="p-3.5 rounded-sm border-2 border-primary bg-surface-soft flex items-start gap-3">
+            <div class="w-9 h-9 rounded-sm bg-ink text-primary flex items-center justify-center shrink-0 border border-hairline-strong" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/>
+              </svg>
+            </div>
+            <div class="flex flex-col gap-0.5">
+              <span class="text-sm font-bold text-ink">Hybrid Offgrid</span>
+              <p class="text-xs text-mute leading-relaxed">
+                PV + <strong class="text-ink">Hybrid Inverter</strong> + <strong class="text-ink">Baterai LiFePO4</strong> untuk supply siang &amp; malam hari, dengan PLN sebagai backup otomatis (<em>Zero Export</em>).
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -326,32 +333,35 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
           <legend class="text-sm font-semibold text-ink mb-0.5">
             6. Support PLTS
           </legend>
-          <p class="text-xs text-mute">Pemakaian PLTS terhadap kebutuhan listrik</p>
 
-          <div class="grid grid-cols-2 mobile:grid-cols-4 gap-2">
-            ${HYBRID_COVERAGE_OPTIONS.map(opt => {
-              const isSelected = current.persenCover === opt.value;
-              return `
-                <label for="radio-cover-${opt.value}" class="cursor-pointer block">
-                  <input type="radio"
-                    id="radio-cover-${opt.value}"
-                    name="persenCover"
-                    value="${opt.value}"
-                    class="sr-only peer"
-                    ${isSelected ? 'checked' : ''}>
-                  <div class="coverage-card min-h-touch py-2.5 px-2 rounded-sm border text-center transition-all select-none peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-focus-visible:outline-offset-2 ${
-                    isSelected
-                      ? 'border-2 border-primary bg-ink text-on-dark'
-                      : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
-                  }">
-                    <span class="text-base font-bold block tabular-nums">${opt.label}</span>
-                    <span class="coverage-sub text-[11px] font-medium block mt-0.5 ${
-                      isSelected ? 'text-primary' : 'text-mute'
-                    }">${opt.sub}</span>
-                  </div>
-                </label>
-              `;
-            }).join('')}
+          <div class="pl-4 flex flex-col gap-2.5">
+            <p class="text-xs text-mute">Pemakaian PLTS terhadap kebutuhan listrik</p>
+
+            <div class="grid grid-cols-2 mobile:grid-cols-4 gap-2">
+              ${HYBRID_COVERAGE_OPTIONS.map(opt => {
+                const isSelected = current.persenCover === opt.value;
+                return `
+                  <label for="radio-cover-${opt.value}" class="cursor-pointer block">
+                    <input type="radio"
+                      id="radio-cover-${opt.value}"
+                      name="persenCover"
+                      value="${opt.value}"
+                      class="sr-only peer"
+                      ${isSelected ? 'checked' : ''}>
+                    <div class="coverage-card min-h-touch py-2.5 px-2 rounded-sm border text-center transition-all select-none peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-focus-visible:outline-offset-2 ${
+                      isSelected
+                        ? 'border-2 border-primary bg-ink text-on-dark'
+                        : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
+                    }">
+                      <span class="text-base font-bold block tabular-nums">${opt.label}</span>
+                      <span class="coverage-sub text-[11px] font-medium block mt-0.5 ${
+                        isSelected ? 'text-primary' : 'text-mute'
+                      }">${opt.sub}</span>
+                    </div>
+                  </label>
+                `;
+              }).join('')}
+            </div>
           </div>
         </fieldset>
       </div>
@@ -506,7 +516,7 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
 
   container.querySelectorAll('.btn-hybrid-bill-chip').forEach(chip => {
     chip.addEventListener('click', () => {
-      const val = Number(chip.getAttribute('data-bill')) || 2500000;
+      const val = Number(chip.getAttribute('data-bill')) || 1000000;
       current.biayaBulanan = val;
       if (billInput) billInput.value = val.toLocaleString('id-ID');
       updateBillErrorState(false);

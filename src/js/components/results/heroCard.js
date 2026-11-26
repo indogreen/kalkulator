@@ -43,7 +43,7 @@ export function getHeroCardHtml({ mode, input, result }) {
     const targetKwhHari = result.energy?.targetKwhHari || 0;
 
     eyebrow = 'REKOMENDASI KAPASITAS PLTS HYBRID-OFFGRID';
-    badgeText = `HYBRID OFFGRID • COVER ${persenCover}%`;
+    badgeText = `${persenCover}% dari PLTS`;
 
     mainValueHtml = `
       <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs break-words tabular-nums">
@@ -53,7 +53,7 @@ export function getHeroCardHtml({ mode, input, result }) {
     `;
 
     subtextHtml = `
-      Suplai target <strong class="text-on-dark font-bold">${formatNumber(targetKwhHari, 2)} kWh/hari</strong> (${persenSiang}% siang / ${persenMalam}% malam) dengan Hybrid Inverter <strong class="text-on-dark font-bold">${inverterKw} kW</strong> dan Baterai <strong class="text-on-dark font-bold">${formatNumber(batteryKwh, 2)} kWh</strong>.
+      Supply target <strong class="text-on-dark font-bold">${formatNumber(targetKwhHari, 2)} kWh/hari</strong> (${persenSiang}% siang / ${persenMalam}% malam) dengan Hybrid Inverter <strong class="text-on-dark font-bold">${inverterKw} kW</strong> dan Baterai <strong class="text-on-dark font-bold">${formatNumber(batteryKwh, 2)} kWh</strong>.
     `;
 
     specs = [
@@ -253,9 +253,14 @@ export function getHeroCardHtml({ mode, input, result }) {
     <article class="relative bg-surface-dark text-on-dark border border-hairline-strong p-5 tablet:p-7 rounded-sm flex flex-col gap-5 select-none" aria-label="Ringkasan Estimasi Utama Hasil Simulasi">
       <!-- Header Strip: Eyebrow & Status Badge -->
       <div class="flex items-center justify-between border-b border-hairline-strong pb-3">
-        <span class="text-xs font-semibold text-accent-yellow uppercase tracking-wider">
-          ${eyebrow}
-        </span>
+        <div class="flex flex-col gap-0.5">
+          <span class="text-[21px] font-bold text-on-dark uppercase tracking-wider">
+            HASIL SIMULASI
+          </span>
+          <span class="text-xs font-semibold text-accent-yellow uppercase tracking-wider">
+            ${eyebrow}
+          </span>
+        </div>
         <span class="text-[11px] bg-surface-elevated text-primary border border-hairline-strong px-2 py-0.5 rounded-sm uppercase font-bold tracking-wider">
           ${badgeText}
         </span>

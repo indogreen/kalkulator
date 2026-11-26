@@ -45,7 +45,7 @@ describe('Reactive State Orchestration (Phase 7)', () => {
     // Active Hybrid Off-Grid defaults
     assert.equal(DEFAULT_APP_STATE.modes.hybrid.kategori, 'Residential');
     assert.equal(DEFAULT_APP_STATE.modes.hybrid.dayaId, 'R1-1300');
-    assert.equal(DEFAULT_APP_STATE.modes.hybrid.biayaBulanan, 2500000);
+    assert.equal(DEFAULT_APP_STATE.modes.hybrid.biayaBulanan, 1000000);
     assert.equal(DEFAULT_APP_STATE.modes.hybrid.persenSiang, 40);
     assert.equal(DEFAULT_APP_STATE.modes.hybrid.persenMalam, 60);
     assert.equal(DEFAULT_APP_STATE.modes.hybrid.sistem, 'Hybrid Offgrid');
@@ -88,9 +88,9 @@ describe('Reactive State Orchestration (Phase 7)', () => {
     setActiveMode('hybrid');
     const hybridResult = calculateCurrentResult();
     assert.equal(hybridResult.mode, 'hybrid');
-    assert.equal(hybridResult.pv.jumlahPanel, 34);
-    assert.equal(hybridResult.inverter.kapasitasInverterKw, 20);
-    assert.equal(hybridResult.battery.jumlahModulBattery, 9);
+    assert.equal(hybridResult.pv.jumlahPanel, 14);
+    assert.equal(hybridResult.inverter.kapasitasInverterKw, 8);
+    assert.equal(hybridResult.battery.jumlahModulBattery, 4);
 
     // 1. Residensial (Arsip)
     setActiveMode('residential');
