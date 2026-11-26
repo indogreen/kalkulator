@@ -152,7 +152,7 @@ Membangun seluruh logika matematika dan rekayasa kelistrikan energi surya dalam 
 #### 2. Scope Pekerjaan
 - **`src/js/calculator/constants.js`**:
   - Jam Matahari Puncak (PSH) 9 wilayah Indonesia: DKI/Jabar/Banten (4.4), Jateng/DIY (4.6), Jatim (4.8), Sumatera (4.3), Kalimantan (4.4), Sulawesi (4.9), Bali/NTB (5.1), NTT (5.4), Maluku/Papua (4.7).
-  - Tabel tarif PLN 2026: R-1 900 (Rp 1.352), R-1 1300/2200 (Rp 1.444,70), R-2/R-3 (Rp 1.699,53), B-2 (Rp 1.444,70), B-3 (Rp 1.114,74), I-3 (Rp 1.114,74), I-4 (Rp 996,74), P-1 (Rp 1.699,53), P-3 (Rp 1.699,53).
+  - Tabel tarif PLN 2026 (Penetapan Tarif Penyesuaian Okt–Des 2026): R-1 900 (Rp 1.352), R-1 1300/2200 (Rp 1.444,70), R-2/R-3 (Rp 1.699,53), B-2 (Rp 1.444,70), B-3 (Rp 1.035,78 LWBP), I-3 (Rp 1.035,78 LWBP), I-4 (Rp 996,74), P-1 (Rp 1.699,53), P-2 (Rp 1.415,01 LWBP), P-3 (Rp 1.699,53). (Catatan: Rp 1.114,74 pada B-3/I-3 adalah tarif kelebihan daya reaktif/kVArh, sedangkan produksi PLTS siang hari menggantikan energi aktif di blok LWBP Rp 1.035,78/kWh).
   - Spesifikasi teknis: Modul Tier-1 600 Wp, Performance Ratio (PR) 0.80, Emisi Karbon 0.87 kg CO₂/kWh, rasio luas atap (6.0 m²/kWp rumah, 5.5 m²/kWp industri).
   - Biaya acuan turnkey per Wp bergradasi kapasitas + PPN 11%, biaya baterai LiFePO4 per kWh.
 - **`src/js/calculator/residential.js`**:

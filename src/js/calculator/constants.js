@@ -121,7 +121,7 @@ export const PLN_TARIFFS_2026 = Object.freeze({
     code: 'B-3',
     group: 'commercial',
     name: 'B-3/TM Bisnis Besar (> 200 kVA)',
-    rate: 1114.74,
+    rate: 1035.78,
     minVa: 200001,
     maxVa: Infinity
   },
@@ -129,7 +129,7 @@ export const PLN_TARIFFS_2026 = Object.freeze({
     code: 'I-3',
     group: 'industrial',
     name: 'I-3/TM Industri Menengah (> 200 kVA)',
-    rate: 1114.74,
+    rate: 1035.78,
     minVa: 200001,
     maxVa: Infinity
   },
@@ -148,6 +148,14 @@ export const PLN_TARIFFS_2026 = Object.freeze({
     rate: 1699.53,
     minVa: 6600,
     maxVa: 200000
+  },
+  'P-2': {
+    code: 'P-2',
+    group: 'government',
+    name: 'P-2/TM Kantor Pemerintah (> 200 kVA)',
+    rate: 1415.01,
+    minVa: 200001,
+    maxVa: Infinity
   },
   'P-3': {
     code: 'P-3',

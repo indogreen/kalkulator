@@ -3,7 +3,7 @@
  * Solar Energy Calculator - Commercial & Industrial Module (PLTS Bisnis & Industri)
  * 
  * Compliant with:
- * - Golongan Tarif B-2, B-3, I-3, I-4, P-1 (Permen ESDM 2026)
+ * - Golongan Tarif B-2, B-3, I-3, I-4, P-1, P-2 (Permen ESDM 2026)
  * - Analisis kurva beban operasional (Kantor 08-17, 1-Shift, 2-Shift, 24-Jam) vs radiasi surya
  * - Komparasi 3 Skema Finansial:
  *   1. CAPEX Beli Putus (Turnkey penuh, O&M 1%, payback ~4-6 tahun)

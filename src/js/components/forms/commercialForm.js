@@ -13,7 +13,7 @@
 
 import { REGIONS_PSH, PLN_TARIFFS_2026, COMMERCIAL_OPERATIONAL_HOURS, COMMERCIAL_SCHEMES } from '../../calculator/constants.js';
 
-export const COMMERCIAL_TARIFF_OPTIONS = ['B-2', 'B-3', 'I-3', 'I-4', 'P-1'];
+export const COMMERCIAL_TARIFF_OPTIONS = ['B-2', 'B-3', 'I-3', 'I-4', 'P-1', 'P-2'];
 
 export const COMMERCIAL_BILL_CHIPS = [
   { label: 'Rp 15 Jt', value: 15000000 },

@@ -30,7 +30,7 @@ PT. Indogreen Technology And Management adalah perusahaan rekayasa dan pengemban
 - **Kepatuhan Regulasi Kelistrikan Indonesia:**
   - **Permen ESDM No. 2/2024:** Aturan legal mutlak **Rekening Minimum PLN** ($40 \times \text{kVA} \times \text{Tarif per kWh}$). Tagihan setelah PLTS **tidak boleh lebih rendah** dari batas rekening minimum ini.
   - **Jam Matahari Puncak (PSH) 9 Wilayah:** DKI/Jabar/Banten (4.4), Jateng/DIY (4.6), Jatim (4.8), Sumatera (4.3), Kalimantan (4.4), Sulawesi (4.9), Bali/NTB (5.1), NTT (5.4), Maluku/Papua (4.7).
-  - **Tabel Tarif PLN 2026:** R-1 900 (Rp 1.352), R-1 1300/2200 (Rp 1.444,70), R-2/R-3 (Rp 1.699,53), B-2 (Rp 1.444,70), B-3 (Rp 1.114,74), I-3 (Rp 1.114,74), I-4 (Rp 996,74), P-1 (Rp 1.699,53), P-3 (Rp 1.699,53).
+  - **Tabel Tarif PLN 2026:** R-1 900 (Rp 1.352), R-1 1300/2200 (Rp 1.444,70), R-2/R-3 (Rp 1.699,53), B-2 (Rp 1.444,70), B-3 (Rp 1.035,78 LWBP), I-3 (Rp 1.035,78 LWBP), I-4 (Rp 996,74), P-1 (Rp 1.699,53), P-2 (Rp 1.415,01 LWBP), P-3 (Rp 1.699,53).
 - **Bahasa & Konten:**
   - Teks antarmuka (UI) berbahasa Indonesia yang baik, formal, dan profesional.
   - Kode program, penamaan berkas, git commit, dan identifier berbahasa Inggris.

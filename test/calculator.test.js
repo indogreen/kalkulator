@@ -76,10 +76,11 @@ describe('Core Constants & Helper Functions', () => {
     assert.equal(PLN_TARIFFS_2026['R-2'].rate, 1699.53);
     assert.equal(PLN_TARIFFS_2026['R-3'].rate, 1699.53);
     assert.equal(PLN_TARIFFS_2026['B-2'].rate, 1444.70);
-    assert.equal(PLN_TARIFFS_2026['B-3'].rate, 1114.74);
-    assert.equal(PLN_TARIFFS_2026['I-3'].rate, 1114.74);
+    assert.equal(PLN_TARIFFS_2026['B-3'].rate, 1035.78);
+    assert.equal(PLN_TARIFFS_2026['I-3'].rate, 1035.78);
     assert.equal(PLN_TARIFFS_2026['I-4'].rate, 996.74);
     assert.equal(PLN_TARIFFS_2026['P-1'].rate, 1699.53);
+    assert.equal(PLN_TARIFFS_2026['P-2'].rate, 1415.01);
     assert.equal(PLN_TARIFFS_2026['P-3'].rate, 1699.53);
 
     // Helper getResidentialTariff
@@ -92,7 +93,8 @@ describe('Core Constants & Helper Functions', () => {
 
     // Helper getTariffByGroup
     assert.equal(getTariffByGroup('B-2'), 1444.70);
-    assert.equal(getTariffByGroup('I-3'), 1114.74);
+    assert.equal(getTariffByGroup('I-3'), 1035.78);
+    assert.equal(getTariffByGroup('P-2'), 1415.01);
     assert.equal(getTariffByGroup('unknown'), 1444.70);
   });
 
@@ -289,7 +291,7 @@ describe('Commercial & Industrial Solar Engine (commercial.js)', () => {
       region: 'jatim'
     });
 
-    assert.equal(result.system.tariffRate, 1114.74);
+    assert.equal(result.system.tariffRate, 1035.78);
     assert.ok(result.system.systemKwp > 50);
     assert.ok(result.costBasis.totalCapex > 0);
   });
