@@ -415,9 +415,9 @@ describe('Hybrid Form Component (hybridForm.js)', () => {
       capturedState = state;
     });
 
-    assert.ok(mockContainer.innerHTML.includes('1. Untuk (Peruntukan)'));
+    assert.ok(mockContainer.innerHTML.includes('1. Kategori Peruntukan'));
     assert.ok(mockContainer.innerHTML.includes('5. Sistem PLTS'));
-    assert.ok(mockContainer.innerHTML.includes('6. Dicover PLTS'));
+    assert.ok(mockContainer.innerHTML.includes('6. Support PLTS'));
 
     // Test input siang 30% -> malam otomatis 70%, slider 30
     listeners['input-hybrid-day-percent:input']({ target: { value: '30' } });

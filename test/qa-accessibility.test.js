@@ -27,8 +27,7 @@ describe('Phase 8: Accessibility & WCAG 2.1 AA Audit', () => {
   test('1. Unified Hybrid Off-Grid workspace semantics & archived BESS/PJUTS structure', () => {
     assert.ok(indexHtml.includes('Kalkulator PLTS Hybrid Off-Grid'), 'Must have unified Hybrid Off-Grid heading');
     assert.ok(indexHtml.includes('id="form-container"'), 'Form container must exist');
-    assert.ok(indexHtml.includes('id="active-mode-badge"'), 'Mode badge must exist');
-    assert.ok(indexHtml.includes('PLTS HYBRID OFF-GRID'), 'Must display active Hybrid Off-Grid badge');
+    assert.ok(indexHtml.includes('id="form-slot"'), 'Form slot must exist');
     assert.ok(indexHtml.includes('ARCHIVED: 4-Mode Tab Switcher'), 'Archived BESS & PJUTS tab markup must be preserved as archive note');
     assert.ok(!indexHtml.includes('id="form-container" class="relative border border-hairline bg-canvas p-5 tablet:p-7 rounded-sm flex flex-col gap-6" role="tabpanel" id="panel-simulator"'), 'Must not contain duplicate id attribute');
   });

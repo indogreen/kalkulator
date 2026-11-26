@@ -7,12 +7,12 @@
  * - Modern Web Guidance: Semantic <fieldset>/<legend>, type="text" + inputmode="numeric",
  *   post-interaction validation on blur, native labeled <input type="range"> with progress var sync
  * - 6 Steps:
- *   1. Untuk (Residential / Bisnis)
+ *   1. Kategori Peruntukan (Residential / Bisnis)
  *   2. Daya PLN (Dynamic PLN 2026 tariffs + Subsidi/Non-Subsidi badge)
  *   3. Biaya Listrik per Bulan (Formatted Rp + Quick chips + Live kWh preview)
  *   4. Persen Pemakaian Siang & Malam (Dual balanced inputs + Slider + CAD bar)
  *   5. Sistem PLTS (Hybrid Offgrid active info card)
- *   6. Dicover PLTS (25% / 50% / 75% / 100%)
+ *   6. Support PLTS (25% / 50% / 75% / 100%)
  */
 
 import {
@@ -26,15 +26,14 @@ export const HYBRID_BILL_CHIPS = [
   { label: 'Rp 1 Jt', value: 1000000 },
   { label: 'Rp 2,5 Jt', value: 2500000 },
   { label: 'Rp 5 Jt', value: 5000000 },
-  { label: 'Rp 10 Jt', value: 10000000 },
-  { label: 'Rp 25 Jt', value: 25000000 }
+  { label: 'Rp 10 Jt', value: 10000000 }
 ];
 
 export const HYBRID_COVERAGE_OPTIONS = [
-  { value: 25, label: '25%', sub: 'Awal' },
-  { value: 50, label: '50%', sub: 'Hemat' },
-  { value: 75, label: '75%', sub: 'Optimal' },
-  { value: 100, label: '100%', sub: 'Penuh' }
+  { value: 25, label: '25%', sub: 'dari PLTS' },
+  { value: 50, label: '50%', sub: 'dari PLTS' },
+  { value: 75, label: '75%', sub: 'dari PLTS' },
+  { value: 100, label: '100%', sub: 'dari PLTS' }
 ];
 
 export const MIN_VALID_MONTHLY_BILL = 50000;
@@ -79,17 +78,17 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
   container.innerHTML = `
     <form id="form-hybrid" class="flex flex-col gap-6" novalidate>
 
-      <!-- 1. Untuk (Peruntukan) -->
+      <!-- 1. Kategori Peruntukan -->
       <fieldset class="flex flex-col gap-2.5 border-0 p-0 m-0">
         <legend class="text-sm font-semibold text-ink mb-0.5">
-          1. Untuk (Peruntukan)
+          1. Kategori Peruntukan
         </legend>
         <p class="text-xs text-mute">Pilih kategori pelanggan PLN</p>
 
         <div class="grid grid-cols-2 gap-3">
           ${[
-            { id: 'Residential', title: 'Residential', desc: 'Rumah Tangga (R-1 s/d R-3)' },
-            { id: 'Bisnis', title: 'Bisnis', desc: 'Komersial (B-1 s/d B-3)' }
+            { id: 'Residential', title: 'Residential', desc: 'R-1 s/d R-3' },
+            { id: 'Bisnis', title: 'Bisnis', desc: 'B-1 s/d B-3' }
           ].map(cat => {
             const isSelected = current.kategori === cat.id;
             return `
@@ -144,7 +143,7 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
           class="min-h-touch w-full border border-hairline bg-canvas px-md py-2.5 text-ink font-semibold text-xs mobile:text-sm rounded-sm focus:border-2 focus:border-primary focus:outline-none">
           ${tariffList.map(item => `
             <option value="${item.id}" ${item.id === dayaObj.id ? 'selected' : ''}>
-              ${item.label} — Rp ${formatNumber(item.tariff, 2)}/kWh
+              ${item.label}
             </option>
           `).join('')}
         </select>
@@ -162,9 +161,6 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
         <label for="input-hybrid-bill" class="text-sm font-semibold text-ink">
           3. Biaya Listrik per Bulan (Rp)
         </label>
-        <p id="hint-hybrid-bill" class="text-xs text-mute">
-          Tagihan pascabayar atau pembelian token rata-rata (minimal Rp 50.000/bulan).
-        </p>
 
         <div class="relative flex items-center">
           <span class="absolute left-md text-mute font-bold text-sm pointer-events-none select-none">Rp</span>
@@ -231,9 +227,6 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
             Total 100%
           </span>
         </div>
-        <p id="hint-hybrid-ratio" class="text-xs text-mute leading-normal">
-          Isi proporsi siang atau malam (otomatis berimbang <strong>100%</strong>).
-        </p>
 
         <!-- Dual Manual Inputs (Siang & Malam) -->
         <div class="grid grid-cols-2 gap-3">
@@ -327,13 +320,13 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
         </div>
       </div>
 
-      <!-- 6. Dicover PLTS -->
+      <!-- 6. Support PLTS -->
       <div class="pt-4 border-t border-hairline">
         <fieldset class="flex flex-col gap-2.5 border-0 p-0 m-0">
           <legend class="text-sm font-semibold text-ink mb-0.5">
-            6. Dicover PLTS
+            6. Support PLTS
           </legend>
-          <p class="text-xs text-mute">Persentase kebutuhan listrik yang disuplai PLTS</p>
+          <p class="text-xs text-mute">Pemakaian PLTS terhadap kebutuhan listrik</p>
 
           <div class="grid grid-cols-2 mobile:grid-cols-4 gap-2">
             ${HYBRID_COVERAGE_OPTIONS.map(opt => {
@@ -432,7 +425,7 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
 
     dayaSelect.innerHTML = list.map(item => `
       <option value="${item.id}" ${item.id === defaultOpt.id ? 'selected' : ''}>
-        ${item.label} — Rp ${formatNumber(item.tariff, 2)}/kWh
+        ${item.label}
       </option>
     `).join('');
 
@@ -594,7 +587,7 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
     });
   }
 
-  // 6. Dicover PLTS Radio Cards
+  // 6. Support PLTS Radio Cards
   container.querySelectorAll('input[name="persenCover"]').forEach(radio => {
     radio.addEventListener('change', () => {
       current.persenCover = Number(radio.value) || 100;

@@ -42,7 +42,7 @@ export function getHeroCardHtml({ mode, input, result }) {
     const persenMalam = result.inputs?.persenMalam ?? 60;
     const targetKwhHari = result.energy?.targetKwhHari || 0;
 
-    eyebrow = 'REKOMENDASI KAPASITAS SISTEM HYBRID OFF-GRID';
+    eyebrow = 'REKOMENDASI KAPASITAS PLTS HYBRID-OFFGRID';
     badgeText = `HYBRID OFFGRID • COVER ${persenCover}%`;
 
     mainValueHtml = `

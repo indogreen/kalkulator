@@ -212,7 +212,7 @@ describe('Results Panel Visualizations (Phase 6)', () => {
 
   test('Hybrid Off-Grid mode: renders Hero, 3 Technical Cards, Energy Profile, CTA without deferred price/timeline slots', () => {
     const heroHtml = getHeroCardHtml({ mode: 'hybrid', input: hybridInput, result: hybridResult });
-    assert.ok(heroHtml.includes('REKOMENDASI KAPASITAS SISTEM HYBRID OFF-GRID'));
+    assert.ok(heroHtml.includes('REKOMENDASI KAPASITAS PLTS HYBRID-OFFGRID'));
     assert.ok(heroHtml.includes('18,70 kWp'));
     assert.ok(heroHtml.includes('20 kW'));
     assert.ok(heroHtml.includes('46,08 kWh'));
