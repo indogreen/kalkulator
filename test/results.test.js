@@ -16,6 +16,7 @@
 import { test, describe } from 'node:test';
 import assert from 'node:assert/strict';
 
+import { calculateHybridOffGrid } from '../src/js/calculator/hybrid.js';
 import { calculateResidential } from '../src/js/calculator/residential.js';
 import { calculateCommercial } from '../src/js/calculator/commercial.js';
 import { calculateBattery } from '../src/js/calculator/battery.js';
@@ -23,6 +24,7 @@ import { calculatePjuts } from '../src/js/calculator/pjuts.js';
 
 import { getHeroCardHtml } from '../src/js/components/results/heroCard.js';
 import { getKpiGridHtml } from '../src/js/components/results/kpiGrid.js';
+import { getEnergyProfileHtml } from '../src/js/components/results/energyProfile.js';
 import { getBillBarHtml } from '../src/js/components/results/billBar.js';
 import { getTimelineHtml } from '../src/js/components/results/timeline.js';
 import { getSchemeTableHtml } from '../src/js/components/results/schemeTable.js';
@@ -31,7 +33,16 @@ import { getRegulatoryNoteHtml } from '../src/js/components/results/regulatoryNo
 import { renderResults } from '../src/js/components/results/index.js';
 
 describe('Results Panel Visualizations (Phase 6)', () => {
-  // Test data for 4 modes
+  const hybridInput = {
+    kategori: 'Residential',
+    dayaId: 'R1-1300',
+    biayaBulanan: 2500000,
+    persenSiang: 40,
+    persenCover: 100
+  };
+  const hybridResult = calculateHybridOffGrid(hybridInput);
+
+  // Test data for archived 4 modes
   const resInput = {
     powerVa: 2200,
     monthlyBill: 1500000,
@@ -197,5 +208,42 @@ describe('Results Panel Visualizations (Phase 6)', () => {
     assert.ok(listeners['click'], 'Click listener must be registered on #btn-result-qr');
     listeners['click']({ preventDefault() {} });
     assert.equal(qrOpened, true, 'onOpenQr callback must be executed on click');
+  });
+
+  test('Hybrid Off-Grid mode: renders Hero, 3 Technical Cards, Energy Profile, CTA without deferred price/timeline slots', () => {
+    const heroHtml = getHeroCardHtml({ mode: 'hybrid', input: hybridInput, result: hybridResult });
+    assert.ok(heroHtml.includes('REKOMENDASI KAPASITAS SISTEM HYBRID OFF-GRID'));
+    assert.ok(heroHtml.includes('18,70 kWp'));
+    assert.ok(heroHtml.includes('20 kW'));
+    assert.ok(heroHtml.includes('46,08 kWh'));
+
+    const kpiHtml = getKpiGridHtml({ mode: 'hybrid', input: hybridInput, result: hybridResult });
+    assert.ok(kpiHtml.includes('1. KAPASITAS PV'));
+    assert.ok(kpiHtml.includes('2. KAPASITAS INVERTER'));
+    assert.ok(kpiHtml.includes('3. KAPASITAS BATTERY'));
+    assert.ok(!kpiHtml.includes('PERKIRAAN HARGA'));
+
+    const profileHtml = getEnergyProfileHtml({ mode: 'hybrid', result: hybridResult });
+    assert.ok(profileHtml.includes('PROFIL ENERGI PELANGGAN'));
+    assert.ok(profileHtml.includes('Residential (R-1/TR 1.300 VA)'));
+    assert.ok(profileHtml.includes('Non-Subsidi'));
+
+    const mockContainer = {
+      innerHTML: '',
+      querySelector() { return null; }
+    };
+    renderResults(mockContainer, {
+      mode: 'hybrid',
+      input: hybridInput,
+      result: hybridResult,
+      waUrl: 'https://wa.me/628170092221'
+    });
+
+    assert.ok(mockContainer.innerHTML.includes('result-hero-slot'));
+    assert.ok(mockContainer.innerHTML.includes('result-kpi-slot'));
+    assert.ok(mockContainer.innerHTML.includes('result-profile-slot'));
+    assert.ok(mockContainer.innerHTML.includes('result-cta-slot'));
+    assert.ok(!mockContainer.innerHTML.includes('result-billbar-slot'));
+    assert.ok(!mockContainer.innerHTML.includes('result-timeline-slot'));
   });
 });

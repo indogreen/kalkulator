@@ -407,3 +407,53 @@ export function getPjutsCostPerPole(lampWattage) {
   }
   return 18500000;
 }
+
+// 10. Parameter Teknis & Tarif PLN 2026 Khusus PLTS Hybrid Off-Grid
+export const HYBRID_TECH_CONFIG = Object.freeze({
+  PSH_HOURS: 3.8,               // Peak Sun Hours rata-rata Indonesia (jam/hari)
+  PERFORMANCE_RATIO: 0.82,      // Efisiensi sistem keseluruhan (82%)
+  PANEL_WP: 550,                // Kapasitas per lembar panel surya (550 Wp)
+  BATTERY_DOD: 0.85,            // Depth of Discharge baterai Lithium LiFePO4 (85%)
+  BATTERY_EFFICIENCY: 0.95,     // Efisiensi baterai & inverter (95%)
+  BATTERY_MODULE_KWH: 5.12,     // Kapasitas standar 1 modul baterai (48V 100Ah = 5.12 kWh)
+  DAYS_PER_MONTH: 30,
+  INVERTER_PV_FACTOR: 0.85,
+  INVERTER_DAILY_DIVISOR: 4.5,
+  STANDARD_INVERTER_KW: Object.freeze([3, 5, 6, 8, 10, 12, 15, 20, 25, 30, 40, 50, 60, 80, 100])
+});
+
+export const HYBRID_PLN_TARIFFS = Object.freeze({
+  Residential: [
+    { id: 'R1-450', label: 'R-1/TR 450 VA', tariff: 415.00, status: 'Bersubsidi' },
+    { id: 'R1-900-S', label: 'R-1/TR 900 VA', tariff: 605.00, status: 'Bersubsidi' },
+    { id: 'R1-900-RTM', label: 'R-1/TR 900 VA (RTM)', tariff: 1352.00, status: 'Non-Subsidi' },
+    { id: 'R1-1300', label: 'R-1/TR 1.300 VA', tariff: 1444.70, status: 'Non-Subsidi' },
+    { id: 'R1-2200', label: 'R-1/TR 2.200 VA', tariff: 1444.70, status: 'Non-Subsidi' },
+    { id: 'R2-3500', label: 'R-2/TR 3.500 VA – 5.500 VA', tariff: 1699.53, status: 'Non-Subsidi' },
+    { id: 'R3-6600', label: 'R-3/TR, TM ≥ 6.600 VA', tariff: 1699.53, status: 'Non-Subsidi' }
+  ],
+  Bisnis: [
+    { id: 'B1-450', label: 'B-1/TR 450 VA', tariff: 535.00, status: 'Bersubsidi' },
+    { id: 'B1-900', label: 'B-1/TR 900 VA', tariff: 630.00, status: 'Bersubsidi' },
+    { id: 'B1-1300', label: 'B-1/TR 1.300 VA', tariff: 966.00, status: 'Bersubsidi' },
+    { id: 'B1-2200', label: 'B-1/TR 2.200 VA – 5.500 VA', tariff: 1100.00, status: 'Bersubsidi' },
+    { id: 'B2-6600', label: 'B-2/TR 6.600 VA – 200 kVA', tariff: 1444.70, status: 'Non-Subsidi' },
+    { id: 'B3-200KVA', label: 'B-3/TM, TT > 200 kVA (LWBP)', tariff: 1114.74, status: 'Non-Subsidi' }
+  ]
+});
+
+/**
+ * Mendapatkan objek tarif PLN Hybrid Off-Grid berdasarkan kategori & ID golongan daya
+ * @param {'Residential'|'Bisnis'} kategori
+ * @param {string|null} dayaId
+ * @returns {{ id: string, label: string, tariff: number, status: string }}
+ */
+export function getHybridTariffOption(kategori = 'Residential', dayaId = null) {
+  const safeKategori = kategori === 'Bisnis' ? 'Bisnis' : 'Residential';
+  const list = HYBRID_PLN_TARIFFS[safeKategori];
+  if (dayaId) {
+    const found = list.find(item => item.id === dayaId);
+    if (found) return found;
+  }
+  return safeKategori === 'Bisnis' ? list[4] : list[3];
+}

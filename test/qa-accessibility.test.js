@@ -8,6 +8,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 
+import { renderHybridForm } from '../src/js/components/forms/hybridForm.js';
 import { renderResidentialForm } from '../src/js/components/forms/residentialForm.js';
 import { renderCommercialForm } from '../src/js/components/forms/commercialForm.js';
 import { renderBatteryForm } from '../src/js/components/forms/batteryForm.js';
@@ -15,24 +16,19 @@ import { renderPjutsForm } from '../src/js/components/forms/pjutsForm.js';
 import { getConversionCtaHtml } from '../src/js/components/results/conversionCta.js';
 import { getKpiGridHtml } from '../src/js/components/results/kpiGrid.js';
 import { getHeroCardHtml } from '../src/js/components/results/heroCard.js';
+import { calculateHybridOffGrid } from '../src/js/calculator/hybrid.js';
 import { calculateResidential } from '../src/js/calculator/residential.js';
 
 describe('Phase 8: Accessibility & WCAG 2.1 AA Audit', () => {
   const indexHtml = fs.readFileSync(path.resolve('index.html'), 'utf8');
 
-  test('1. WAI-ARIA tab semantics: tablist, tab, aria-selected, aria-controls, and tabpanel exist', () => {
-    assert.ok(indexHtml.includes('role="tablist"'), 'Must have role="tablist"');
-    assert.ok(indexHtml.includes('aria-label="Mode Simulasi Kalkulator Energi"'), 'Tablist must have accessible label');
-    
-    // Tab items
-    const tabModes = ['residential', 'commercial', 'battery', 'pjuts'];
-    for (const mode of tabModes) {
-      assert.ok(indexHtml.includes(`data-mode="${mode}"`), `Must contain tab for ${mode}`);
-      assert.ok(indexHtml.includes(`id="tab-${mode}"`), `Must have id="tab-${mode}"`);
-    }
-    assert.ok(indexHtml.includes('role="tab"'), 'Tab buttons must have role="tab"');
-    assert.ok(indexHtml.includes('aria-selected="true"'), 'Active tab must have aria-selected="true"');
-    assert.ok(indexHtml.includes('role="tabpanel"'), 'Form container must have role="tabpanel"');
+  test('1. Unified Hybrid Off-Grid workspace semantics & archived BESS/PJUTS structure', () => {
+    assert.ok(indexHtml.includes('Kalkulator PLTS Hybrid Off-Grid'), 'Must have unified Hybrid Off-Grid heading');
+    assert.ok(indexHtml.includes('id="form-container"'), 'Form container must exist');
+    assert.ok(indexHtml.includes('id="active-mode-badge"'), 'Mode badge must exist');
+    assert.ok(indexHtml.includes('PLTS HYBRID OFF-GRID'), 'Must display active Hybrid Off-Grid badge');
+    assert.ok(indexHtml.includes('ARCHIVED: 4-Mode Tab Switcher'), 'Archived BESS & PJUTS tab markup must be preserved as archive note');
+    assert.ok(!indexHtml.includes('id="form-container" class="relative border border-hairline bg-canvas p-5 tablet:p-7 rounded-sm flex flex-col gap-6" role="tabpanel" id="panel-simulator"'), 'Must not contain duplicate id attribute');
   });
 
   test('2. Modal Dialog accessibility: native dialog with role="dialog", aria-modal="true", labelledby & describedby', () => {
@@ -60,16 +56,27 @@ describe('Phase 8: Accessibility & WCAG 2.1 AA Audit', () => {
     assert.ok(styleCss.includes('background-color: #00b100;'), 'Primary button background must be #00b100');
     assert.ok(styleCss.includes('color: #000000;'), 'Primary button text color must be jet black #000000');
     
-    // Active chips
+    // Active chips (Hybrid & Archived Residential)
     const mockContainer = { innerHTML: '', querySelectorAll: () => [], querySelector: () => null };
+    renderHybridForm(mockContainer, {});
+    assert.ok(mockContainer.innerHTML.includes('bg-primary text-on-primary'), 'Active Hybrid chips must use text-on-primary (black on green)');
+
     renderResidentialForm(mockContainer, {});
     assert.ok(mockContainer.innerHTML.includes('bg-primary text-on-primary'), 'Active chips must use text-on-primary (black on green)');
   });
 
   test('5. Touch Target Audit: all form chips and preset buttons satisfy minimum 44x44px touch requirements', () => {
     const mockContainer = { innerHTML: '', querySelectorAll: () => [], querySelector: () => null };
-    
-    // Residential form
+
+    // Hybrid Off-Grid form (Active)
+    renderHybridForm(mockContainer, {});
+    assert.ok(mockContainer.innerHTML.includes('btn-hybrid-bill-chip min-h-touch min-w-[44px]'), 'Hybrid chips must have min 44px touch target');
+    assert.ok(mockContainer.innerHTML.includes('cad-range-slider'), 'Hybrid ratio must use styled native range slider');
+    assert.ok(mockContainer.innerHTML.includes('<fieldset') && mockContainer.innerHTML.includes('<legend'), 'Hybrid radio groups must use semantic <fieldset>/<legend>');
+    assert.ok(mockContainer.innerHTML.includes('id="input-hybrid-day-percent"'), 'Hybrid day percent input must exist');
+    assert.ok(mockContainer.innerHTML.includes('id="input-hybrid-night-percent"'), 'Hybrid night percent input must exist');
+
+    // Residential form (Archived)
     renderResidentialForm(mockContainer, {});
     assert.ok(mockContainer.innerHTML.includes('min-h-touch min-w-[44px]'), 'Residential chips must have min 44px touch target');
     assert.ok(mockContainer.innerHTML.includes('btn-va-preset h-touch'), 'VA presets must have 44px height (h-touch)');
@@ -111,11 +118,15 @@ describe('Phase 8: Responsive Layout & Viewport Audit', () => {
     assert.ok(indexHtml.includes('hidden tablet:inline') || indexHtml.includes('hidden mobile:inline'), 'Header action buttons must adapt label on mobile');
   });
 
-  test('4. Segmented tabs stack cleanly on narrow mobile without clipping text', () => {
-    assert.ok(indexHtml.includes('pill-tab active flex-1 tablet:flex-initial text-center justify-center') || indexHtml.includes('pill-tab active w-full mobile:w-auto text-center justify-center'), 'Tabs must be full-width or flex-1 on mobile');
+  test('4. Header workspace badge stacks cleanly on mobile without clipping', () => {
+    assert.ok(indexHtml.includes('flex flex-col mobile:flex-row'), 'Workspace header must stack vertically on narrow mobile');
   });
 
-  test('5. KPI Metric Grid stacks cleanly: 1 column on 320px mobile, 2 on 480px mobile, 4 on tablet+', () => {
+  test('5. KPI Metric Grid stacks cleanly: 1 col mobile -> 3 cols tablet+ for Hybrid, 4 cols for archived modes', () => {
+    const hybridRes = calculateHybridOffGrid({ kategori: 'Residential', dayaId: 'R1-1300', biayaBulanan: 2500000 });
+    const hybridKpiHtml = getKpiGridHtml({ mode: 'hybrid', input: {}, result: hybridRes });
+    assert.ok(hybridKpiHtml.includes('grid-cols-1 tablet:grid-cols-3'), 'Hybrid KPI grid must stack cleanly on mobile');
+
     const res = calculateResidential({ powerVa: 2200, monthlyBill: 1500000 });
     const kpiHtml = getKpiGridHtml({ mode: 'residential', input: {}, result: res });
     assert.ok(kpiHtml.includes('grid-cols-1 mobile:grid-cols-2 tablet:grid-cols-4'), 'KPI grid must be responsive for 320px mobile');

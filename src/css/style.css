@@ -280,4 +280,93 @@
   .corner-square, .corner-square-lg {
     display: none !important;
   }
+
+  /* Brand-consistent Flat CAD Range Slider */
+  input[type="range"].cad-range-slider {
+    --slider-track-size: 8px;
+    --slider-thumb-size: 20px;
+    --slider-track-radius: 2px;
+    --slider-thumb-radius: 2px;
+    --slider-track-color: #e5e5e5;
+    --slider-fill-color: #00b100;
+    --slider-thumb-color: #000000;
+    --slider-thumb-border: #00b100;
+    --slider-direction: to right;
+    --attr-min: 0;
+    --attr-max: 100;
+    --control-value: 40;
+    --slider-progress: calc(
+      progress(var(--control-value), var(--attr-min), var(--attr-max)) * 100%
+    );
+
+    -webkit-appearance: none;
+    appearance: none;
+    inline-size: 100%;
+    block-size: 44px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  @supports not (opacity: progress(1, 0, 100)) {
+    input[type="range"].cad-range-slider {
+      --slider-progress: calc(
+        (var(--control-value) - var(--attr-min)) /
+        (var(--attr-max) - var(--attr-min)) * 100%
+      );
+    }
+  }
+
+  input[type="range"].cad-range-slider:focus-visible {
+    outline: 2px solid #00b100;
+    outline-offset: 2px;
+  }
+
+  /* WebKit / Blink track & thumb */
+  input[type="range"].cad-range-slider::-webkit-slider-runnable-track {
+    block-size: var(--slider-track-size);
+    border: 1px solid #cccccc;
+    border-radius: var(--slider-track-radius);
+    background: linear-gradient(
+      var(--slider-direction),
+      var(--slider-fill-color) var(--slider-progress),
+      var(--slider-track-color) var(--slider-progress)
+    );
+  }
+
+  input[type="range"].cad-range-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    inline-size: var(--slider-thumb-size);
+    block-size: var(--slider-thumb-size);
+    margin-block-start: calc((var(--slider-track-size) - var(--slider-thumb-size)) / 2 - 1px);
+    border: 2px solid var(--slider-thumb-border);
+    border-radius: var(--slider-thumb-radius);
+    background: var(--slider-thumb-color);
+  }
+
+  /* Firefox track, progress & thumb */
+  input[type="range"].cad-range-slider::-moz-range-track {
+    block-size: var(--slider-track-size);
+    border: 1px solid #cccccc;
+    border-radius: var(--slider-track-radius);
+    background: var(--slider-track-color);
+  }
+
+  input[type="range"].cad-range-slider::-moz-range-progress {
+    block-size: var(--slider-track-size);
+    border-radius: var(--slider-track-radius);
+    background: var(--slider-fill-color);
+  }
+
+  input[type="range"].cad-range-slider::-moz-range-thumb {
+    inline-size: var(--slider-thumb-size);
+    block-size: var(--slider-thumb-size);
+    border: 2px solid var(--slider-thumb-border);
+    border-radius: var(--slider-thumb-radius);
+    background: var(--slider-thumb-color);
+  }
 }

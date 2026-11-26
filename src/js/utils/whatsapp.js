@@ -23,6 +23,36 @@ export function generateWhatsAppMessage(mode, input = {}, result = {}) {
   const regionLabel = REGIONS_PSH[input.region]?.label || 'DKI Jakarta, Jabar & Banten';
   const psh = REGIONS_PSH[input.region]?.psh || 4.4;
 
+  if (mode === 'hybrid') {
+    const kategori = input.kategori || result.inputs?.kategori || 'Residential';
+    const dayaLabel = result.inputs?.dayaLabel || input.dayaId || 'R-1/TR 1.300 VA';
+    const monthlyBill = formatRupiah(input.biayaBulanan || result.inputs?.biayaBulanan || 2500000);
+    const persenSiang = result.inputs?.persenSiang ?? input.persenSiang ?? 40;
+    const persenMalam = result.inputs?.persenMalam ?? (100 - persenSiang);
+    const persenCover = result.inputs?.persenCover ?? input.persenCover ?? 100;
+    const targetKwhHari = `${formatNumber(result.energy?.targetKwhHari || 0, 2)} kWh/hari`;
+    const pvKwp = `${formatNumber(result.pv?.kapasitasPvKwp || 0, 2)} kWp`;
+    const jumlahPanel = result.pv?.jumlahPanel || 0;
+    const panelWp = result.pv?.panelWp || 550;
+    const inverterKw = `${result.inverter?.kapasitasInverterKw || 0} kW`;
+    const batteryKwh = `${formatNumber(result.battery?.kapasitasBatteryKwh || 0, 2)} kWh`;
+    const jumlahBattery = result.battery?.jumlahModulBattery || 0;
+
+    return [
+      'Halo Tim Engineering PT. Indogreen Technology And Management,',
+      'Saya ingin konsultasi teknis sistem PLTS Hybrid Off-Grid:',
+      `- Kategori & Daya PLN: ${kategori} (${dayaLabel})`,
+      `- Biaya Listrik Bulanan: ${monthlyBill} / bulan`,
+      `- Proporsi Beban: Siang ${persenSiang}% / Malam ${persenMalam}%`,
+      `- Target Dicover PLTS: ${persenCover}% (${targetKwhHari})`,
+      `- Rekomendasi Kapasitas PV: ${pvKwp} (${jumlahPanel} Panel @ ${panelWp} Wp)`,
+      `- Rekomendasi Hybrid Inverter: ${inverterKw}`,
+      `- Rekomendasi Baterai LiFePO4: ${batteryKwh} (${jumlahBattery} Unit @ 5,12 kWh)`,
+      '',
+      'Mohon dapat dibantu survei lokasi dan penawaran harga resminya. Terima kasih.'
+    ].join('\n');
+  }
+
   if (mode === 'residential') {
     const powerVa = formatNumber(input.powerVa || result.inputs?.powerVa || 2200);
     const monthlyBill = formatRupiah(input.monthlyBill || result.inputs?.monthlyBill || 1500000);

@@ -14,6 +14,7 @@ import { initHeader } from './components/header.js';
 import { initTabs, setActiveTab } from './components/tabs.js';
 import { initModalQr, openModalQr, updateModalQrSvg, closeModalQr } from './components/modalQr.js';
 
+import { renderHybridForm } from './components/forms/hybridForm.js';
 import { renderResidentialForm } from './components/forms/residentialForm.js';
 import { renderCommercialForm } from './components/forms/commercialForm.js';
 import { renderBatteryForm } from './components/forms/batteryForm.js';
@@ -21,6 +22,7 @@ import { renderPjutsForm } from './components/forms/pjutsForm.js';
 
 import { renderResults } from './components/results/index.js';
 
+import { calculateHybridOffGrid } from './calculator/hybrid.js';
 import { calculateResidential } from './calculator/residential.js';
 import { calculateCommercial } from './calculator/commercial.js';
 import { calculateBattery } from './calculator/battery.js';
@@ -29,11 +31,20 @@ import { calculatePjuts } from './calculator/pjuts.js';
 import { generateWhatsAppUrl } from './utils/whatsapp.js';
 
 /**
- * Calibrated default parameters for all 4 simulator modes
+ * Calibrated default parameters (Active: Hybrid Off-Grid; Archived: residential, commercial, battery, pjuts)
  */
 export const DEFAULT_APP_STATE = Object.freeze({
-  activeMode: 'residential',
+  activeMode: 'hybrid',
   modes: {
+    hybrid: {
+      kategori: 'Residential',
+      dayaId: 'R1-1300',
+      biayaBulanan: 2500000,
+      persenSiang: 40,
+      persenMalam: 60,
+      sistem: 'Hybrid Offgrid',
+      persenCover: 100
+    },
     residential: {
       powerVa: 2200,
       monthlyBill: 1500000,
@@ -129,6 +140,7 @@ export function calculateCurrentResult() {
   const mode = appState.activeMode;
   const input = appState.modes[mode];
 
+  if (mode === 'hybrid') return calculateHybridOffGrid(input);
   if (mode === 'residential') return calculateResidential(input);
   if (mode === 'commercial') return calculateCommercial(input);
   if (mode === 'battery') return calculateBattery(input);
@@ -151,6 +163,7 @@ export function mountActiveForm() {
   const badgeMode = document.getElementById('active-mode-badge');
   if (badgeMode) {
     const labels = {
+      hybrid: 'PLTS HYBRID OFF-GRID',
       residential: 'PLTS ATAP RESIDENSIAL',
       commercial: 'PLTS BISNIS & INDUSTRI',
       battery: 'BATERAI CADANGAN (BESS)',
@@ -159,9 +172,9 @@ export function mountActiveForm() {
     badgeMode.textContent = labels[mode] || mode.toUpperCase();
   }
 
-  // Update tabpanel accessible label
+  // Update accessible label pada kontainer form
   const formContainer = document.getElementById('form-container');
-  if (formContainer) {
+  if (formContainer && mode !== 'hybrid') {
     formContainer.setAttribute('aria-labelledby', `tab-${mode}`);
   }
 
@@ -175,7 +188,9 @@ export function mountActiveForm() {
   };
 
   // Render form spesifik
-  if (mode === 'residential') {
+  if (mode === 'hybrid') {
+    renderHybridForm(formSlot, currentState, handleFormChange);
+  } else if (mode === 'residential') {
     renderResidentialForm(formSlot, currentState, handleFormChange);
   } else if (mode === 'commercial') {
     renderCommercialForm(formSlot, currentState, handleFormChange);

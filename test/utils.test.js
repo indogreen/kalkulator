@@ -34,6 +34,7 @@ import {
   WHATSAPP_BASE_URL
 } from '../src/js/utils/whatsapp.js';
 
+import { calculateHybridOffGrid } from '../src/js/calculator/hybrid.js';
 import { calculateResidential } from '../src/js/calculator/residential.js';
 import { calculateCommercial } from '../src/js/calculator/commercial.js';
 import { calculateBattery } from '../src/js/calculator/battery.js';
@@ -202,6 +203,28 @@ describe('Zero-Dependency SVG QR Code Generator (qrcode.js)', () => {
 // 3. WHATSAPP LINK & MESSAGE GENERATOR TESTS
 // ============================================================================
 describe('WhatsApp Consultation Generator (whatsapp.js)', () => {
+  test('Mode Hybrid Off-Grid: pesan dan URL terformat dengan benar', () => {
+    const input = {
+      kategori: 'Residential',
+      dayaId: 'R1-1300',
+      biayaBulanan: 2500000,
+      persenSiang: 40,
+      persenCover: 100
+    };
+    const result = calculateHybridOffGrid(input);
+    const message = generateWhatsAppMessage('hybrid', input, result);
+    const url = generateWhatsAppUrl('hybrid', input, result);
+
+    assert.ok(message.includes('PLTS Hybrid Off-Grid'));
+    assert.ok(message.includes('Residential (R-1/TR 1.300 VA)'));
+    assert.ok(message.includes('Rp 2.500.000'));
+    assert.ok(message.includes('Siang 40% / Malam 60%'));
+    assert.ok(message.includes('18,70 kWp'));
+    assert.ok(message.includes('20 kW'));
+    assert.ok(message.includes('46,08 kWh'));
+    assert.ok(url.startsWith(`${WHATSAPP_BASE_URL}${OFFICIAL_WHATSAPP_NUMBER}?text=`));
+  });
+
   test('Mode Residensial: pesan dan URL terformat dengan benar', () => {
     const input = {
       powerVa: 2200,
@@ -284,6 +307,7 @@ describe('WhatsApp Consultation Generator (whatsapp.js)', () => {
 describe('End-to-End Pipeline: Calculation -> WhatsApp URL -> SVG QR Code', () => {
   test('Pipeline lengkap untuk keempat mode berjalan tanpa error', () => {
     const modes = [
+      { mode: 'hybrid', calc: () => calculateHybridOffGrid({ kategori: 'Residential', dayaId: 'R1-1300', biayaBulanan: 2500000 }) },
       { mode: 'residential', calc: () => calculateResidential({ powerVa: 2200, monthlyBill: 1500000 }) },
       { mode: 'commercial', calc: () => calculateCommercial({ tariffGroup: 'B-2', monthlyBill: 50000000 }) },
       { mode: 'battery', calc: () => calculateBattery({ criticalLoadKw: 2.0, backupHours: 4 }) },

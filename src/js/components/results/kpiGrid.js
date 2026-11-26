@@ -22,6 +22,70 @@ import { formatRupiah, formatNumber, formatPercent } from '../../utils/formatter
 export function getKpiGridHtml({ mode, input, result }) {
   if (!result) return '';
 
+  if (mode === 'hybrid') {
+    const pvKwp = result.pv?.kapasitasPvKwp || 0;
+    const jumlahPanel = result.pv?.jumlahPanel || 0;
+    const panelWp = result.pv?.panelWp || 550;
+    const pshJam = result.pv?.pshJam || 3.8;
+    const prPct = Math.round((result.pv?.performanceRatio || 0.82) * 100);
+
+    const inverterKw = result.inverter?.kapasitasInverterKw || 0;
+    const inverterW = result.inverter?.kapasitasInverterW || 0;
+
+    const batteryKwh = result.battery?.kapasitasBatteryKwh || 0;
+    const jumlahModul = result.battery?.jumlahModulBattery || 0;
+    const moduleKwh = result.battery?.batteryModuleKwh || 5.12;
+    const dodPct = Math.round((result.battery?.batteryDoD || 0.85) * 100);
+    const kwhMalamHari = result.energy?.kwhMalamHari || 0;
+
+    const hybridCards = [
+      {
+        badge: '1. KAPASITAS PV',
+        value: `${formatNumber(pvKwp, 2)} kWp`,
+        sub: `≈ ${jumlahPanel} lembar panel @ ${panelWp} Wp`,
+        foot: `PSH ${formatNumber(pshJam, 1)} jam/hari • PR ${prPct}%`,
+        isHighlight: true
+      },
+      {
+        badge: '2. KAPASITAS INVERTER',
+        value: `${inverterKw} kW`,
+        sub: `Hybrid Off-Grid (${formatNumber(inverterW)} W)`,
+        foot: 'Pure Sine Wave • MPPT Charger',
+        isHighlight: false
+      },
+      {
+        badge: '3. KAPASITAS BATTERY',
+        value: `${formatNumber(batteryKwh, 2)} kWh`,
+        sub: `≈ ${jumlahModul} unit baterai @ ${formatNumber(moduleKwh, 2)} kWh`,
+        foot: `Beban malam ${formatNumber(kwhMalamHari, 2)} kWh/hari (DoD ${dodPct}%)`,
+        isHighlight: false
+      }
+    ];
+
+    return `
+      <div class="grid grid-cols-1 tablet:grid-cols-3 gap-sm" role="region" aria-label="Sizing Teknis Utama PLTS Hybrid Off-Grid">
+        ${hybridCards.map(card => `
+          <div class="p-4 bg-canvas border border-hairline rounded-sm flex flex-col justify-between gap-3 hover:border-hairline-strong transition-colors">
+            <div class="flex flex-col gap-1.5">
+              <span class="text-[11px] font-bold uppercase tracking-wider text-ink bg-surface-soft border border-hairline px-2 py-0.5 rounded-sm self-start">
+                ${card.badge}
+              </span>
+              <span class="text-xl tablet:text-2xl font-bold ${card.isHighlight ? 'text-primary-dark' : 'text-ink'} mt-1 tabular-nums">
+                ${card.value}
+              </span>
+              <span class="text-xs font-medium text-body leading-snug">
+                ${card.sub}
+              </span>
+            </div>
+            <div class="pt-2.5 border-t border-hairline text-[11px] text-mute tabular-nums">
+              ${card.foot}
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    `;
+  }
+
   let kpi1 = { title: 'TOTAL INVESTASI', value: 'Rp 0', sub: 'Turnkey + PPN 11%', isHighlight: false };
   let kpi2 = { title: '% HEMAT LISTRIK', value: '0.0%', sub: 'Per bulan dari PLN', isHighlight: true };
   let kpi3 = { title: 'PAYBACK PERIOD', value: '0 Tahun', sub: 'Titik Impas (ROI)', isHighlight: false };

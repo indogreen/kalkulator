@@ -9,12 +9,12 @@
  * - 4-item technical specification strip (kWp, modules, battery, roof area)
  */
 
-import { formatRupiah, formatKwp, formatPercent } from '../../utils/formatter.js';
+import { formatRupiah, formatKwp, formatPercent, formatNumber } from '../../utils/formatter.js';
 
 /**
  * Generate HTML string for Hero Result Card based on active simulator mode
  * @param {Object} params
- * @param {string} params.mode - Active mode: 'residential' | 'commercial' | 'battery' | 'pjuts'
+ * @param {string} params.mode - Active mode: 'hybrid' | 'residential' | 'commercial' | 'battery' | 'pjuts'
  * @param {Object} params.input - User input parameters
  * @param {Object} params.result - Calculated results object from calculation engine
  * @returns {string} Semantic HTML string
@@ -28,7 +28,57 @@ export function getHeroCardHtml({ mode, input, result }) {
   let subtextHtml = '';
   let specs = [];
 
-  if (mode === 'residential') {
+  if (mode === 'hybrid') {
+    const pvKwp = result.pv?.kapasitasPvKwp || 0;
+    const jumlahPanel = result.pv?.jumlahPanel || 0;
+    const panelWp = result.pv?.panelWp || 550;
+    const inverterKw = result.inverter?.kapasitasInverterKw || 0;
+    const inverterW = result.inverter?.kapasitasInverterW || 0;
+    const batteryKwh = result.battery?.kapasitasBatteryKwh || 0;
+    const jumlahModul = result.battery?.jumlahModulBattery || 0;
+    const batteryUnitKwh = result.battery?.batteryModuleKwh || 5.12;
+    const persenCover = result.inputs?.persenCover ?? 100;
+    const persenSiang = result.inputs?.persenSiang ?? 40;
+    const persenMalam = result.inputs?.persenMalam ?? 60;
+    const targetKwhHari = result.energy?.targetKwhHari || 0;
+
+    eyebrow = 'REKOMENDASI KAPASITAS SISTEM HYBRID OFF-GRID';
+    badgeText = `HYBRID OFFGRID • COVER ${persenCover}%`;
+
+    mainValueHtml = `
+      <div class="type-display-xl font-bold text-primary flex flex-wrap items-baseline gap-xs break-words tabular-nums">
+        <span>${formatNumber(pvKwp, 2)} kWp</span>
+        <span class="text-base tablet:text-lg text-on-dark-mute font-normal">${jumlahPanel} Panel @ ${panelWp} Wp</span>
+      </div>
+    `;
+
+    subtextHtml = `
+      Suplai target <strong class="text-on-dark font-bold">${formatNumber(targetKwhHari, 2)} kWh/hari</strong> (${persenSiang}% siang / ${persenMalam}% malam) dengan Hybrid Inverter <strong class="text-on-dark font-bold">${inverterKw} kW</strong> dan Baterai <strong class="text-on-dark font-bold">${formatNumber(batteryKwh, 2)} kWh</strong>.
+    `;
+
+    specs = [
+      {
+        label: '1. KAPASITAS PV',
+        value: `${formatNumber(pvKwp, 2)} kWp`,
+        sub: `${jumlahPanel} Panel @ ${panelWp} Wp`
+      },
+      {
+        label: '2. INVERTER HYBRID',
+        value: `${inverterKw} kW`,
+        sub: `Off-Grid (${formatNumber(inverterW)} W)`
+      },
+      {
+        label: '3. BATERAI LIFEPO4',
+        value: `${formatNumber(batteryKwh, 2)} kWh`,
+        sub: `${jumlahModul} Unit @ ${formatNumber(batteryUnitKwh, 2)} kWh`
+      },
+      {
+        label: 'TARGET COVER',
+        value: `${persenCover}% Beban`,
+        sub: `${formatNumber(targetKwhHari, 2)} kWh / hari`
+      }
+    ];
+  } else if (mode === 'residential') {
     const savingsRp = result.billing?.monthlySavings || 0;
     const savingsPct = result.billing?.savingsPercent || 0;
     const isMinApplied = result.billing?.isMinimumBillApplied;

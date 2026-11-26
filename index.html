@@ -66,52 +66,49 @@
   <!-- 2. Main Calculator Workspace (Above-The-Fold Pure Calculator) -->
   <main class="flex-1 max-w-7xl w-full mx-auto px-4 tablet:px-8 py-6 tablet:py-10 flex flex-col gap-6 tablet:gap-8">
 
-    <!-- Header & Mode Tabs Switcher -->
-    <div class="flex flex-col gap-4">
+    <!-- Header Workspace PLTS Hybrid Off-Grid -->
+    <div class="flex flex-col mobile:flex-row mobile:items-end justify-between gap-3 border-b border-hairline pb-4">
       <div class="flex flex-col gap-1">
         <h1 class="text-2xl tablet:text-3xl font-bold text-ink tracking-tight">
-          Kalkulator Energi Surya
+          Kalkulator PLTS Hybrid Off-Grid
         </h1>
         <p class="text-sm tablet:text-base text-mute">
-          Simulasikan kebutuhan sistem PLTS, proteksi rekening minimum, dan estimasi investasi.
+          Simulasikan kebutuhan kapasitas PV, Hybrid Inverter, dan Baterai LiFePO4 untuk rumah tangga maupun bisnis.
         </p>
       </div>
-
-      <!-- Segmented Control Tabs (4 Mode Simulasi) -->
-      <div class="flex flex-wrap tablet:flex-nowrap items-center gap-2 tablet:gap-3" role="tablist" aria-label="Mode Simulasi Kalkulator Energi">
-        <button type="button" class="pill-tab active flex-1 tablet:flex-initial text-center justify-center whitespace-nowrap py-2.5 px-4" role="tab" aria-selected="true" data-mode="residential" id="tab-residential" aria-controls="panel-simulator">
-          PLTS Residensial
-        </button>
-        <button type="button" class="pill-tab flex-1 tablet:flex-initial text-center justify-center whitespace-nowrap py-2.5 px-4" role="tab" aria-selected="false" data-mode="commercial" id="tab-commercial" aria-controls="panel-simulator">
-          PLTS Bisnis & Industri
-        </button>
-        <button type="button" class="pill-tab flex-1 tablet:flex-initial text-center justify-center whitespace-nowrap py-2.5 px-4" role="tab" aria-selected="false" data-mode="battery" id="tab-battery" aria-controls="panel-simulator">
-          Baterai Cadangan (BESS)
-        </button>
-        <button type="button" class="pill-tab flex-1 tablet:flex-initial text-center justify-center whitespace-nowrap py-2.5 px-4" role="tab" aria-selected="false" data-mode="pjuts" id="tab-pjuts" aria-controls="panel-simulator">
-          Penerangan Jalan (PJUTS)
-        </button>
-      </div>
+      <span class="inline-flex items-center gap-2 self-start mobile:self-auto px-3 py-1.5 rounded-sm text-xs font-bold uppercase tracking-wide bg-surface-soft text-ink border border-hairline shrink-0">
+        <span class="w-2 h-2 rounded-xs bg-primary" aria-hidden="true"></span>
+        Tarif PLN 2026
+      </span>
     </div>
+
+    <!-- ARCHIVED: 4-Mode Tab Switcher (BESS, PJUTS, Legacy Residential & Commercial)
+    <div class="flex flex-wrap tablet:flex-nowrap items-center gap-2 tablet:gap-3" role="tablist" aria-label="Mode Simulasi Kalkulator Energi">
+      <button type="button" class="pill-tab active" role="tab" aria-selected="true" data-mode="residential" id="tab-residential" aria-controls="panel-simulator">PLTS Residensial</button>
+      <button type="button" class="pill-tab" role="tab" aria-selected="false" data-mode="commercial" id="tab-commercial" aria-controls="panel-simulator">PLTS Bisnis & Industri</button>
+      <button type="button" class="pill-tab" role="tab" aria-selected="false" data-mode="battery" id="tab-battery" aria-controls="panel-simulator">Baterai Cadangan (BESS)</button>
+      <button type="button" class="pill-tab" role="tab" aria-selected="false" data-mode="pjuts" id="tab-pjuts" aria-controls="panel-simulator">Penerangan Jalan (PJUTS)</button>
+    </div>
+    -->
 
     <!-- 2-Column Responsive Workspace Grid -->
     <div class="grid grid-cols-1 desktop:grid-cols-12 gap-6 desktop:gap-8 items-start">
       
       <!-- Panel Sisi Kiri: Form Input Parameter (5 Kolom di Desktop) -->
       <section class="desktop:col-span-5 flex flex-col gap-6" aria-labelledby="form-section-title">
-        <div id="form-container" class="relative border border-hairline bg-canvas p-5 tablet:p-7 rounded-sm flex flex-col gap-6" role="tabpanel" id="panel-simulator" aria-labelledby="tab-residential">
+        <div id="form-container" class="relative border border-hairline bg-canvas p-5 tablet:p-7 rounded-sm flex flex-col gap-6">
 
           <!-- Form Header Strip -->
-          <div class="flex items-center justify-between border-b border-hairline pb-4">
-            <div>
-              <span id="active-mode-badge" class="text-xs bg-surface-soft text-ink font-semibold border border-hairline px-2 py-1 rounded-sm uppercase tracking-wide">
-                PLTS Residensial
+          <div class="flex items-start justify-between gap-3 border-b border-hairline pb-4">
+            <div class="min-w-0">
+              <span id="active-mode-badge" class="text-xs bg-surface-soft text-ink font-semibold border border-hairline px-2 py-1 rounded-sm uppercase tracking-wide inline-block">
+                PLTS HYBRID OFF-GRID
               </span>
               <h2 id="form-section-title" class="text-lg font-bold text-ink mt-2">
-                Parameter Kebutuhan
+                Parameter Kebutuhan Listrik &amp; Sistem
               </h2>
             </div>
-            <span class="text-xs text-mute font-medium">Panel Input</span>
+            <span class="text-xs text-mute font-medium whitespace-nowrap shrink-0 mt-1">6 Langkah</span>
           </div>
 
           <!-- Form Dynamic Slot (Diisi secara reaktif oleh komponen form) -->

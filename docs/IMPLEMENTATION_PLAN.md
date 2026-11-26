@@ -552,3 +552,24 @@ Ketika Anda siap memulai proses implementasi kode:
 2. Berikan prompt yang telah disediakan pada sub-bab *Prompt AI Coding Agent* untuk fase tersebut kepada AI coding agent pilihan Anda.
 3. Periksa dan verifikasi hasil pengerjaan berdasarkan *Kriteria Keberhasilan & Verifikasi* fase tersebut.
 4. Lanjutkan ke fase berikutnya hanya setelah fase sebelumnya selesai dan terverifikasi sempurna.
+
+---
+
+## 6. Pembaruan Arsitektur: Overhaul Kalkulator PLTS Hybrid Off-Grid (Tahap 1 — Sizing Teknis)
+
+> **Status:** Aktif Diimplementasikan | **Mode Arsip:** BESS, PJUTS, dan Modul Residensial/Komersial Lama (tetap tersimpan di repositori & teruji)
+
+1. **Mode Tunggal Terpadu (`hybrid.js`, `hybridForm.js`)**:
+   - Menggabungkan kalkulasi **Residential (R-1 s/d R-3)** dan **Bisnis (B-1 s/d B-3)** dalam satu alur 6 langkah **PLTS Hybrid Off-Grid**.
+   - Konstanta sizing teknis baru (`HYBRID_TECH_CONFIG`): `PSH 3.8 jam/hari`, `PR 82%`, `Panel 550 Wp`, `DoD 85%`, `Efisiensi Baterai 95%`, `Modul Baterai 5.12 kWh`, serta katalog inverter standar `[3..100 kW]`.
+   - Formula sizing:
+     - `totalKwhBulan = biayaBulanan / tariff`, `totalKwhHari = totalKwhBulan / 30`
+     - `targetKwhHari = totalKwhHari * (persenCover / 100)`
+     - `jumlahPanel = Math.ceil((targetKwhHari / (3.8 * 0.82) * 1000) / 550)`
+     - `minInverterReq = Math.max(kapasitasPvKwp * 0.85, targetKwhHari / 4.5)` -> di-snap ke `STANDARD_INVERTER_KW`
+     - `jumlahModulBattery = kwhMalamHari > 0 ? Math.ceil((kwhMalamHari / (0.85 * 0.95)) / 5.12) : 1`
+2. **Penundaan Perhitungan Biaya & Fitur Tambahan**:
+   - Perhitungan biaya perangkat & instalasi (`pricing`) serta modul tambahan (Timeline 25 Tahun, Bill Comparison Bar, Rekening Min. PLN) ditunda untuk iterasi lanjutan.
+   - Panel hasil aktif menampilkan Hero Card kapasitas sistem, 3 Kartu Sizing Teknis (`Kapasitas PV`, `Kapasitas Inverter`, `Kapasitas Battery`), Rincian Teknis `Profil Energi Pelanggan` (`energyProfile.js`), serta CTA WhatsApp & Barcode QR.
+3. **Pengarsipan Modul Sebelumnya**:
+   - Tab navigasi 4 mode pada `index.html` dinonaktifkan sementara (diarsipkan dalam komentar HTML), sedangkan berkas `residential.js`, `commercial.js`, `battery.js`, `pjuts.js` beserta form dan test unitnya tetap dipertahankan agar sewaktu-waktu dapat diaktifkan kembali.

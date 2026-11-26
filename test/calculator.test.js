@@ -29,9 +29,13 @@ import {
   getTariffByGroup,
   getTurnkeyCostPerWp,
   getCommercialTurnkeyCostPerWp,
-  getPjutsCostPerPole
+  getPjutsCostPerPole,
+  HYBRID_TECH_CONFIG,
+  HYBRID_PLN_TARIFFS,
+  getHybridTariffOption
 } from '../src/js/calculator/constants.js';
 
+import { calculateHybridOffGrid } from '../src/js/calculator/hybrid.js';
 import { calculateResidential } from '../src/js/calculator/residential.js';
 import { calculateCommercial } from '../src/js/calculator/commercial.js';
 import { calculateBattery } from '../src/js/calculator/battery.js';
@@ -474,5 +478,113 @@ describe('Public Solar Street Lighting Engine (pjuts.js)', () => {
     assert.equal(result.financial.totalInvestment, 0);
     assert.equal(result.savings.avoidedCostYearlyRp, 0);
     assert.ok(!isNaN(result.financial.totalInvestment));
+  });
+});
+
+// ============================================================================
+// 6. UNIFIED HYBRID OFF-GRID ENGINE TEST (NEW SYSTEM)
+// ============================================================================
+describe('Unified Hybrid Off-Grid Engine (hybrid.js)', () => {
+  test('Kasus Default Terkalibrasi: Residential R1-1300, Rp 2.500.000/bln, Siang 40%, Cover 100%', () => {
+    const result = calculateHybridOffGrid({
+      kategori: 'Residential',
+      dayaId: 'R1-1300',
+      biayaBulanan: 2500000,
+      persenSiang: 40,
+      persenCover: 100
+    });
+
+    assert.equal(result.mode, 'hybrid');
+    assert.equal(result.inputs.kategori, 'Residential');
+    assert.equal(result.inputs.dayaId, 'R1-1300');
+    assert.equal(result.inputs.dayaStatus, 'Non-Subsidi');
+    assert.equal(result.inputs.tariff, 1444.70);
+    assert.equal(result.inputs.persenSiang, 40);
+    assert.equal(result.inputs.persenMalam, 60);
+
+    // Total kWh: 2.500.000 / 1444.70 = 1730.46 kWh/bln -> 57.68 kWh/hari
+    assert.equal(result.energy.totalKwhBulan, 1730.46);
+    assert.equal(result.energy.totalKwhHari, 57.68);
+    assert.equal(result.energy.targetKwhHari, 57.68);
+    assert.equal(result.energy.kwhSiangHari, 23.07);
+    assert.equal(result.energy.kwhMalamHari, 34.61);
+
+    // PV Sizing: ceil((57.6821 / (3.8 * 0.82)) * 1000 / 550) = 34 panel -> 18.70 kWp
+    assert.equal(result.pv.jumlahPanel, 34);
+    assert.equal(result.pv.kapasitasPvKwp, 18.70);
+    assert.equal(result.pv.panelWp, 550);
+    assert.equal(result.pv.pshJam, 3.8);
+    assert.equal(result.pv.performanceRatio, 0.82);
+
+    // Inverter Sizing: max(18.70 * 0.85, 57.6821 / 4.5) = 15.895 kW -> 20 kW standar
+    assert.equal(result.inverter.kapasitasInverterKw, 20);
+    assert.equal(result.inverter.kapasitasInverterW, 20000);
+
+    // Battery Sizing: ceil((34.609 / (0.85 * 0.95)) / 5.12) = 9 unit -> 46.08 kWh
+    assert.equal(result.battery.jumlahModulBattery, 9);
+    assert.equal(result.battery.kapasitasBatteryKwh, 46.08);
+
+    // Pricing ditunda ke perintah selanjutnya
+    assert.equal(result.pricing, null);
+  });
+
+  test('Kategori Bisnis & Tarif Bersubsidi / Non-Subsidi', () => {
+    const resBiz = calculateHybridOffGrid({
+      kategori: 'Bisnis',
+      dayaId: 'B2-6600',
+      biayaBulanan: 10000000,
+      persenSiang: 70,
+      persenCover: 50
+    });
+
+    assert.equal(resBiz.inputs.kategori, 'Bisnis');
+    assert.equal(resBiz.inputs.dayaId, 'B2-6600');
+    assert.equal(resBiz.inputs.tariff, 1444.70);
+    assert.equal(resBiz.inputs.persenMalam, 30);
+    assert.equal(resBiz.inputs.persenCover, 50);
+    assert.ok(resBiz.pv.jumlahPanel > 0);
+    assert.ok(resBiz.inverter.kapasitasInverterKw > 0);
+    assert.ok(resBiz.battery.jumlahModulBattery > 0);
+
+    // Tarif bersubsidi R1-450
+    const resSubsidi = calculateHybridOffGrid({
+      kategori: 'Residential',
+      dayaId: 'R1-450',
+      biayaBulanan: 100000,
+      persenSiang: 30,
+      persenCover: 100
+    });
+    assert.equal(resSubsidi.inputs.dayaStatus, 'Bersubsidi');
+    assert.equal(resSubsidi.inputs.tariff, 415.00);
+  });
+
+  test('Edge Case: Biaya Nol dan Pemakaian 100% Siang', () => {
+    const resZero = calculateHybridOffGrid({ biayaBulanan: 0 });
+    assert.equal(resZero.energy.totalKwhBulan, 0);
+    assert.equal(resZero.pv.jumlahPanel, 0);
+    assert.equal(resZero.pv.kapasitasPvKwp, 0);
+    assert.equal(resZero.inverter.kapasitasInverterKw, 0);
+    assert.equal(resZero.battery.jumlahModulBattery, 0);
+    assert.equal(resZero.battery.kapasitasBatteryKwh, 0);
+    assert.ok(!isNaN(resZero.pv.kapasitasPvKwp));
+
+    // 100% siang tetap menyertakan buffer 1 modul baterai (5.12 kWh)
+    const resFullDay = calculateHybridOffGrid({
+      kategori: 'Residential',
+      dayaId: 'R1-1300',
+      biayaBulanan: 2500000,
+      persenSiang: 100,
+      persenCover: 100
+    });
+    assert.equal(resFullDay.energy.kwhMalamHari, 0);
+    assert.equal(resFullDay.battery.jumlahModulBattery, 1);
+    assert.equal(resFullDay.battery.kapasitasBatteryKwh, 5.12);
+
+    // Lookup helper fallback
+    assert.equal(getHybridTariffOption('Bisnis').id, 'B2-6600');
+    assert.equal(getHybridTariffOption('Residential', 'INVALID').id, 'R1-1300');
+    assert.equal(HYBRID_TECH_CONFIG.PANEL_WP, 550);
+    assert.ok(HYBRID_PLN_TARIFFS.Residential.length === 7);
+    assert.ok(HYBRID_PLN_TARIFFS.Bisnis.length === 6);
   });
 });

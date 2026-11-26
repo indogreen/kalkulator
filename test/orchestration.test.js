@@ -35,13 +35,23 @@ import {
 } from '../src/js/components/modalQr.js';
 
 import { renderResidentialForm } from '../src/js/components/forms/residentialForm.js';
+import { renderHybridForm } from '../src/js/components/forms/hybridForm.js';
 
 describe('Reactive State Orchestration (Phase 7)', () => {
 
-  test('DEFAULT_APP_STATE: contains calibrated default parameters for all 4 modes', () => {
-    assert.equal(DEFAULT_APP_STATE.activeMode, 'residential');
-    
-    // Residential defaults
+  test('DEFAULT_APP_STATE: contains calibrated default parameters for Hybrid Off-Grid and archived modes', () => {
+    assert.equal(DEFAULT_APP_STATE.activeMode, 'hybrid');
+
+    // Active Hybrid Off-Grid defaults
+    assert.equal(DEFAULT_APP_STATE.modes.hybrid.kategori, 'Residential');
+    assert.equal(DEFAULT_APP_STATE.modes.hybrid.dayaId, 'R1-1300');
+    assert.equal(DEFAULT_APP_STATE.modes.hybrid.biayaBulanan, 2500000);
+    assert.equal(DEFAULT_APP_STATE.modes.hybrid.persenSiang, 40);
+    assert.equal(DEFAULT_APP_STATE.modes.hybrid.persenMalam, 60);
+    assert.equal(DEFAULT_APP_STATE.modes.hybrid.sistem, 'Hybrid Offgrid');
+    assert.equal(DEFAULT_APP_STATE.modes.hybrid.persenCover, 100);
+
+    // Archived Residential defaults
     assert.equal(DEFAULT_APP_STATE.modes.residential.powerVa, 2200);
     assert.equal(DEFAULT_APP_STATE.modes.residential.monthlyBill, 1500000);
     assert.equal(DEFAULT_APP_STATE.modes.residential.daytimePercent, 30);
@@ -74,7 +84,15 @@ describe('Reactive State Orchestration (Phase 7)', () => {
   });
 
   test('calculateCurrentResult: calculates result according to active mode', () => {
-    // 1. Residensial
+    // 0. Unified Hybrid Off-Grid (Active Default)
+    setActiveMode('hybrid');
+    const hybridResult = calculateCurrentResult();
+    assert.equal(hybridResult.mode, 'hybrid');
+    assert.equal(hybridResult.pv.jumlahPanel, 34);
+    assert.equal(hybridResult.inverter.kapasitasInverterKw, 20);
+    assert.equal(hybridResult.battery.jumlahModulBattery, 9);
+
+    // 1. Residensial (Arsip)
     setActiveMode('residential');
     const resResult = calculateCurrentResult();
     assert.equal(resResult.mode, 'residential');
@@ -316,5 +334,115 @@ describe('Residential Form Component (residentialForm.js)', () => {
     assert.equal(elements['input-res-daytime-percent'].value, 40);
     assert.equal(capturedState.daytimePercent, 40);
     assert.equal(capturedState.nighttimePercent, 60);
+  });
+});
+
+describe('Hybrid Form Component (hybridForm.js)', () => {
+  test('Sinkronisasi 6 langkah Hybrid Off-Grid: kategori, daya, biaya, siang/malam & slider, dan cover %', () => {
+    let capturedState = null;
+    const listeners = {};
+    const elements = {};
+    const radioGroups = { kategori: [], persenCover: [] };
+
+    function createMockEl(id, val = '') {
+      return {
+        id,
+        value: val,
+        innerHTML: '',
+        className: '',
+        textContent: '',
+        checked: false,
+        style: { setProperty() {} },
+        classList: {
+          add() {},
+          remove() {},
+          toggle() {}
+        },
+        setAttribute() {},
+        addEventListener(event, handler) {
+          listeners[`${id}:${event}`] = handler;
+        },
+        parentElement: {
+          querySelector() {
+            return {
+              className: '',
+              classList: { toggle() {} }
+            };
+          }
+        }
+      };
+    }
+
+    elements['form-hybrid'] = createMockEl('form-hybrid');
+    elements['select-hybrid-daya'] = createMockEl('select-hybrid-daya', 'R1-1300');
+    elements['label-hybrid-kategori'] = createMockEl('label-hybrid-kategori');
+    elements['badge-hybrid-daya-status'] = createMockEl('badge-hybrid-daya-status');
+    elements['display-hybrid-tariff'] = createMockEl('display-hybrid-tariff');
+    elements['input-hybrid-bill'] = createMockEl('input-hybrid-bill', '2.500.000');
+    elements['error-hybrid-bill'] = createMockEl('error-hybrid-bill');
+    elements['preview-hybrid-kwh-month'] = createMockEl('preview-hybrid-kwh-month');
+    elements['preview-hybrid-kwh-day'] = createMockEl('preview-hybrid-kwh-day');
+    elements['input-hybrid-day-percent'] = createMockEl('input-hybrid-day-percent', '40');
+    elements['input-hybrid-night-percent'] = createMockEl('input-hybrid-night-percent', '60');
+    elements['slider-hybrid-day'] = createMockEl('slider-hybrid-day', '40');
+    elements['bar-hybrid-day'] = createMockEl('bar-hybrid-day');
+    elements['bar-hybrid-night'] = createMockEl('bar-hybrid-night');
+    elements['label-hybrid-day-val'] = createMockEl('label-hybrid-day-val');
+    elements['label-hybrid-night-val'] = createMockEl('label-hybrid-night-val');
+
+    const catRes = createMockEl('radio-cat-Residential', 'Residential');
+    const catBiz = createMockEl('radio-cat-Bisnis', 'Bisnis');
+    radioGroups.kategori = [catRes, catBiz];
+
+    const cov50 = createMockEl('radio-cover-50', '50');
+    const cov100 = createMockEl('radio-cover-100', '100');
+    radioGroups.persenCover = [cov50, cov100];
+
+    const mockContainer = {
+      innerHTML: '',
+      querySelector(selector) {
+        const id = selector.replace('#', '');
+        return elements[id] || null;
+      },
+      querySelectorAll(selector) {
+        if (selector === 'input[name="kategori"]') return radioGroups.kategori;
+        if (selector === 'input[name="persenCover"]') return radioGroups.persenCover;
+        return [];
+      }
+    };
+
+    renderHybridForm(mockContainer, { biayaBulanan: 2500000, persenSiang: 40 }, (state) => {
+      capturedState = state;
+    });
+
+    assert.ok(mockContainer.innerHTML.includes('1. Untuk (Peruntukan)'));
+    assert.ok(mockContainer.innerHTML.includes('5. Sistem PLTS'));
+    assert.ok(mockContainer.innerHTML.includes('6. Dicover PLTS'));
+
+    // Test input siang 30% -> malam otomatis 70%, slider 30
+    listeners['input-hybrid-day-percent:input']({ target: { value: '30' } });
+    assert.equal(elements['input-hybrid-night-percent'].value, '70');
+    assert.equal(elements['slider-hybrid-day'].value, '30');
+    assert.equal(capturedState.persenSiang, 30);
+    assert.equal(capturedState.persenMalam, 70);
+
+    // Test slider digeser ke 55% -> siang 55, malam 45
+    listeners['slider-hybrid-day:input']({ target: { value: '55' } });
+    assert.equal(elements['input-hybrid-day-percent'].value, '55');
+    assert.equal(elements['input-hybrid-night-percent'].value, '45');
+    assert.equal(capturedState.persenSiang, 55);
+
+    // Test pindah kategori ke Bisnis -> daya otomatis B2-6600
+    catBiz.checked = true;
+    catRes.checked = false;
+    listeners['radio-cat-Bisnis:change']();
+    assert.equal(capturedState.kategori, 'Bisnis');
+    assert.equal(capturedState.dayaId, 'B2-6600');
+
+    // Test ganti cover PLTS ke 50%
+    cov50.checked = true;
+    cov100.checked = false;
+    listeners['radio-cover-50:change']();
+    assert.equal(capturedState.persenCover, 50);
   });
 });
