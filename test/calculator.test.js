@@ -524,9 +524,68 @@ describe('Unified Hybrid Off-Grid Engine (hybrid.js)', () => {
     assert.equal(result.inverter.kapasitasInverterKw, 20);
     assert.equal(result.inverter.kapasitasInverterW, 20000);
 
-    // Battery Sizing: ceil((34.609 / (0.85 * 0.95)) / 5.12) = 9 unit -> 46.08 kWh
+    // Battery Sizing (default unit 5 kWh): ceil((34.609 / (0.85 * 0.95)) / 5) = 9 unit -> 45 kWh
     assert.equal(result.battery.jumlahModulBattery, 9);
-    assert.equal(result.battery.kapasitasBatteryKwh, 46.08);
+    assert.equal(result.battery.batteryModuleKwh, 5);
+    assert.equal(result.battery.kapasitasBatteryKwh, 45);
+    assert.equal(result.battery.batteryFormula, '5 + 5 + 5 + 5 + 5 + 5 + 5 + 5 + 5');
+
+    // Verifikasi output baterai simetris (5, 10, 15 kWh)
+    const resBat10 = calculateHybridOffGrid({
+      kategori: 'Residential',
+      dayaId: 'R1-1300',
+      biayaBulanan: 2500000,
+      persenSiang: 40,
+      persenCover: 100,
+      batteryUnitKwh: 10
+    });
+    // raw 42.86 / 10 = ceil(4.286) = 5 unit -> 50 kWh (10 + 10 + 10 + 10 + 10)
+    assert.equal(resBat10.battery.jumlahModulBattery, 5);
+    assert.equal(resBat10.battery.batteryModuleKwh, 10);
+    assert.equal(resBat10.battery.kapasitasBatteryKwh, 50);
+    assert.equal(resBat10.battery.batteryFormula, '10 + 10 + 10 + 10 + 10');
+
+    const resBat15 = calculateHybridOffGrid({
+      kategori: 'Residential',
+      dayaId: 'R1-1300',
+      biayaBulanan: 2500000,
+      persenSiang: 40,
+      persenCover: 100,
+      batteryUnitKwh: 15
+    });
+    // raw 42.86 / 15 = ceil(2.857) = 3 unit -> 45 kWh (15 + 15 + 15)
+    assert.equal(resBat15.battery.jumlahModulBattery, 3);
+    assert.equal(resBat15.battery.batteryModuleKwh, 15);
+    assert.equal(resBat15.battery.kapasitasBatteryKwh, 45);
+    assert.equal(resBat15.battery.batteryFormula, '15 + 15 + 15');
+
+    // Default 1 Juta dengan variasi unit modular simetris
+    const res1Jt5 = calculateHybridOffGrid({
+      biayaBulanan: 1000000,
+      batteryUnitKwh: 5
+    });
+    // raw 17.14 / 5 = ceil(3.428) = 4 unit -> 20 kWh (5 + 5 + 5 + 5)
+    assert.equal(res1Jt5.battery.jumlahModulBattery, 4);
+    assert.equal(res1Jt5.battery.kapasitasBatteryKwh, 20);
+    assert.equal(res1Jt5.battery.batteryFormula, '5 + 5 + 5 + 5');
+
+    const res1Jt10 = calculateHybridOffGrid({
+      biayaBulanan: 1000000,
+      batteryUnitKwh: 10
+    });
+    // raw 17.14 / 10 = ceil(1.714) = 2 unit -> 20 kWh (10 + 10)
+    assert.equal(res1Jt10.battery.jumlahModulBattery, 2);
+    assert.equal(res1Jt10.battery.kapasitasBatteryKwh, 20);
+    assert.equal(res1Jt10.battery.batteryFormula, '10 + 10');
+
+    const res1Jt15 = calculateHybridOffGrid({
+      biayaBulanan: 1000000,
+      batteryUnitKwh: 15
+    });
+    // raw 17.14 / 15 = ceil(1.143) = 2 unit -> 30 kWh (15 + 15)
+    assert.equal(res1Jt15.battery.jumlahModulBattery, 2);
+    assert.equal(res1Jt15.battery.kapasitasBatteryKwh, 30);
+    assert.equal(res1Jt15.battery.batteryFormula, '15 + 15');
 
     // Pricing ditunda ke perintah selanjutnya
     assert.equal(result.pricing, null);
@@ -620,7 +679,7 @@ describe('Unified Hybrid Off-Grid Engine (hybrid.js)', () => {
     assert.equal(resZero.battery.kapasitasBatteryKwh, 0);
     assert.ok(!isNaN(resZero.pv.kapasitasPvKwp));
 
-    // 100% siang tetap menyertakan buffer 1 modul baterai (5.12 kWh)
+    // 100% siang tetap menyertakan buffer 1 modul baterai (5 kWh default)
     const resFullDay = calculateHybridOffGrid({
       kategori: 'Residential',
       dayaId: 'R1-1300',
@@ -630,7 +689,7 @@ describe('Unified Hybrid Off-Grid Engine (hybrid.js)', () => {
     });
     assert.equal(resFullDay.energy.kwhMalamHari, 0);
     assert.equal(resFullDay.battery.jumlahModulBattery, 1);
-    assert.equal(resFullDay.battery.kapasitasBatteryKwh, 5.12);
+    assert.equal(resFullDay.battery.kapasitasBatteryKwh, 5);
 
     // Lookup helper fallback
     assert.equal(getHybridTariffOption('Bisnis').id, 'B2-6600');

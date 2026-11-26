@@ -36,6 +36,7 @@ function resolveStandardInverterKw(minInverterReq) {
  * @param {string} [params.sistem='Hybrid Offgrid'] - Jenis arsitektur sistem PLTS
  * @param {number} [params.persenCover=100] - Target persentase kebutuhan listrik dicover PLTS (25, 50, 75, 100)
  * @param {number|string} [params.panelWp=615] - Pilihan kapasitas modul surya (550, 610, 615, 620, 720 Wp)
+ * @param {number} [params.batteryUnitKwh=5] - Pilihan kapasitas 1 unit baterai (5, 10, atau 15 kWh)
  * @returns {Object} Hasil kalkulasi teknis terstruktur
  */
 export function calculateHybridOffGrid(params = {}) {
@@ -43,6 +44,11 @@ export function calculateHybridOffGrid(params = {}) {
   const dayaObj = getHybridTariffOption(kategori, params.dayaId);
   const panelConfig = getHybridSolarPanel(params.panelWp || HYBRID_TECH_CONFIG.PANEL_WP_DEFAULT);
   const panelWp = panelConfig.wp;
+
+  const validBatteryUnits = [5, 10, 15];
+  const batteryUnitKwh = validBatteryUnits.includes(Number(params.batteryUnitKwh))
+    ? Number(params.batteryUnitKwh)
+    : HYBRID_TECH_CONFIG.BATTERY_MODULE_KWH;
 
   const rawBiaya = Number(params.biayaBulanan);
   const biayaBulanan = isNaN(rawBiaya) ? 0 : Math.max(0, rawBiaya);
@@ -97,19 +103,21 @@ export function calculateHybridOffGrid(params = {}) {
     kapasitasInverterKw = resolveStandardInverterKw(minInverterReq);
   }
 
-  // 4. Sizing Kapasitas Battery Bank LiFePO4 (5.12 kWh per modul, DoD 85%, Eff 95%)
+  // 4. Sizing Kapasitas Battery Bank LiFePO4 Simetris (Modular 5, 10, atau 15 kWh per unit)
   let rawBatteryKwh = 0;
   let jumlahModulBattery = 0;
   let kapasitasBatteryKwh = 0;
+  let batteryFormula = '';
   if (targetKwhHari > 0) {
     if (kwhMalamHari > 0) {
       rawBatteryKwh = kwhMalamHari / (HYBRID_TECH_CONFIG.BATTERY_DOD * HYBRID_TECH_CONFIG.BATTERY_EFFICIENCY);
-      jumlahModulBattery = Math.max(1, Math.ceil(rawBatteryKwh / HYBRID_TECH_CONFIG.BATTERY_MODULE_KWH));
+      jumlahModulBattery = Math.max(1, Math.ceil(rawBatteryKwh / batteryUnitKwh));
     } else {
       // Buffer minimum 1 unit untuk stabilitas arsitektur Hybrid Off-Grid
       jumlahModulBattery = 1;
     }
-    kapasitasBatteryKwh = Number((jumlahModulBattery * HYBRID_TECH_CONFIG.BATTERY_MODULE_KWH).toFixed(2));
+    kapasitasBatteryKwh = Number((jumlahModulBattery * batteryUnitKwh).toFixed(2));
+    batteryFormula = Array(jumlahModulBattery).fill(`${batteryUnitKwh}`).join(' + ');
   }
 
   return {
@@ -125,7 +133,8 @@ export function calculateHybridOffGrid(params = {}) {
       persenMalam,
       sistem,
       persenCover,
-      panelWp
+      panelWp,
+      batteryUnitKwh
     },
     energy: {
       totalKwhBulan: Number(totalKwhBulan.toFixed(2)),
@@ -155,7 +164,8 @@ export function calculateHybridOffGrid(params = {}) {
     battery: {
       kapasitasBatteryKwh,
       jumlahModulBattery,
-      batteryModuleKwh: HYBRID_TECH_CONFIG.BATTERY_MODULE_KWH,
+      batteryModuleKwh: batteryUnitKwh,
+      batteryFormula,
       batteryDoD: HYBRID_TECH_CONFIG.BATTERY_DOD,
       batteryEfficiency: HYBRID_TECH_CONFIG.BATTERY_EFFICIENCY,
       rawBatteryKwh: Number(rawBatteryKwh.toFixed(2))

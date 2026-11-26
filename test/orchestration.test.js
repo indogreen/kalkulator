@@ -51,6 +51,7 @@ describe('Reactive State Orchestration (Phase 7)', () => {
     assert.equal(DEFAULT_APP_STATE.modes.hybrid.sistem, 'Hybrid Offgrid');
     assert.equal(DEFAULT_APP_STATE.modes.hybrid.persenCover, 100);
     assert.equal(DEFAULT_APP_STATE.modes.hybrid.panelWp, 615);
+    assert.equal(DEFAULT_APP_STATE.modes.hybrid.batteryUnitKwh, 5);
 
     // Archived Residential defaults
     assert.equal(DEFAULT_APP_STATE.modes.residential.powerVa, 2200);
@@ -404,6 +405,10 @@ describe('Hybrid Form Component (hybridForm.js)', () => {
     const panel615 = createMockEl('radio-panel-615', '615');
     radioGroups.panelWp = [panel610, panel615];
 
+    const bat5 = createMockEl('radio-bat-5', '5');
+    const bat10 = createMockEl('radio-bat-10', '10');
+    radioGroups.batteryUnitKwh = [bat5, bat10];
+
     const mockContainer = {
       innerHTML: '',
       querySelector(selector) {
@@ -414,6 +419,7 @@ describe('Hybrid Form Component (hybridForm.js)', () => {
         if (selector === 'input[name="kategori"]') return radioGroups.kategori;
         if (selector === 'input[name="persenCover"]') return radioGroups.persenCover;
         if (selector === 'input[name="panelWp"]') return radioGroups.panelWp;
+        if (selector === 'input[name="batteryUnitKwh"]') return radioGroups.batteryUnitKwh;
         return [];
       }
     };
@@ -458,5 +464,11 @@ describe('Hybrid Form Component (hybridForm.js)', () => {
     cov100.checked = false;
     listeners['radio-cover-50:change']();
     assert.equal(capturedState.persenCover, 50);
+
+    // Test pilih unit baterai 10 kWh (output modular simetris)
+    bat10.checked = true;
+    bat5.checked = false;
+    listeners['radio-bat-10:change']();
+    assert.equal(capturedState.batteryUnitKwh, 10);
   });
 });

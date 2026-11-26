@@ -37,7 +37,9 @@ export function getKpiGridHtml({ mode, input, result }) {
 
     const batteryKwh = result.battery?.kapasitasBatteryKwh || 0;
     const jumlahModul = result.battery?.jumlahModulBattery || 0;
-    const moduleKwh = result.battery?.batteryModuleKwh || 5.12;
+    const moduleKwh = result.battery?.batteryModuleKwh || 5;
+    const batteryFormula = result.battery?.batteryFormula || `${batteryKwh}`;
+    const batteryDesc = jumlahModul > 1 ? `${jumlahModul} unit (${batteryFormula} kWh)` : `1 unit (${moduleKwh} kWh)`;
     const dodPct = Math.round((result.battery?.batteryDoD || 0.85) * 100);
     const kwhMalamHari = result.energy?.kwhMalamHari || 0;
 
@@ -58,15 +60,15 @@ export function getKpiGridHtml({ mode, input, result }) {
       },
       {
         badge: '3. KAPASITAS BATTERY',
-        value: `${formatNumber(batteryKwh, 2)} kWh`,
-        sub: `≈ ${jumlahModul} unit baterai @ ${formatNumber(moduleKwh, 2)} kWh`,
+        value: `${formatNumber(batteryKwh, 0)} kWh`,
+        sub: `≈ ${batteryDesc}`,
         foot: `Beban malam ${formatNumber(kwhMalamHari, 2)} kWh/hari (DoD ${dodPct}%)`,
         isHighlight: false
       }
     ];
 
     return `
-      <div class="grid grid-cols-1 tablet:grid-cols-3 gap-sm" role="region" aria-label="Sizing Teknis Utama PLTS Hybrid Off-Grid">
+      <div class="hidden grid grid-cols-1 tablet:grid-cols-3 gap-sm" role="region" aria-label="Sizing Teknis Utama PLTS Hybrid Off-Grid">
         ${hybridCards.map(card => `
           <div class="p-4 bg-canvas border border-hairline rounded-sm flex flex-col justify-between gap-3 hover:border-hairline-strong transition-colors">
             <div class="flex flex-col gap-1.5">

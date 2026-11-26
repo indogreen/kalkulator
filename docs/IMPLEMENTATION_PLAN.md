@@ -604,4 +604,40 @@ Ketika Anda siap memulai proses implementasi kode:
    - **WhatsApp Hotline (`whatsapp.js`)**: Menyertakan detail tipe modul dan estimasi luas atap secara otomatis pada payload konsultasi sales.
 4. **Verifikasi Kualitas & Aksesibilitas**:
    - Seluruh 76 unit test lulus tanpa peringatan.
+   - Penghapusan label/badge `DEF` pada kartu pilihan solar panel agar tampilan antarmuka lebih bersih dan profesional.
    - Touch target radio card $\ge 44\text{px}$, ber-radius ketat 2px (`rounded-sm`), flat CAD styling 100% patuh `DESIGN.md`.
+
+---
+
+## 8. Pembaruan Presets Biaya Bulanan & Rekomendasi Baterai Modular Simetris
+
+> **Status:** Selesai Diimplementasikan (Completed) ✅
+
+1. **Penyesuaian Opsi Cepat Biaya Listrik Bulanan (`HYBRID_BILL_CHIPS`)**:
+   - Opsi chip preset biaya listrik disederhanakan menjadi 4 nilai:
+     - **Rp 1 Jt** (Rp 1.000.000 — **Default Terkalibrasi**)
+     - **Rp 1,5 Jt** (Rp 1.500.000)
+     - **Rp 2 Jt** (Rp 2.000.000)
+     - **Rp 5 Jt** (Rp 5.000.000)
+   - Nilai default awal state aplikasi diatur ke **Rp 1.000.000** (`biayaBulanan: 1000000`).
+
+2. **Pilihan Kapasitas 1 Unit Baterai LiFePO4 (`HYBRID_BATTERY_UNITS`)**:
+   - Disediakan 3 pilihan kapasitas per unit modul baterai:
+     - **5 kWh** (**Default**, LiFePO4 51.2V 100Ah nominal)
+     - **10 kWh** (LiFePO4 51.2V 200Ah nominal)
+     - **15 kWh** (LiFePO4 51.2V 300Ah nominal)
+   - Input radio interaktif ditempatkan pada Step 5 (Sistem PLTS & Baterai) di `hybridForm.js`.
+
+3. **Logika Output Rekomendasi Baterai Modular Simetris (`hybrid.js`)**:
+   - Seluruh modul bank baterai dirancang **simetris** dari unit kapasitas yang sama (contoh: `5 + 5` atau `10 + 10` atau `15 + 15`), dan **tidak mencampur unit asimetris** (seperti `5 + 10`).
+   - Formula kalkulasi:
+     $$\text{Kebutuhan Bersih Baterai (kWh)} = \frac{\text{kWh Malam Hari}}{0.85 \times 0.95}$$
+     $$\text{Jumlah Modul} = \max\left(1, \left\lceil \frac{\text{Kebutuhan Bersih Baterai}}{\text{Kapasitas Unit Terpilih}} \right\rceil\right)$$
+     $$\text{Total Kapasitas Baterai Bank} = \text{Jumlah Modul} \times \text{Kapasitas Unit Terpilih}$$
+     $$\text{Formula Simetris} = \underbrace{\text{Kapasitas Unit} + \text{Kapasitas Unit} + \dots + \text{Kapasitas Unit}}_{\text{Jumlah Modul}}$$
+
+4. **Visualisasi Hasil & Integrasi WhatsApp**:
+   - **Hero Card & KPI Grid**: Menampilkan total kapasitas baterai beserta deskripsi simetris (misal: `20 kWh (4 Unit @ 5 kWh (5 + 5 + 5 + 5 kWh))`).
+   - **Profil Energi Pelanggan**: Menyertakan detail unit per modul dan rumus simetris.
+   - **WhatsApp Hotline Generator**: Mengirim rincian rekomendasi baterai simetris ke tim sales engineering PT. Indogreen.
+

@@ -457,6 +457,12 @@ export const HYBRID_SOLAR_PANELS = Object.freeze({
   }
 });
 
+export const HYBRID_BATTERY_UNITS = Object.freeze([
+  { kwh: 5, label: '5 kWh', isDefault: true, description: '1 Unit Modul Baterai LiFePO4 5 kWh' },
+  { kwh: 10, label: '10 kWh', isDefault: false, description: '1 Unit Modul Baterai LiFePO4 10 kWh' },
+  { kwh: 15, label: '15 kWh', isDefault: false, description: '1 Unit Modul Baterai LiFePO4 15 kWh' }
+]);
+
 export const HYBRID_TECH_CONFIG = Object.freeze({
   PSH_HOURS: 3.8,               // Peak Sun Hours rata-rata Indonesia (jam/hari)
   PERFORMANCE_RATIO: 0.82,      // Efisiensi sistem keseluruhan (82%)
@@ -465,7 +471,8 @@ export const HYBRID_TECH_CONFIG = Object.freeze({
   ROOF_MARGIN_FACTOR: 1.01,     // Margin instalasi luas atap 1%
   BATTERY_DOD: 0.85,            // Depth of Discharge baterai Lithium LiFePO4 (85%)
   BATTERY_EFFICIENCY: 0.95,     // Efisiensi baterai & inverter (95%)
-  BATTERY_MODULE_KWH: 5.12,     // Kapasitas standar 1 modul baterai (48V 100Ah = 5.12 kWh)
+  BATTERY_MODULE_KWH: 5,        // Kapasitas standar 1 modul baterai (5 kWh)
+  BATTERY_MODULE_KWH_DEFAULT: 5,
   DAYS_PER_MONTH: 30,
   INVERTER_PV_FACTOR: 0.85,
   INVERTER_DAILY_DIVISOR: 4.5,

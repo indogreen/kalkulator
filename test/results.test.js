@@ -216,7 +216,7 @@ describe('Results Panel Visualizations (Phase 6)', () => {
     assert.ok(heroHtml.includes('19,07 kWp'));
     assert.ok(heroHtml.includes('31 Panel @ 615 Wp'));
     assert.ok(heroHtml.includes('20 kW'));
-    assert.ok(heroHtml.includes('46,08 kWh'));
+    assert.ok(heroHtml.includes('45 kWh'));
     assert.ok(heroHtml.includes('KEBUTUHAN LUAS ATAP'));
     assert.ok(heroHtml.includes('90,2 m²'));
 

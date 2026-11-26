@@ -44,7 +44,8 @@ export const DEFAULT_APP_STATE = Object.freeze({
       persenMalam: 60,
       sistem: 'Hybrid Offgrid',
       persenCover: 100,
-      panelWp: 615
+      panelWp: 615,
+      batteryUnitKwh: 5
     },
     residential: {
       powerVa: 2200,

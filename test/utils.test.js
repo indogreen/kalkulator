@@ -223,7 +223,7 @@ describe('WhatsApp Consultation Generator (whatsapp.js)', () => {
     assert.ok(message.includes('31 Panel @ 615 Wp'));
     assert.ok(message.includes('Luas Atap: ± 90,2 m²'));
     assert.ok(message.includes('20 kW'));
-    assert.ok(message.includes('46,08 kWh'));
+    assert.ok(message.includes('45 kWh'));
     assert.ok(url.startsWith(`${WHATSAPP_BASE_URL}${OFFICIAL_WHATSAPP_NUMBER}?text=`));
   });
 

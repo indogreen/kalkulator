@@ -39,7 +39,9 @@ export function getHeroCardHtml({ mode, input, result }) {
     const inverterW = result.inverter?.kapasitasInverterW || 0;
     const batteryKwh = result.battery?.kapasitasBatteryKwh || 0;
     const jumlahModul = result.battery?.jumlahModulBattery || 0;
-    const batteryUnitKwh = result.battery?.batteryModuleKwh || 5.12;
+    const batteryUnitKwh = result.battery?.batteryModuleKwh || 5;
+    const batteryFormula = result.battery?.batteryFormula || `${batteryKwh}`;
+    const batteryDesc = jumlahModul > 1 ? `${jumlahModul} Unit (${batteryFormula} kWh)` : `1 Unit (${batteryUnitKwh} kWh)`;
     const persenCover = result.inputs?.persenCover ?? 100;
     const persenSiang = result.inputs?.persenSiang ?? 40;
     const persenMalam = result.inputs?.persenMalam ?? 60;
@@ -56,7 +58,7 @@ export function getHeroCardHtml({ mode, input, result }) {
     `;
 
     subtextHtml = `
-      Supply target <strong class="text-on-dark font-bold">${formatNumber(targetKwhHari, 2)} kWh/hari</strong> (${persenSiang}% siang / ${persenMalam}% malam) dicover ${persenCover}% dari PLTS dengan Hybrid Inverter <strong class="text-on-dark font-bold">${inverterKw} kW</strong>, Baterai <strong class="text-on-dark font-bold">${formatNumber(batteryKwh, 2)} kWh</strong>, dan estimasi luas atap <strong class="text-on-dark font-bold">± ${formatNumber(luasAtap, 1)} m²</strong>.
+      Supply target <strong class="text-on-dark font-bold">${formatNumber(targetKwhHari, 2)} kWh/hari</strong> (${persenSiang}% siang / ${persenMalam}% malam) dicover ${persenCover}% dari PLTS dengan Hybrid Inverter <strong class="text-on-dark font-bold">${inverterKw} kW</strong>, Baterai <strong class="text-on-dark font-bold">${formatNumber(batteryKwh, 0)} kWh</strong> (${batteryDesc}), dan estimasi luas atap <strong class="text-on-dark font-bold">± ${formatNumber(luasAtap, 1)} m²</strong>.
     `;
 
     specs = [
@@ -77,8 +79,8 @@ export function getHeroCardHtml({ mode, input, result }) {
       },
       {
         label: '4. BATERAI LIFEPO4',
-        value: `${formatNumber(batteryKwh, 2)} kWh`,
-        sub: `${jumlahModul} Unit @ ${formatNumber(batteryUnitKwh, 2)} kWh`
+        value: `${formatNumber(batteryKwh, 0)} kWh`,
+        sub: batteryDesc
       }
     ];
   } else if (mode === 'residential') {

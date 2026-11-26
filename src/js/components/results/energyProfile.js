@@ -69,6 +69,15 @@ export function getEnergyProfileHtml({ mode, result }) {
       label: 'Kebutuhan Panel & Luas Atap',
       value: `${jumlahPanel} Lembar Panel (Kebutuhan Atap: ± ${formatNumber(luasAtap, 1)} m²)`,
       highlight: true
+    },
+    {
+      label: 'Rekomendasi Baterai Bank',
+      value: `${formatNumber(result.battery?.kapasitasBatteryKwh || 0, 0)} kWh (${
+        (result.battery?.jumlahModulBattery || 0) > 1
+          ? `${result.battery?.jumlahModulBattery} Unit @ ${result.battery?.batteryModuleKwh || 5} kWh = ${result.battery?.batteryFormula} kWh`
+          : `1 Unit @ ${result.battery?.batteryModuleKwh || 5} kWh`
+      })`,
+      highlight: true
     }
   ];
 

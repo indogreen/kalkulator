@@ -20,6 +20,7 @@ import {
   HYBRID_TECH_CONFIG,
   HYBRID_PLN_TARIFFS,
   HYBRID_SOLAR_PANELS,
+  HYBRID_BATTERY_UNITS,
   getHybridTariffOption,
   getHybridSolarPanel
 } from '../../calculator/constants.js';
@@ -27,9 +28,9 @@ import { formatNumber } from '../../utils/formatter.js';
 
 export const HYBRID_BILL_CHIPS = [
   { label: 'Rp 1 Jt', value: 1000000 },
-  { label: 'Rp 2,5 Jt', value: 2500000 },
-  { label: 'Rp 5 Jt', value: 5000000 },
-  { label: 'Rp 10 Jt', value: 10000000 }
+  { label: 'Rp 1,5 Jt', value: 1500000 },
+  { label: 'Rp 2 Jt', value: 2000000 },
+  { label: 'Rp 5 Jt', value: 5000000 }
 ];
 
 export const HYBRID_COVERAGE_OPTIONS = [
@@ -54,6 +55,9 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
   const kategori = state.kategori === 'Bisnis' ? 'Bisnis' : 'Residential';
   const dayaObj = getHybridTariffOption(kategori, state.dayaId);
   const panelObj = getHybridSolarPanel(state.panelWp || HYBRID_TECH_CONFIG.PANEL_WP_DEFAULT);
+  const batteryUnitKwh = [5, 10, 15].includes(Number(state.batteryUnitKwh))
+    ? Number(state.batteryUnitKwh)
+    : 5;
   const biayaBulanan = state.biayaBulanan !== undefined && state.biayaBulanan !== null
     ? Math.max(0, Number(state.biayaBulanan) || 0)
     : 1000000;
@@ -75,7 +79,8 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
     persenMalam,
     sistem: state.sistem || 'Hybrid Offgrid',
     persenCover,
-    panelWp: panelObj.wp
+    panelWp: panelObj.wp,
+    batteryUnitKwh
   };
 
   const tariffList = HYBRID_PLN_TARIFFS[current.kategori];
@@ -233,9 +238,6 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
           <legend class="text-sm font-semibold text-ink">
             4. Persen Pemakaian Siang &amp; Malam
           </legend>
-          <span class="text-xs font-semibold px-2 py-0.5 bg-surface-soft border border-hairline rounded-sm text-ink tabular-nums">
-            Total 100%
-          </span>
         </div>
 
         <div class="pl-4 flex flex-col gap-2.5">
@@ -310,14 +312,14 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
         </div>
       </fieldset>
 
-      <!-- 5. Sistem PLTS -->
+      <!-- 5. Sistem PLTS & Pilihan Unit Baterai -->
       <div class="flex flex-col gap-2.5">
         <div class="flex items-center justify-between">
-          <span class="text-sm font-semibold text-ink">5. Sistem PLTS</span>
+          <span class="text-sm font-semibold text-ink">5. Sistem PLTS &amp; Baterai</span>
           <span class="px-2 py-0.5 rounded-sm text-[11px] font-bold uppercase bg-primary text-on-primary">Aktif</span>
         </div>
 
-        <div class="pl-4">
+        <div class="pl-4 flex flex-col gap-3">
           <div class="p-3.5 rounded-sm border-2 border-primary bg-surface-soft flex items-start gap-3">
             <div class="w-9 h-9 rounded-sm bg-ink text-primary flex items-center justify-center shrink-0 border border-hairline-strong" aria-hidden="true">
               <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -329,6 +331,36 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
               <p class="text-xs text-mute leading-relaxed">
                 PV + <strong class="text-ink">Hybrid Inverter</strong> + <strong class="text-ink">Baterai LiFePO4</strong> untuk supply siang &amp; malam hari, dengan PLN sebagai backup otomatis (<em>Zero Export</em>).
               </p>
+            </div>
+          </div>
+
+          <!-- Opsi 1 Unit Baterai Simetris -->
+          <div class="flex flex-col gap-1.5 pt-1">
+            <span class="text-xs font-semibold text-ink">Pilihan 1 Unit Baterai (Output Simetris):</span>
+            <div class="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Pilihan Kapasitas 1 Unit Baterai LiFePO4">
+              ${HYBRID_BATTERY_UNITS.map(bat => {
+                const isSelected = current.batteryUnitKwh === bat.kwh;
+                return `
+                  <label for="radio-bat-${bat.kwh}" class="cursor-pointer block">
+                    <input type="radio"
+                      id="radio-bat-${bat.kwh}"
+                      name="batteryUnitKwh"
+                      value="${bat.kwh}"
+                      class="sr-only peer"
+                      ${isSelected ? 'checked' : ''}>
+                    <div class="battery-card min-h-touch py-2 px-2 rounded-sm border text-center transition-all select-none peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-focus-visible:outline-offset-2 ${
+                      isSelected
+                        ? 'border-2 border-primary bg-ink text-on-dark font-bold'
+                        : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
+                    }">
+                      <span class="text-sm font-bold block tabular-nums">${bat.label}</span>
+                      <span class="battery-sub text-[10px] font-medium block mt-0.5 ${
+                        isSelected ? 'text-primary' : 'text-mute'
+                      }">per unit</span>
+                    </div>
+                  </label>
+                `;
+              }).join('')}
             </div>
           </div>
         </div>
@@ -688,6 +720,30 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
         }
         if (dim) {
           dim.className = `panel-dim text-[11px] font-medium block mt-0.5 tabular-nums ${
+            r.checked ? 'text-primary' : 'text-mute'
+          }`;
+        }
+      });
+      emitChange();
+    });
+  });
+
+  // 5. Pilihan 1 Unit Baterai Radio Cards
+  container.querySelectorAll('input[name="batteryUnitKwh"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      current.batteryUnitKwh = Number(radio.value) || 5;
+      container.querySelectorAll('input[name="batteryUnitKwh"]').forEach(r => {
+        const card = r.parentElement?.querySelector('.battery-card');
+        const sub = r.parentElement?.querySelector('.battery-sub');
+        if (card) {
+          card.className = `battery-card min-h-touch py-2 px-2 rounded-sm border text-center transition-all select-none peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-focus-visible:outline-offset-2 ${
+            r.checked
+              ? 'border-2 border-primary bg-ink text-on-dark font-bold'
+              : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
+          }`;
+        }
+        if (sub) {
+          sub.className = `battery-sub text-[10px] font-medium block mt-0.5 ${
             r.checked ? 'text-primary' : 'text-mute'
           }`;
         }
