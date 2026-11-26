@@ -317,7 +317,7 @@ Membangun seluruh komponen input formulir pada panel sisi kiri (~42% lebar deskt
 - **Form Mode 1 (Residensial)**:
   - Grid tombol preset daya listrik PLN (900 VA s.d 11.000 VA) dengan active indicator border hijau.
   - Input nominal tagihan listrik bulanan (angka langsung) + Chip preset cepat (Rp 500rb, 1jt, 2jt, 3.5jt, 5jt).
-  - Radio card pilihan Pola Aktivitas Siang Hari (Rendah 25%, Sedang 35%, Tinggi 50%).
+  - Dual manual input persentase pemakaian listrik Siang Hari & Malam Hari (otomatis berimbang 100%, misal Siang 30% maka Malam 70%) disertai visual CAD distribution bar.
   - Radio card pilihan Opsi Baterai Hybrid (Tanpa Baterai / On-Grid, Hybrid 5.12 kWh, Hybrid 10.24 kWh).
   - Dropdown pilihan Wilayah Radiasi Matahari (9 wilayah PSH).
   - Input estimasi luas atap rumah (m²).

@@ -73,6 +73,8 @@ describe('Phase 8: Accessibility & WCAG 2.1 AA Audit', () => {
     renderResidentialForm(mockContainer, {});
     assert.ok(mockContainer.innerHTML.includes('min-h-touch min-w-[44px]'), 'Residential chips must have min 44px touch target');
     assert.ok(mockContainer.innerHTML.includes('btn-va-preset h-touch'), 'VA presets must have 44px height (h-touch)');
+    assert.ok(mockContainer.innerHTML.includes('id="input-res-daytime-percent"'), 'Daytime percent input must exist');
+    assert.ok(mockContainer.innerHTML.includes('id="input-res-nighttime-percent"'), 'Nighttime percent input must exist');
     assert.ok(mockContainer.innerHTML.includes('role="radiogroup"'), 'Residential options must use role="radiogroup"');
 
     // Commercial form

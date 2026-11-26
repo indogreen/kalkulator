@@ -34,6 +34,8 @@ import {
   isModalQrOpen
 } from '../src/js/components/modalQr.js';
 
+import { renderResidentialForm } from '../src/js/components/forms/residentialForm.js';
+
 describe('Reactive State Orchestration (Phase 7)', () => {
 
   test('DEFAULT_APP_STATE: contains calibrated default parameters for all 4 modes', () => {
@@ -42,6 +44,8 @@ describe('Reactive State Orchestration (Phase 7)', () => {
     // Residential defaults
     assert.equal(DEFAULT_APP_STATE.modes.residential.powerVa, 2200);
     assert.equal(DEFAULT_APP_STATE.modes.residential.monthlyBill, 1500000);
+    assert.equal(DEFAULT_APP_STATE.modes.residential.daytimePercent, 30);
+    assert.equal(DEFAULT_APP_STATE.modes.residential.nighttimePercent, 70);
     assert.equal(DEFAULT_APP_STATE.modes.residential.daytimeActivity, 'medium');
     assert.equal(DEFAULT_APP_STATE.modes.residential.batteryOption, 'hybrid_5');
     assert.equal(DEFAULT_APP_STATE.modes.residential.region, 'dki_jabar_banten');
@@ -254,5 +258,63 @@ describe('Modal QR Component (modalQr.js)', () => {
 
     listeners['closeBtn:click']();
     assert.equal(mockDialog.open, false, 'Dialog must be closed on button click');
+  });
+});
+
+describe('Residential Form Component (residentialForm.js)', () => {
+  test('Pengisian manual siang & malam otomatis berimbang 100%', () => {
+    let capturedState = null;
+    const listeners = {};
+    const elements = {};
+
+    function createElement(id, val = '') {
+      return {
+        id,
+        value: val,
+        style: {},
+        textContent: '',
+        addEventListener(event, handler) {
+          listeners[`${id}:${event}`] = handler;
+        }
+      };
+    }
+
+    elements['input-res-daytime-percent'] = createElement('input-res-daytime-percent', '30');
+    elements['input-res-nighttime-percent'] = createElement('input-res-nighttime-percent', '70');
+    elements['bar-daytime-visual'] = createElement('bar-daytime-visual');
+    elements['bar-nighttime-visual'] = createElement('bar-nighttime-visual');
+    elements['label-daytime-val'] = createElement('label-daytime-val');
+    elements['label-nighttime-val'] = createElement('label-nighttime-val');
+
+    const mockContainer = {
+      innerHTML: '',
+      querySelector(selector) {
+        const id = selector.replace('#', '');
+        return elements[id] || null;
+      },
+      querySelectorAll(selector) {
+        return [];
+      }
+    };
+
+    renderResidentialForm(mockContainer, { daytimePercent: 30 }, (state) => {
+      capturedState = state;
+    });
+
+    // 1. Verifikasi render awal
+    assert.ok(mockContainer.innerHTML.includes('id="input-res-daytime-percent"'));
+    assert.ok(mockContainer.innerHTML.includes('id="input-res-nighttime-percent"'));
+
+    // 2. Simulasi input siang diubah menjadi 30%
+    listeners['input-res-daytime-percent:input']({ target: { value: '30' } });
+    assert.equal(elements['input-res-nighttime-percent'].value, 70);
+    assert.equal(capturedState.daytimePercent, 30);
+    assert.equal(capturedState.nighttimePercent, 70);
+
+    // 3. Simulasi input malam diubah menjadi 60%
+    listeners['input-res-nighttime-percent:input']({ target: { value: '60' } });
+    assert.equal(elements['input-res-daytime-percent'].value, 40);
+    assert.equal(capturedState.daytimePercent, 40);
+    assert.equal(capturedState.nighttimePercent, 60);
   });
 });

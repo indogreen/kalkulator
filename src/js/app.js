@@ -37,6 +37,8 @@ export const DEFAULT_APP_STATE = Object.freeze({
     residential: {
       powerVa: 2200,
       monthlyBill: 1500000,
+      daytimePercent: 30,
+      nighttimePercent: 70,
       daytimeActivity: 'medium',
       batteryOption: 'hybrid_5',
       region: 'dki_jabar_banten',

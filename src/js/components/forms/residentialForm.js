@@ -31,10 +31,23 @@ export const RESIDENTIAL_BILL_CHIPS = [
  * @param {Function} onChange - Callback pembaruan state
  */
 export function renderResidentialForm(container, state = {}, onChange = () => {}) {
+  let daytimePercent = 30;
+  if (state.daytimePercent !== undefined && state.daytimePercent !== null && !isNaN(Number(state.daytimePercent))) {
+    daytimePercent = Math.max(0, Math.min(100, Math.round(Number(state.daytimePercent))));
+  } else if (state.daytimeRatio !== undefined && state.daytimeRatio !== null && !isNaN(Number(state.daytimeRatio))) {
+    daytimePercent = Math.max(0, Math.min(100, Math.round(Number(state.daytimeRatio) * 100)));
+  } else if (state.daytimeActivity && DAYTIME_ACTIVITY_PATTERNS[state.daytimeActivity]) {
+    daytimePercent = Math.round(DAYTIME_ACTIVITY_PATTERNS[state.daytimeActivity].ratio * 100);
+  }
+  const nighttimePercent = 100 - daytimePercent;
+
   const current = {
     powerVa: state.powerVa || 2200,
     monthlyBill: state.monthlyBill || 1500000,
-    daytimeActivity: state.daytimeActivity || 'medium',
+    daytimePercent,
+    nighttimePercent,
+    daytimeRatio: daytimePercent / 100,
+    daytimeActivity: state.daytimeActivity || `${daytimePercent}%`,
     batteryOption: state.batteryOption || 'hybrid_5',
     region: state.region || 'dki_jabar_banten',
     roofArea: state.roofArea || 30
@@ -113,36 +126,103 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
         </div>
       </div>
 
-      <!-- 3. Pola Konsumsi Siang Hari (Radio Cards) -->
+      <!-- 3. Pola Penggunaan Listrik Siang & Malam (Manual Input Berimbang) -->
       <div class="flex flex-col gap-2.5">
-        <label id="label-res-daytime" class="text-sm font-semibold text-ink">
-          3. Pola Aktivitas Penggunaan Listrik Siang Hari
-        </label>
-
-        <div class="grid grid-cols-1 tablet:grid-cols-3 gap-2.5" role="radiogroup" aria-labelledby="label-res-daytime">
-          ${Object.values(DAYTIME_ACTIVITY_PATTERNS).map(pattern => {
-            const isSelected = current.daytimeActivity === pattern.id;
-            return `
-              <label class="radio-card cursor-pointer border rounded-sm p-3.5 flex flex-col gap-1 transition-all select-none ${
-                isSelected 
-                  ? 'border-2 border-primary bg-surface-soft' 
-                  : 'border-hairline bg-canvas hover:border-hairline-strong'
-              }">
-                <div class="flex items-center justify-between">
-                  <span class="text-sm font-semibold text-ink">${pattern.label}</span>
-                  <input type="radio" 
-                    id="radio-daytime-${pattern.id}"
-                    name="daytimeActivity" 
-                    value="${pattern.id}" 
-                    class="accent-primary h-4 w-4" 
-                    aria-label="${pattern.label}: ${pattern.description}"
-                    ${isSelected ? 'checked' : ''}>
-                </div>
-                <span class="text-xs text-mute leading-normal">${pattern.description}</span>
-              </label>
-            `;
-          }).join('')}
+        <div class="flex items-center justify-between">
+          <label id="label-res-daytime" class="text-sm font-semibold text-ink">
+            3. Pola Aktivitas Penggunaan Listrik (Siang & Malam)
+          </label>
+          <span class="text-xs font-semibold px-2 py-0.5 bg-surface-soft border border-hairline rounded-sm text-ink tabular-nums">
+            Total 100%
+          </span>
         </div>
+        <p class="text-xs text-mute leading-normal">
+          Tentukan persentase penggunaan listrik siang dan malam hari (otomatis berimbang total 100%).
+        </p>
+
+        <!-- Dual Manual Input Fields (Siang & Malam) -->
+        <div class="grid grid-cols-2 gap-3 tablet:gap-4">
+          
+          <!-- Input Siang Hari -->
+          <div class="flex flex-col gap-1.5">
+            <label for="input-res-daytime-percent" class="text-xs font-semibold text-ink flex items-center justify-between">
+              <span class="flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-primary shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <circle cx="12" cy="12" r="4"/>
+                  <path d="M12 2v2"/>
+                  <path d="M12 20v2"/>
+                  <path d="m4.93 4.93 1.41 1.41"/>
+                  <path d="m17.66 17.66 1.41 1.41"/>
+                  <path d="M2 12h2"/>
+                  <path d="M20 12h2"/>
+                  <path d="m6.34 17.66-1.41 1.41"/>
+                  <path d="m19.07 4.93-1.41 1.41"/>
+                </svg>
+                Siang Hari
+              </span>
+              <span class="text-[11px] text-mute font-normal hidden mobile:inline">06:00 - 18:00</span>
+            </label>
+            <div class="relative flex items-center">
+              <input type="number" 
+                id="input-res-daytime-percent" 
+                name="daytimePercent"
+                min="0" 
+                max="100" 
+                step="1"
+                value="${current.daytimePercent}" 
+                placeholder="30"
+                aria-label="Persentase pemakaian listrik siang hari"
+                class="h-touch w-full border border-hairline bg-canvas px-md pr-8 py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+              <span class="absolute right-md text-mute font-bold text-sm pointer-events-none select-none">%</span>
+            </div>
+          </div>
+
+          <!-- Input Malam Hari -->
+          <div class="flex flex-col gap-1.5">
+            <label for="input-res-nighttime-percent" class="text-xs font-semibold text-ink flex items-center justify-between">
+              <span class="flex items-center gap-1.5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-mute shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+                </svg>
+                Malam Hari
+              </span>
+              <span class="text-[11px] text-mute font-normal hidden mobile:inline">18:00 - 06:00</span>
+            </label>
+            <div class="relative flex items-center">
+              <input type="number" 
+                id="input-res-nighttime-percent" 
+                name="nighttimePercent"
+                min="0" 
+                max="100" 
+                step="1"
+                value="${current.nighttimePercent}" 
+                placeholder="70"
+                aria-label="Persentase pemakaian listrik malam hari"
+                class="h-touch w-full border border-hairline bg-canvas px-md pr-8 py-input-y text-ink font-semibold text-sm tabular-nums rounded-sm focus:border-2 focus:border-primary focus:outline-none">
+              <span class="absolute right-md text-mute font-bold text-sm pointer-events-none select-none">%</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- CAD Visual Proportion Distribution Bar -->
+        <div class="flex flex-col gap-1.5 pt-1">
+          <div class="h-2 w-full bg-surface-elevated rounded-sm overflow-hidden flex border border-hairline" role="progressbar" aria-label="Distribusi pemakaian listrik siang dan malam" aria-valuenow="${current.daytimePercent}" aria-valuemin="0" aria-valuemax="100">
+            <div id="bar-daytime-visual" class="bg-primary h-full transition-all duration-150" style="width: ${current.daytimePercent}%" title="Siang Hari: ${current.daytimePercent}%"></div>
+            <div id="bar-nighttime-visual" class="bg-ink h-full transition-all duration-150" style="width: ${current.nighttimePercent}%" title="Malam Hari: ${current.nighttimePercent}%"></div>
+          </div>
+          <div class="flex items-center justify-between text-[11px] text-mute font-mono">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 inline-block bg-primary rounded-sm"></span>
+              Siang: <strong id="label-daytime-val" class="text-ink font-semibold">${current.daytimePercent}%</strong>
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 inline-block bg-ink rounded-sm"></span>
+              Malam: <strong id="label-nighttime-val" class="text-ink font-semibold">${current.nighttimePercent}%</strong>
+            </span>
+          </div>
+        </div>
+
       </div>
 
       <!-- 4. Opsi Baterai Cadangan Hybrid LiFePO4 -->
@@ -286,23 +366,88 @@ export function renderResidentialForm(container, state = {}, onChange = () => {}
     });
   });
 
-  // 3. Radio Card Aktivitas Siang
-  container.querySelectorAll('input[name="daytimeActivity"]').forEach(radio => {
-    radio.addEventListener('change', () => {
-      current.daytimeActivity = radio.value;
-      container.querySelectorAll('input[name="daytimeActivity"]').forEach(r => {
-        const card = r.closest('.radio-card');
-        if (card) {
-          if (r.checked) {
-            card.className = 'radio-card cursor-pointer border-2 border-primary bg-surface-soft rounded-sm p-sm flex flex-col gap-xxs transition-all select-none';
-          } else {
-            card.className = 'radio-card cursor-pointer border border-hairline bg-canvas rounded-sm p-sm flex flex-col gap-xxs transition-all select-none hover:border-hairline-strong';
-          }
-        }
-      });
-      emitChange();
+  // 3. Input Proporsi Siang & Malam (Otomatis Berimbang 100%)
+  const inputDaytime = container.querySelector('#input-res-daytime-percent');
+  const inputNighttime = container.querySelector('#input-res-nighttime-percent');
+
+  function updateVisualBar(dayVal, nightVal) {
+    const barDay = container.querySelector('#bar-daytime-visual');
+    const barNight = container.querySelector('#bar-nighttime-visual');
+    const lblDay = container.querySelector('#label-daytime-val');
+    const lblNight = container.querySelector('#label-nighttime-val');
+    if (barDay) barDay.style.width = `${dayVal}%`;
+    if (barNight) barNight.style.width = `${nightVal}%`;
+    if (lblDay) lblDay.textContent = `${dayVal}%`;
+    if (lblNight) lblNight.textContent = `${nightVal}%`;
+  }
+
+  function syncFromDaytime(rawVal) {
+    let dayVal = Number(rawVal);
+    if (isNaN(dayVal)) dayVal = 0;
+    dayVal = Math.max(0, Math.min(100, Math.round(dayVal)));
+    const nightVal = 100 - dayVal;
+
+    current.daytimePercent = dayVal;
+    current.nighttimePercent = nightVal;
+    current.daytimeRatio = dayVal / 100;
+    current.daytimeActivity = `${dayVal}%`;
+
+    const isNightActive = typeof document !== 'undefined' && document.activeElement === inputNighttime;
+    if (inputNighttime && !isNightActive) {
+      inputNighttime.value = nightVal;
+    }
+    updateVisualBar(dayVal, nightVal);
+    emitChange();
+  }
+
+  function syncFromNighttime(rawVal) {
+    let nightVal = Number(rawVal);
+    if (isNaN(nightVal)) nightVal = 0;
+    nightVal = Math.max(0, Math.min(100, Math.round(nightVal)));
+    const dayVal = 100 - nightVal;
+
+    current.nighttimePercent = nightVal;
+    current.daytimePercent = dayVal;
+    current.daytimeRatio = dayVal / 100;
+    current.daytimeActivity = `${dayVal}%`;
+
+    const isDayActive = typeof document !== 'undefined' && document.activeElement === inputDaytime;
+    if (inputDaytime && !isDayActive) {
+      inputDaytime.value = dayVal;
+    }
+    updateVisualBar(dayVal, nightVal);
+    emitChange();
+  }
+
+  if (inputDaytime) {
+    inputDaytime.addEventListener('input', (e) => {
+      syncFromDaytime(e.target.value);
     });
-  });
+    inputDaytime.addEventListener('blur', () => {
+      if (inputDaytime.value === '' || isNaN(Number(inputDaytime.value))) {
+        inputDaytime.value = current.daytimePercent;
+      } else {
+        const clamped = Math.max(0, Math.min(100, Math.round(Number(inputDaytime.value))));
+        inputDaytime.value = clamped;
+        syncFromDaytime(clamped);
+      }
+    });
+  }
+
+  if (inputNighttime) {
+    inputNighttime.addEventListener('input', (e) => {
+      syncFromNighttime(e.target.value);
+    });
+    inputNighttime.addEventListener('blur', () => {
+      if (inputNighttime.value === '' || isNaN(Number(inputNighttime.value))) {
+        inputNighttime.value = current.nighttimePercent;
+      } else {
+        const clamped = Math.max(0, Math.min(100, Math.round(Number(inputNighttime.value))));
+        inputNighttime.value = clamped;
+        syncFromNighttime(clamped);
+      }
+    });
+  }
 
   // 4. Radio Card Baterai Hybrid
   container.querySelectorAll('input[name="batteryOption"]').forEach(radio => {

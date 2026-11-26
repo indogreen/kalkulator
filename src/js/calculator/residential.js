@@ -27,6 +27,9 @@ import {
  * @param {number} params.powerVa - Daya PLN dalam VA (misal: 900, 1300, 2200, 3500, 4400, 5500, 6600, 11000)
  * @param {number} params.monthlyBill - Tagihan listrik bulanan dalam Rupiah (misal: 1500000)
  * @param {string} [params.region='dki_jabar_banten'] - Kode wilayah PSH
+ * @param {number} [params.daytimePercent] - Persentase aktivitas siang hari (0 - 100), misal: 30
+ * @param {number} [params.nighttimePercent] - Persentase aktivitas malam hari (0 - 100), misal: 70
+ * @param {number} [params.daytimeRatio] - Rasio aktivitas siang desimal (0.0 - 1.0), misal: 0.30
  * @param {string} [params.daytimeActivity='medium'] - Pola aktivitas siang ('low', 'medium', 'high')
  * @param {string} [params.batteryOption='none'] - Opsi baterai hybrid ('none', 'hybrid_5', 'hybrid_10')
  * @param {number} [params.roofArea=0] - Luas atap tersedia dalam m² (0 = tidak membatasi)
@@ -38,7 +41,6 @@ export function calculateResidential(params = {}) {
   const powerVa = Math.max(0, Number(params.powerVa) || 0);
   const monthlyBill = Math.max(0, Number(params.monthlyBill) || 0);
   const region = params.region || 'dki_jabar_banten';
-  const daytimeActivity = params.daytimeActivity || 'medium';
   const batteryOption = params.batteryOption || 'none';
   const roofArea = Math.max(0, Number(params.roofArea) || 0);
 
@@ -46,8 +48,28 @@ export function calculateResidential(params = {}) {
   const psh = getPsh(region);
   const tariffRate = getResidentialTariff(powerVa);
   const kva = powerVa / 1000;
-  const activityConfig = DAYTIME_ACTIVITY_PATTERNS[daytimeActivity] || DAYTIME_ACTIVITY_PATTERNS.medium;
   const batteryConfig = BATTERY_HYBRID_OPTIONS[batteryOption] || BATTERY_HYBRID_OPTIONS.none;
+
+  // Resolusi proporsi aktivitas siang vs malam (manual persentase atau legacy pattern)
+  let daytimeRatio = 0.30;
+  if (params.daytimePercent !== undefined && params.daytimePercent !== null && !isNaN(Number(params.daytimePercent))) {
+    daytimeRatio = Math.max(0, Math.min(100, Number(params.daytimePercent))) / 100;
+  } else if (params.daytimeRatio !== undefined && params.daytimeRatio !== null && !isNaN(Number(params.daytimeRatio))) {
+    daytimeRatio = Math.max(0, Math.min(1, Number(params.daytimeRatio)));
+  } else if (params.daytimeActivity && DAYTIME_ACTIVITY_PATTERNS[params.daytimeActivity]) {
+    daytimeRatio = DAYTIME_ACTIVITY_PATTERNS[params.daytimeActivity].ratio;
+  } else if (typeof params.daytimeActivity === 'number') {
+    daytimeRatio = params.daytimeActivity > 1
+      ? Math.max(0, Math.min(100, params.daytimeActivity)) / 100
+      : Math.max(0, Math.min(1, params.daytimeActivity));
+  } else if (params.nighttimePercent !== undefined && params.nighttimePercent !== null && !isNaN(Number(params.nighttimePercent))) {
+    const night = Math.max(0, Math.min(100, Number(params.nighttimePercent)));
+    daytimeRatio = (100 - night) / 100;
+  }
+
+  const daytimePercent = Math.round(daytimeRatio * 100);
+  const nighttimePercent = 100 - daytimePercent;
+  const daytimeActivity = params.daytimeActivity || `${daytimePercent}%`;
 
   // 3. Batas legal Rekening Minimum PLN (Permen ESDM No. 2/2024)
   // Rumus: 40 jam nyala * kVA * Tarif per kWh
@@ -72,7 +94,7 @@ export function calculateResidential(params = {}) {
     // Optimasi kapasitas: menutup konsumsi siang hari + kapasitas serap baterai
     // Namun tidak melebihi penghematan di bawah rekening minimum PLN
     const maxSavingKwh = Math.max(0, monthlyBill - minimumBill) / (tariffRate > 0 ? tariffRate : 1);
-    const daylightKwh = monthlyKwh * activityConfig.ratio;
+    const daylightKwh = monthlyKwh * daytimeRatio;
     const batteryMonthlyUsableKwh = batteryConfig.usableKwh * TECHNICAL_SPECS.DAYS_PER_MONTH;
     const targetAbsorbableKwh = Math.min(daylightKwh + batteryMonthlyUsableKwh, maxSavingKwh);
 
@@ -99,12 +121,12 @@ export function calculateResidential(params = {}) {
 
   // 8. Pemodelan Swakonsumsi (Self-Consumption)
   // Energi surya yang dikonsumsi langsung siang hari
-  const monthlyDaylightLoadKwh = monthlyKwh * activityConfig.ratio;
+  const monthlyDaylightLoadKwh = monthlyKwh * daytimeRatio;
   const solarDirectDaylightConsumed = Math.min(monthlySolarGen, monthlyDaylightLoadKwh);
 
   // Surplus energi siang hari yang dapat disimpan ke baterai hybrid
   const solarSurplusAfterDaylight = Math.max(0, monthlySolarGen - solarDirectDaylightConsumed);
-  const monthlyNightLoadKwh = monthlyKwh * (1 - activityConfig.ratio);
+  const monthlyNightLoadKwh = monthlyKwh * (1 - daytimeRatio);
   const batteryMonthlyCapacityUsable = batteryConfig.usableKwh * TECHNICAL_SPECS.DAYS_PER_MONTH;
   const solarBatteryConsumed = Math.min(
     solarSurplusAfterDaylight,
@@ -189,6 +211,9 @@ export function calculateResidential(params = {}) {
       monthlyBill,
       region,
       daytimeActivity,
+      daytimePercent,
+      nighttimePercent,
+      daytimeRatio,
       batteryOption,
       roofArea,
       customModuleCount: params.customModuleCount || null

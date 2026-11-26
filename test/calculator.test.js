@@ -233,6 +233,52 @@ describe('Residential Solar Engine (residential.js)', () => {
     assert.equal(res10.backup.batteryCapacityKwh, 10.24);
     assert.ok(res10.backup.backupHours > res5.backup.backupHours);
   });
+
+  test('Proporsi Penggunaan Listrik Manual: Siang 30% otomatis Malam 70%', () => {
+    // Pengisian manual siang 30%
+    const res30 = calculateResidential({
+      powerVa: 2200,
+      monthlyBill: 1500000,
+      daytimePercent: 30,
+      batteryOption: 'none'
+    });
+
+    assert.equal(res30.inputs.daytimePercent, 30);
+    assert.equal(res30.inputs.nighttimePercent, 70);
+    assert.equal(res30.inputs.daytimeRatio, 0.30);
+
+    // Pengisian manual siang 50%
+    const res50 = calculateResidential({
+      powerVa: 2200,
+      monthlyBill: 1500000,
+      daytimePercent: 50,
+      batteryOption: 'none'
+    });
+    assert.equal(res50.inputs.daytimePercent, 50);
+    assert.equal(res50.inputs.nighttimePercent, 50);
+    assert.equal(res50.inputs.daytimeRatio, 0.50);
+
+    // Siang 50% menyerap lebih banyak beban siang hari langsung daripada 30%
+    assert.ok(res50.energy.totalSolarConsumedKwh >= res30.energy.totalSolarConsumedKwh);
+
+    // Pengisian via nighttimePercent
+    const resNight80 = calculateResidential({
+      powerVa: 2200,
+      monthlyBill: 1500000,
+      nighttimePercent: 80
+    });
+    assert.equal(resNight80.inputs.daytimePercent, 20);
+    assert.equal(resNight80.inputs.nighttimePercent, 80);
+
+    // Proteksi batas clamp 0% - 100%
+    const resOver = calculateResidential({ powerVa: 2200, monthlyBill: 1500000, daytimePercent: 120 });
+    assert.equal(resOver.inputs.daytimePercent, 100);
+    assert.equal(resOver.inputs.nighttimePercent, 0);
+
+    const resUnder = calculateResidential({ powerVa: 2200, monthlyBill: 1500000, daytimePercent: -10 });
+    assert.equal(resUnder.inputs.daytimePercent, 0);
+    assert.equal(resUnder.inputs.nighttimePercent, 100);
+  });
 });
 
 // ============================================================================
