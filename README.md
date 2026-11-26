@@ -4,31 +4,25 @@ Aplikasi web mandiri (*standalone web application*) berstandar rekayasa (*engine
 
 ---
 
-## 1. Ikhtisar & 4 Mode Simulasi
+## 1. Ikhtisar & Mode Simulasi
 
 Aplikasi ini dirancang untuk penggunaan publik, konsultasi teknis sales engineer, hingga terminal anjungan pameran (*kiosk booth*) dengan kalkulasi reaktif instan (*real-time*) tanpa memuat ulang halaman.
 
-### 4 Mode Simulasi Utama:
-1. **PLTS Atap Residensial:**
-   - Rekomendasi kapasitas modul Tier-1 600 Wp Monofacial berdasarkan batas daya PLN (900 VA s.d. 11.000 VA) dan batas luas atap.
-   - Optimasi swakonsumsi (*self-consumption*) berdasarkan pola aktivitas siang hari (Rendah 25%, Sedang 35%, Tinggi 50%).
-   - Kepatuhan mutlak aturan legal **Rekening Minimum PLN Permen ESDM No. 2/2024** ($40 \times \text{kVA} \times \text{Tarif per kWh}$).
-   - Pilihan baterai hybrid LiFePO4 cadangan padam (5.12 kWh / 10.24 kWh).
-   - Proyeksi 25 tahun, payback period (ROI), dan reduksi emisi karbon $CO_2$.
-2. **PLTS Bisnis & Industri:**
-   - Profil beban operasional fasilitas (Kantor 08-17, 1-Shift, 2-Shift, 24-Jam) disinkronkan dengan kurva radiasi matahari.
-   - Komparasi 3 skema finansial komersial:
-     - **CAPEX Beli Putus:** Kepemilikan aset hari pertama, O&M 1%, payback period ~4-6 tahun.
-     - **OPEX PPA (Power Purchase Agreement):** Nol investasi awal (*Zero CAPEX*), diskon tarif 15% dari tarif PLN, O&M ditanggung pengembang, kontrak 20 tahun.
-     - **OPEX Sewa Operasional:** Nol investasi awal, cicilan sewa tetap tenor 7 tahun, pengalihan hak milik di tahun ke-8.
-3. **BESS / Baterai Cadangan Anti-Padam:**
-   - Sizing kapasitas baterai LiFePO4 (90% Depth of Discharge, 95% efisiensi inverter) untuk sektor Rumah Tangga maupun Industri.
-   - Sizing Inverter Darurat (*safety margin* 1.25x) dan modul Solar PV Charger mandiri saat listrik padam berhari-hari.
-4. **Penerangan Jalan Umum Tenaga Surya (PJUTS):**
-   - Perhitungan daya lampu LED (20W s.d. 200W) dan jumlah tiang jalan.
-   - Fitur **Smart Dimming otomatis** (100% daya 5 jam awal + 50% daya sisa malam) menghemat hingga 30% kapasitas baterai & panel.
-   - Cadangan hari otonomi cuaca mendung/hujan (1–3 hari).
-   - Penghematan tagihan listrik setara Tarif P-3 PLN (Rp 1.699,53/kWh).
+### Mode Utama Aktif: Kalkulator PLTS Hybrid Off-Grid
+Antarmuka utama saat ini berfokus pada alur simulasi **PLTS Hybrid Off-Grid** 6 langkah yang terkalibrasi dengan **Tarif PLN 2026**:
+1. **Kategori Pelanggan:** Pilihan sektor **Residential** (Rumah Tangga) atau **Business / Commercial** (Bisnis & Industri).
+2. **Golongan Daya & Tarif PLN 2026:** Pilihan kapasitas daya dan tarif resmi PLN (subsidi & non-subsidi).
+3. **Biaya Listrik Bulanan:** Input nominal tagihan listrik bulanan untuk menghitung estimasi konsumsi energi harian (kWh/hari).
+4. **Proporsi Pemakaian Siang vs Malam:** Pengisian seimbang otomatis (total 100%) antara beban siang hari dan beban malam hari.
+5. **Sistem Hybrid Off-Grid:** Kalkulasi kebutuhan kapasitas panel surya (PV kWp), Hybrid Inverter (kW), dan kapasitas Baterai LiFePO4 (kWh).
+6. **Target Cakupan (Cover %):** Penyesuaian persentase kebutuhan energi yang ingin ditanggung oleh sistem PLTS.
+
+### Modul Mesin Hitung Tersedia (Modular / Diarsipkan dari UI Tab)
+Selain mesin utama `hybrid.js`, repositori ini juga tetap mempertahankan 4 modul kalkulator spesialis beserta komponen form dan unit test-nya:
+- **PLTS Atap Residensial (`residential.js`):** Optimasi swakonsumsi, proteksi **Rekening Minimum PLN Permen ESDM No. 2/2024** ($40 \times \text{kVA} \times \text{Tarif per kWh}$), dan opsi baterai hybrid LiFePO4.
+- **PLTS Bisnis & Industri (`commercial.js`):** Analisis kurva beban operasional (Kantor 08–17, 1-Shift, 2-Shift, 24-Jam) dan komparasi 3 skema finansial (CAPEX Beli Putus, OPEX PPA Diskon 15%, OPEX Sewa 7 Tahun).
+- **BESS / Baterai Cadangan Anti-Padam (`battery.js`):** Sizing kapasitas baterai LiFePO4 (90% DoD, 95% efisiensi inverter), inverter darurat (*safety margin* 1.25x), dan opsi Solar PV Charger.
+- **PJUTS (`pjuts.js`):** Perhitungan daya lampu LED (20W–200W), fitur *Smart Dimming*, durasi otonomi cuaca mendung/hujan (1–3 hari), dan penghematan Tarif P-3 PLN.
 
 ---
 
@@ -38,6 +32,9 @@ Kalkulator dibangun dengan filosofi **performa sekejap mata (< 1 detik)**, **zer
 
 ```
 kalkulator/
+├── .github/
+│   └── workflows/
+│       └── ci.yml                   # CI Quality Gate (push & PR ke main)
 ├── index.html                       # Semantic HTML5, accessible shell, modal dialog
 ├── package.json                     # Konfigurasi dev tools & build scripts
 ├── tailwind.config.js               # Token desain resmi INDOGREEN (warna, 2px radius, Inter)
@@ -49,16 +46,31 @@ kalkulator/
 │       ├── app.js                   # State orchestrator & event controller
 │       ├── calculator/              # Pure JavaScript calculation engine
 │       │   ├── constants.js         # PSH 9 wilayah, tarif PLN 2026, konstanta teknis
+│       │   ├── hybrid.js            # Mesin hitung utama PLTS Hybrid Off-Grid
 │       │   ├── residential.js       # Mesin hitung PLTS Rumah & Rekening Min
 │       │   ├── commercial.js        # Mesin hitung PLTS Industri & 3 Skema
 │       │   ├── battery.js           # Mesin hitung BESS LiFePO4
 │       │   └── pjuts.js             # Mesin hitung PJUTS Smart Dimming
 │       ├── components/              # UI components & form renderers
 │       │   ├── header.js            # Header, toolbar aksi, drawer mobile
-│       │   ├── tabs.js              # Segmented control 4 mode simulasi
+│       │   ├── tabs.js              # Segmented control tab simulasi
 │       │   ├── modalQr.js           # Accessible native dialog QR code
-│       │   ├── forms/               # Input form generators (4 mode)
-│       │   └── results/             # Visualizations (Hero card, KPI grid, Bill bar, Timeline, Table)
+│       │   ├── forms/               # Input form generators (hybrid & modul arsip)
+│       │   │   ├── hybridForm.js
+│       │   │   ├── residentialForm.js
+│       │   │   ├── commercialForm.js
+│       │   │   ├── batteryForm.js
+│       │   │   └── pjutsForm.js
+│       │   └── results/             # Visualizations & cards
+│       │       ├── index.js
+│       │       ├── heroCard.js
+│       │       ├── kpiGrid.js
+│       │       ├── energyProfile.js
+│       │       ├── billBar.js
+│       │       ├── timeline.js
+│       │       ├── schemeTable.js
+│       │       ├── conversionCta.js
+│       │       └── regulatoryNote.js
 │       └── utils/
 │           ├── qrcode.js            # Generator SVG QR Code murni zero-dependency
 │           ├── whatsapp.js          # Generator pesan konsultasi WhatsApp terformat
@@ -66,8 +78,15 @@ kalkulator/
 ├── dist/
 │   ├── css/style.css                # CSS produksi terkompilasi & ter-minifikasi
 │   └── js/bundle.js                 # Standalone JS bundle (kompatibel file:// & http://)
-├── test/                            # 64 unit test terotomatisasi (Node.js test runner)
-└── scripts/                         # Script build & server lokal zero-dependency
+├── test/                            # 75 unit test terotomatisasi (Node.js test runner)
+│   ├── calculator.test.js
+│   ├── orchestration.test.js
+│   ├── results.test.js
+│   ├── utils.test.js
+│   └── qa-accessibility.test.js
+└── scripts/
+    ├── build.js                     # Builder bundle JS & cache-busting hash asset
+    └── serve.js                     # Server lokal dev zero-dependency + no-cache headers
 ```
 
 ### Standar Kepatuhan Aksesibilitas (WCAG 2.1 AA) & Desain:
@@ -107,6 +126,8 @@ npm run build
 npm run serve
 # atau
 npm start
+# atau
+npm run dev
 ```
 Buka peramban di: `http://localhost:3000`
 
@@ -114,24 +135,27 @@ Buka peramban di: `http://localhost:3000`
 ```bash
 npm test
 ```
-Menjalankan 64 pengujian otomatis mencakup:
-- Validasi numerik formula kelistrikan (Residensial, Komersial, BESS, PJUTS).
+Menjalankan 75 pengujian otomatis (18 suite) mencakup:
+- Validasi numerik formula kelistrikan (Hybrid Off-Grid, Residensial, Komersial, BESS, PJUTS).
 - Validasi proteksi rekening minimum PLN Permen ESDM No. 2/2024.
-- Validasi rendering SVG QR Code & enkoding URL WhatsApp.
+- Validasi orkestrasi state reaktif, rendering panel hasil, SVG QR Code & enkoding URL WhatsApp.
 - Audit aksesibilitas WCAG 2.1 AA (touch target $\ge 44\text{px}$, ARIA, kontras warna).
 - Audit responsivitas pada breakpoint 320px, 480px, 768px, 1024px, dan 1440px.
-- Verifikasi kebocoran dependensi eksternal.
+- Verifikasi build produksi, cache-busting hash aset, header server, dan kebocoran dependensi eksternal.
+
+### CI/CD (GitHub Actions)
+Workflow [`.github/workflows/ci.yml`](.github/workflows/ci.yml) menjalankan verifikasi dokumen fondasi, build aset produksi (`npm run build`), dan seluruh test suite (`npm test`) secara otomatis pada event `push` dan `pull_request` ke branch `main`. Branch `phase/**` dan `feature/**` tidak lagi memicu workflow CI.
 
 ---
 
 ## 4. Panduan Penggunaan Fitur
 
-1. **Simulasi Instan:**
-   - Pilih mode simulasi pada tab di atas (PLTS Rumah, Bisnis, Baterai, atau PJUTS).
-   - Geser slider atau ubah nominal tagihan/daya: panel kanan akan memperbarui angka penghematan bulanan, bar perbandingan, timeline payback 25 tahun, dan spesifikasi sistem secara seketika (*real-time*).
+1. **Simulasi Instan (6 Langkah Hybrid Off-Grid):**
+   - Pilih kategori pelanggan (Residential / Business), golongan daya PLN, isi biaya listrik bulanan, atur proporsi pemakaian siang vs malam, dan sesuaikan target persentase cakupan (*cover*).
+   - Panel kanan akan memperbarui kebutuhan kapasitas PV (kWp), Hybrid Inverter, Baterai LiFePO4, serta profil energi secara seketika (*real-time*).
 2. **Konsultasi WhatsApp:**
    - Klik tombol hijau **"Konsultasikan via WhatsApp"**.
-   - Sistem membuka aplikasi WhatsApp dengan pesan rekayasa terstruktur yang merangkum parameter teknis dan estimasi investasi Anda ke tim sales engineer PT. Indogreen (+62 817-0092-221 / 08170092221).
+   - Sistem membuka aplikasi WhatsApp dengan pesan rekayasa terstruktur yang merangkum parameter teknis dan hasil sizing sistem Anda ke tim sales engineer PT. Indogreen (+62 817-0092-221 / 08170092221).
 3. **Barcode Sales (Kiosk Mode):**
    - Klik tombol **"Buka Barcode Sales"** di header atau di kartu konversi hasil.
    - Pindai kode QR vektor SVG yang muncul di layar menggunakan kamera ponsel pengunjung untuk langsung mentransfer hasil simulasi ke WhatsApp ponsel mereka.
