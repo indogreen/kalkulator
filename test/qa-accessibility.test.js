@@ -19,7 +19,7 @@ import { getHeroCardHtml } from '../src/js/components/results/heroCard.js';
 import { calculateHybridOffGrid } from '../src/js/calculator/hybrid.js';
 import { calculateResidential } from '../src/js/calculator/residential.js';
 import { applyCacheBustingToHtml, computeAssetHash } from '../scripts/build.js';
-import { applyNoCacheHeaders, createStaticHandler, getLocalIpv4Addresses } from '../scripts/serve.js';
+import { applyNoCacheHeaders, createStaticHandler, getLocalIpv4Addresses, parsePort, PORT, HOST } from '../scripts/serve.js';
 
 describe('Phase 8: Accessibility & WCAG 2.1 AA Audit', () => {
   const indexHtml = fs.readFileSync(path.resolve('index.html'), 'utf8');
@@ -198,7 +198,17 @@ describe('Phase 8: Build Verification & Zero External Dependency Leak Check', ()
     assert.ok(!indexHtml.includes('indogreen.png?v='), 'index.html must not contain indogreen.png?v= query string');
   });
 
-  test('5. Static server emits no-cache headers and discovers local IPv4 addresses', async () => {
+  test('5. Static server emits no-cache headers, supports dynamic port, and discovers local IPv4 addresses', async () => {
+    assert.equal(PORT, process.env.PORT || 5500);
+    assert.equal(HOST, process.env.HOST || '0.0.0.0');
+    assert.equal(parsePort([], {}), 5500, 'parsePort default must be 5500');
+    assert.equal(parsePort(['--port=4400'], {}), 4400, 'parsePort must parse --port=4400');
+    assert.equal(parsePort(['--port', '4400'], {}), 4400, 'parsePort must parse --port 4400');
+    assert.equal(parsePort(['-p', '4400'], {}), 4400, 'parsePort must parse -p 4400');
+    assert.equal(parsePort(['-p=4400'], {}), 4400, 'parsePort must parse -p=4400');
+    assert.equal(parsePort(['4400'], {}), 4400, 'parsePort must parse positional port 4400');
+    assert.equal(parsePort([], { PORT: '4400' }), 4400, 'parsePort must parse PORT environment variable');
+
     assert.ok(Array.isArray(getLocalIpv4Addresses()), 'getLocalIpv4Addresses must return an array');
     const headers = {};
     const mockRes = {

@@ -42,9 +42,9 @@
     "semantic_hash": ""
   },
   "scripts/serve.js": {
-    "mtime": 1795775956.5735776,
-    "seen": 1795776002.987536,
-    "ast_hash": "f7f64997e95991577be965d3500e07ab",
+    "mtime": 1795776663.2361126,
+    "seen": 1795776687.370005,
+    "ast_hash": "fbcebb755f6ee5877111166ea5231e71",
     "semantic_hash": ""
   },
   "src/js/app.js": {
@@ -228,9 +228,9 @@
     "semantic_hash": "e892adb89f10c72ddc4e60ecdaeb11f0"
   },
   "test/qa-accessibility.test.js": {
-    "mtime": 1795775970.7770557,
-    "seen": 1795776002.987562,
-    "ast_hash": "a4395e2c0e47003fa75896c1fa3a49bc",
+    "mtime": 1795776663.2748108,
+    "seen": 1795776687.370031,
+    "ast_hash": "ae34297ff1fea78590128979e6340574",
     "semantic_hash": ""
   },
   "test/results.test.js": {

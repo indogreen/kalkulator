@@ -24,10 +24,10 @@
     "semantic_hash": "15104e8b53a54000e5b010ab16d5590f"
   },
   "package.json": {
-    "mtime": 1795669107.0721824,
-    "seen": 1795772998.315827,
-    "ast_hash": "19f42e70785ddd88b6b748f9f51ea9bb",
-    "semantic_hash": "19f42e70785ddd88b6b748f9f51ea9bb"
+    "mtime": 1795775945.5081933,
+    "seen": 1795776002.987534,
+    "ast_hash": "1834321568581de7cc1b3411dd3dd848",
+    "semantic_hash": ""
   },
   "postcss.config.js": {
     "mtime": 1795595199.9644592,
@@ -36,16 +36,16 @@
     "semantic_hash": "c735540bb63936a123bc867d950c9f69"
   },
   "scripts/build.js": {
-    "mtime": 1795669107.9636312,
-    "seen": 1795772998.315829,
-    "ast_hash": "eadadb339ddcb23366b1ea8d06d8d73c",
-    "semantic_hash": "eadadb339ddcb23366b1ea8d06d8d73c"
+    "mtime": 1795775945.5000377,
+    "seen": 1795776002.987536,
+    "ast_hash": "40d9047580864696695b3527659dc263",
+    "semantic_hash": ""
   },
   "scripts/serve.js": {
-    "mtime": 1795669109.0600584,
-    "seen": 1795772998.31583,
-    "ast_hash": "a6b73dfc2ab498ac101d065211707cea",
-    "semantic_hash": "a6b73dfc2ab498ac101d065211707cea"
+    "mtime": 1795776377.3464422,
+    "seen": 1795776415.0984168,
+    "ast_hash": "02348684dc0a1a11eab1cfc30333f2bc",
+    "semantic_hash": ""
   },
   "src/js/app.js": {
     "mtime": 1795694134.7220216,
@@ -228,10 +228,10 @@
     "semantic_hash": "e892adb89f10c72ddc4e60ecdaeb11f0"
   },
   "test/qa-accessibility.test.js": {
-    "mtime": 1795685298.5273511,
-    "seen": 1795772998.315852,
-    "ast_hash": "e1bd6bb44d89509318b6d2b709be375b",
-    "semantic_hash": "e1bd6bb44d89509318b6d2b709be375b"
+    "mtime": 1795776387.914025,
+    "seen": 1795776415.098444,
+    "ast_hash": "b6a2df359f3675f25db2b4d30f693105",
+    "semantic_hash": ""
   },
   "test/results.test.js": {
     "mtime": 1795694423.4561377,
@@ -244,5 +244,1355 @@
     "seen": 1795772998.315854,
     "ast_hash": "3712a570d3649d2f5d25f39b96e9cda9",
     "semantic_hash": "3712a570d3649d2f5d25f39b96e9cda9"
+  },
+  ".agents/skills/conventional-commit-review/SKILL.md": {
+    "mtime": 1793749856.069998,
+    "seen": 1795776002.987565,
+    "ast_hash": "b615b2276d6a574136ebc0991ec87bb3",
+    "semantic_hash": ""
+  },
+  ".agents/skills/docs-governance/SKILL.md": {
+    "mtime": 1793749856.070576,
+    "seen": 1795776002.987566,
+    "ast_hash": "32a5a015fadb7c1398b129dfc962637a",
+    "semantic_hash": ""
+  },
+  ".agents/skills/docs-governance/references/artifact-role-contract.md": {
+    "mtime": 1793749856.0707784,
+    "seen": 1795776002.9875672,
+    "ast_hash": "ffa5ecbbb9e47835accb3b6f518c3f8a",
+    "semantic_hash": ""
+  },
+  ".agents/skills/git-workflow/SKILL.md": {
+    "mtime": 1793749856.0716114,
+    "seen": 1795776002.9875672,
+    "ast_hash": "606df7a0df4bb7df5f46ef749018d0e4",
+    "semantic_hash": ""
+  },
+  ".agents/skills/karpathy-guidelines/SKILL.md": {
+    "mtime": 1795064018.7297301,
+    "seen": 1795776002.9875681,
+    "ast_hash": "568fe33228692e85543530ce376f695f",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/SKILL.md": {
+    "mtime": 1795061576.7350876,
+    "seen": 1795776002.9875681,
+    "ast_hash": "e014925a19259e554418c84229fd9cd0",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/accessibility/accessibility.md": {
+    "mtime": 1795061576.7511473,
+    "seen": 1795776002.9875689,
+    "ast_hash": "6424302d6cc5b62db14d93c5917ccf70",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/accessibility/accessible-error-announcement.md": {
+    "mtime": 1795061576.7508168,
+    "seen": 1795776002.9875698,
+    "ast_hash": "98f3e8045c9ba02ced88ff81b71ad24d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/accessibility/accessible-generated-content.md": {
+    "mtime": 1795061576.7508464,
+    "seen": 1795776002.9875698,
+    "ast_hash": "ad38eca1c7ed47ca3ae3500d680bf339",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/accessibility/respect-os-text-scale.md": {
+    "mtime": 1795061576.7508063,
+    "seen": 1795776002.987571,
+    "ast_hash": "2ee16d5de349ad7040be1557ea545946",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/built-in-ai/language-detection.md": {
+    "mtime": 1795061576.751185,
+    "seen": 1795776002.987571,
+    "ast_hash": "e93e691af35b124cc74090c97e9c1881",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/built-in-ai/language-model.md": {
+    "mtime": 1795061576.752005,
+    "seen": 1795776002.987572,
+    "ast_hash": "e21f86b0890f401e991d95a4f61ea5e9",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/built-in-ai/prompt-api.md": {
+    "mtime": 1795061576.7512753,
+    "seen": 1795776002.987573,
+    "ast_hash": "e21f86b0890f401e991d95a4f61ea5e9",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/built-in-ai/summarizer.md": {
+    "mtime": 1795061576.751225,
+    "seen": 1795776002.987573,
+    "ast_hash": "f091be12fd68b1f5a5f8ff183487b66c",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/built-in-ai/translator.md": {
+    "mtime": 1795061576.7520087,
+    "seen": 1795776002.987574,
+    "ast_hash": "571074c0b7370bef69ea23365903ed23",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/animate-to-intrinsic-sizes.md": {
+    "mtime": 1795061576.7548723,
+    "seen": 1795776002.987574,
+    "ast_hash": "ada4740e064a0c2fc253acfbd1ff8a07",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/atrule-support-conditionals.md": {
+    "mtime": 1795061576.7549462,
+    "seen": 1795776002.987575,
+    "ast_hash": "cc645f0f94bb51c3c4621886b9a63183",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/calculate-with-intrinsic-sizes.md": {
+    "mtime": 1795061576.7547486,
+    "seen": 1795776002.987575,
+    "ast_hash": "d5f74521bad1343af66aa7a2110b1c14",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/child-state-based-styling.md": {
+    "mtime": 1795061576.7557995,
+    "seen": 1795776002.987576,
+    "ast_hash": "7305fe7297ec300980e2835e6e7e7d1c",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/content-based-styling.md": {
+    "mtime": 1795061576.755112,
+    "seen": 1795776002.9875772,
+    "ast_hash": "ea0dd6dd468582d799b5691f8eefb899",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/css-layout.md": {
+    "mtime": 1795061576.75522,
+    "seen": 1795776002.9875772,
+    "ast_hash": "ee403aaec899e5124ed72b7e0d7f5cd9",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/css.md": {
+    "mtime": 1795061576.7552824,
+    "seen": 1795776002.9875782,
+    "ast_hash": "9cef29197685793365d0e416e1f4749d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/design-token-reactivity.md": {
+    "mtime": 1795061576.7553697,
+    "seen": 1795776002.9875782,
+    "ast_hash": "142bc94e10e1e0f034d95338739e5993",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/dynamic-sibling-styling.md": {
+    "mtime": 1795061576.756217,
+    "seen": 1795776002.9875789,
+    "ast_hash": "eed7233c57d71b624912d748f360aeb5",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/fluid-scaling.md": {
+    "mtime": 1795061576.7556343,
+    "seen": 1795776002.9875798,
+    "ast_hash": "f0461aa5e71cab4a220c9fbf861f5b6d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/individual-transform-properties.md": {
+    "mtime": 1795061576.7558782,
+    "seen": 1795776002.9875798,
+    "ast_hash": "30c74574de4f815365b2dbabc2c8b3fa",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/overflow-clipping-control.md": {
+    "mtime": 1795061576.7554812,
+    "seen": 1795776002.987581,
+    "ast_hash": "26450f8386080cbff5b84f71b4478daa",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/reduce-style-repetition.md": {
+    "mtime": 1795061576.7558885,
+    "seen": 1795776002.987581,
+    "ast_hash": "5cd169dc56a792d2fd798f6d738e21a7",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/responsive-design.md": {
+    "mtime": 1795061576.7557044,
+    "seen": 1795776002.987582,
+    "ast_hash": "237844b46572e73525c89e73213f186a",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/selector-atrule-combinations.md": {
+    "mtime": 1795061576.7563088,
+    "seen": 1795776002.987583,
+    "ast_hash": "63926ad60ddb9fe1aa0a15aae465b5d4",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/size-aware-styling.md": {
+    "mtime": 1795061576.755836,
+    "seen": 1795776002.987583,
+    "ast_hash": "682698e1eff6b9b001c55fb3b4236efb",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/style-parent-with-has.md": {
+    "mtime": 1795061576.755637,
+    "seen": 1795776002.987584,
+    "ast_hash": "3af7d43b79786a3a738b6baf0bd971c4",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/css/usage-aware-component-variations.md": {
+    "mtime": 1795061576.7563708,
+    "seen": 1795776002.987584,
+    "ast_hash": "698d41e98f8a7e29056aac574a9cc036",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/animated-select-picker.md": {
+    "mtime": 1795061576.7604487,
+    "seen": 1795776002.987585,
+    "ast_hash": "d7df93f00f1a6f855f98a88e097b34ed",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/autofill-address-form.md": {
+    "mtime": 1795061576.7614686,
+    "seen": 1795776002.987586,
+    "ast_hash": "fd04da72cdb4dfd3d487cafe584effb7",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/autofill-highlight-inputs.md": {
+    "mtime": 1795061576.7613556,
+    "seen": 1795776002.987586,
+    "ast_hash": "0515567ae1b395f733b431e87667c258",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/autofill-payment-form.md": {
+    "mtime": 1795061576.7609947,
+    "seen": 1795776002.987587,
+    "ast_hash": "e1e1691847d1e43ee36b0d0102c9c270",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/autofill-sign-in-form.md": {
+    "mtime": 1795061576.7608335,
+    "seen": 1795776002.987587,
+    "ast_hash": "5948eee6eb70b939983e575159a2d71c",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/autofill-sign-up-form.md": {
+    "mtime": 1795061576.7611222,
+    "seen": 1795776002.9875882,
+    "ast_hash": "0263231ad775ab87f4b0003fdc988a17",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/brand-consistent-forms.md": {
+    "mtime": 1795061576.7613833,
+    "seen": 1795776002.9875891,
+    "ast_hash": "9884d808c9a4d8e8d9b47135689ba978",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/branded-select-styling.md": {
+    "mtime": 1795061576.7613797,
+    "seen": 1795776002.9875891,
+    "ast_hash": "9d75023f0045007ef34a938919e6a1b5",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/custom-select-picker-layouts.md": {
+    "mtime": 1795061576.7617242,
+    "seen": 1795776002.9875898,
+    "ast_hash": "29217e50ee91fb8d6de03af86607a278",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/form-fields-automatically-fit-contents.md": {
+    "mtime": 1795061576.761726,
+    "seen": 1795776002.987591,
+    "ast_hash": "42632026dcee29ce78fb72e5559cc1ac",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/forms.md": {
+    "mtime": 1795061576.761744,
+    "seen": 1795776002.987591,
+    "ast_hash": "508e3ca2e00738366a78253fc721babb",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/ime-safe-enter-submit.md": {
+    "mtime": 1795061576.7611942,
+    "seen": 1795776002.987592,
+    "ast_hash": "de4df34d69b7bc54cae0470439e6fdf7",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/required-field-feedback.md": {
+    "mtime": 1795061576.7616067,
+    "seen": 1795776002.987593,
+    "ast_hash": "3b7047f14a25d836c3e8cef43391876d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/rich-media-picker.md": {
+    "mtime": 1795061576.7619767,
+    "seen": 1795776002.987593,
+    "ast_hash": "7614555df00d4e3eac7299b26542d52e",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/select-menu-interaction.md": {
+    "mtime": 1795061576.762104,
+    "seen": 1795776002.987594,
+    "ast_hash": "530754798dad29cd7ea9d5e5d35aa002",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/slider.md": {
+    "mtime": 1795061576.761906,
+    "seen": 1795776002.987594,
+    "ast_hash": "f48d2ca880bc2531835de9d43bfb7c6f",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/sms-otp-form.md": {
+    "mtime": 1795061576.7622359,
+    "seen": 1795776002.987595,
+    "ast_hash": "78995ad502179b7b6a1255ab66715d35",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/switch.md": {
+    "mtime": 1795061576.762499,
+    "seen": 1795776002.987596,
+    "ast_hash": "ac8ea20b33c6ab300ff0fa5e03dbed0f",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/forms/validate-input-after-interaction.md": {
+    "mtime": 1795061576.7625918,
+    "seen": 1795776002.987596,
+    "ast_hash": "31d6eb2dddf38171755dea5a60a091b6",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/html/accessible-web-components.md": {
+    "mtime": 1795061576.7516448,
+    "seen": 1795776002.987597,
+    "ast_hash": "374646dc81d34787198440d70e5b0ce4",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/html/custom-elements.md": {
+    "mtime": 1795061576.7516944,
+    "seen": 1795776002.9875982,
+    "ast_hash": "cc911058d51a7da7b724a7a77d4990c1",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/html/form-associated-custom-elements.md": {
+    "mtime": 1795061576.751451,
+    "seen": 1795776002.9875982,
+    "ast_hash": "f4b2e8fb378bdf675834448a6f851d25",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/html/html.md": {
+    "mtime": 1795061576.752114,
+    "seen": 1795776002.9875991,
+    "ast_hash": "60b8ada4608f38e6f1c40daaf0f2969e",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/html/prerendering-custom-elements.md": {
+    "mtime": 1795061576.7525485,
+    "seen": 1795776002.9875991,
+    "ast_hash": "6a33ee3f25fe1f88481b939ddddb6482",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/html/shadow-dom.md": {
+    "mtime": 1795061576.7516475,
+    "seen": 1795776002.9875998,
+    "ast_hash": "a06df1408d5edb300503b9333339f0a4",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/html/styling-web-components.md": {
+    "mtime": 1795061576.7520056,
+    "seen": 1795776002.9875998,
+    "ast_hash": "5f099b2dffe1738499ad894d59f845b0",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/html/web-components.md": {
+    "mtime": 1795061576.7515028,
+    "seen": 1795776002.9876008,
+    "ast_hash": "c11fa1af5c2557fdf83a6e01e9a2e948",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/js/calculate-event-differentials.md": {
+    "mtime": 1795061576.7516825,
+    "seen": 1795776002.987602,
+    "ast_hash": "50b299353461b638374314a59e41cdc6",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/js/capture-location-agnostic-data.md": {
+    "mtime": 1795061576.7522645,
+    "seen": 1795776002.987602,
+    "ast_hash": "f81322867b7dc43beeb4f7e2051429b2",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/js/coordinate-global-events.md": {
+    "mtime": 1795061576.7525182,
+    "seen": 1795776002.987603,
+    "ast_hash": "886dcb76e5619ce8dd7b5e6175f9ed65",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/js/js.md": {
+    "mtime": 1795061576.7523506,
+    "seen": 1795776002.987603,
+    "ast_hash": "38d7adf967d1baa608592b8535debb07",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/js/sort-high-precision-timestamps.md": {
+    "mtime": 1795061576.7529733,
+    "seen": 1795776002.987604,
+    "ast_hash": "b9f560cd42f3eac2742b2fe7b232ec97",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/js/support-global-calendar-systems.md": {
+    "mtime": 1795061576.7523406,
+    "seen": 1795776002.987605,
+    "ast_hash": "74cccd86017889f317b5e01a6ba6282b",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/batch-analytics-events.md": {
+    "mtime": 1795061576.7525477,
+    "seen": 1795776002.987605,
+    "ast_hash": "75b37bf05ead00f2a541269b773b5719",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/break-up-long-tasks.md": {
+    "mtime": 1795061576.753376,
+    "seen": 1795776002.987606,
+    "ast_hash": "a55fb3a83acff4bbed05bc3dcc03e690",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/calculate-total-foreground-time.md": {
+    "mtime": 1795061576.7527149,
+    "seen": 1795776002.987606,
+    "ast_hash": "53ab66c5d34bf7b81fb129d5686b20ac",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/conditional-async-dependencies.md": {
+    "mtime": 1795061576.7532625,
+    "seen": 1795776002.987607,
+    "ast_hash": "fde9a778fecb85a404b16de8ed552771",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/defer-rendering-heavy-content.md": {
+    "mtime": 1795061576.7528741,
+    "seen": 1795776002.987608,
+    "ast_hash": "a7f45a5e13171af18c80a98891d9d86c",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/defer-work-until-scroll-ends.md": {
+    "mtime": 1795061576.7531357,
+    "seen": 1795776002.987608,
+    "ast_hash": "81c63c9a7c6475da6c1760513f351689",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/deliver-optimized-decorative-images.md": {
+    "mtime": 1795061576.7532346,
+    "seen": 1795776002.9876091,
+    "ast_hash": "a739b7356b4ba930fdd08b38e4daa6b8",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/deprioritize-background-fetches.md": {
+    "mtime": 1795061576.752701,
+    "seen": 1795776002.9876091,
+    "ast_hash": "75e54661216c662a5e6384ee16c6f8fb",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/detect-initial-visibility-state.md": {
+    "mtime": 1795061576.7527294,
+    "seen": 1795776002.98761,
+    "ast_hash": "cf524db4a96ce5be9fc63bb720bfb5f2",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/efficient-background-processing.md": {
+    "mtime": 1795061576.752864,
+    "seen": 1795776002.98761,
+    "ast_hash": "020a571a2a2851d2039df7cad25ea838",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/faster-spa-view-transitions.md": {
+    "mtime": 1795061576.753041,
+    "seen": 1795776002.9876108,
+    "ast_hash": "35defe7b77b200437254d670a0a5dade",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/flicker-free-client-side-ab-testing.md": {
+    "mtime": 1795061576.7534754,
+    "seen": 1795776002.9876108,
+    "ast_hash": "9b7b8b249dd56f561fca19492f752bf5",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/full-session-analytics.md": {
+    "mtime": 1795061576.7534566,
+    "seen": 1795776002.987612,
+    "ast_hash": "94efd404fdd41f017305da2acb77a7eb",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/identify-heavy-scripts.md": {
+    "mtime": 1795061576.7537303,
+    "seen": 1795776002.987613,
+    "ast_hash": "b75b51aa81a454b7dbc413af39f00d4e",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/identify-inp-causes.md": {
+    "mtime": 1795061576.7534711,
+    "seen": 1795776002.987613,
+    "ast_hash": "9a9bbe8291cc9c8e2f353725c95b72cc",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/improve-next-page-load-performance.md": {
+    "mtime": 1795061576.7540703,
+    "seen": 1795776002.987614,
+    "ast_hash": "9aec04d7e09b6ee7cab5b6450bceee1b",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/interaction-paint-timing.md": {
+    "mtime": 1795061576.7538712,
+    "seen": 1795776002.987614,
+    "ast_hash": "aad61de003b15e6bec35c6efd7baceaa",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/interactions-in-complex-layouts.md": {
+    "mtime": 1795061576.7550406,
+    "seen": 1795776002.9876149,
+    "ast_hash": "760da7219c362ea146dd6226f851feb9",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/lazy-load-video-and-audio.md": {
+    "mtime": 1795061576.754817,
+    "seen": 1795776002.987616,
+    "ast_hash": "dc8051d5678e525a7cfd50560de5312e",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/optimize-image-priority.md": {
+    "mtime": 1795061576.7537165,
+    "seen": 1795776002.987616,
+    "ast_hash": "f5bbcf1383e7d167915dd6d06077a6ec",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/optimize-preload-priority.md": {
+    "mtime": 1795061576.7542298,
+    "seen": 1795776002.987617,
+    "ast_hash": "ef471cdc22776ed35ef023df38cfde74",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/optimize-script-priority.md": {
+    "mtime": 1795061576.753919,
+    "seen": 1795776002.987617,
+    "ast_hash": "4dc2d60a3104d3198b5eac1a719ac3a8",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/out-of-order-html-streaming.md": {
+    "mtime": 1795061576.754063,
+    "seen": 1795776002.987618,
+    "ast_hash": "135f50568b32747b60e87c1aeddcc21e",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/performance.md": {
+    "mtime": 1795061576.7544575,
+    "seen": 1795776002.987618,
+    "ast_hash": "02fad62ff9e2bab586b42d1f870abbc4",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/resolution-optimized-pseudo-elements.md": {
+    "mtime": 1795061576.7544336,
+    "seen": 1795776002.9876192,
+    "ast_hash": "1933e0fbed036bea482a07aea8e6f630",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/performance/schedule-tasks-by-priority.md": {
+    "mtime": 1795061576.754436,
+    "seen": 1795776002.98762,
+    "ast_hash": "fa3e26399d94df038b6551cfb1a6b70d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/privacy/privacy.md": {
+    "mtime": 1795061576.7541335,
+    "seen": 1795776002.98762,
+    "ast_hash": "743aa3634758d411dc6466dcb08d9c08",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/pwa/install-web-app.md": {
+    "mtime": 1795061576.7546759,
+    "seen": 1795776002.987621,
+    "ast_hash": "34a79f111040000af9d74d8a312e4af7",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/pwa/migrate-web-app-origin.md": {
+    "mtime": 1795061576.7545574,
+    "seen": 1795776002.987621,
+    "ast_hash": "d31ba4dcd4354d273ccafcc4c53e98d2",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/client-side-encryption.md": {
+    "mtime": 1795061576.7560484,
+    "seen": 1795776002.9876218,
+    "ast_hash": "d5dbeab6aa68c04f9b77c2b4f4b4f32a",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/digital-signatures.md": {
+    "mtime": 1795061576.7674015,
+    "seen": 1795776002.987623,
+    "ast_hash": "e8240c8d785ccbd629d4e905cfa37d35",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/local-network-access.md": {
+    "mtime": 1795061576.7562275,
+    "seen": 1795776002.987623,
+    "ast_hash": "f5e51ad10294310796e6804b02296e6d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/passkey-authentication.md": {
+    "mtime": 1795061576.7566469,
+    "seen": 1795776002.987624,
+    "ast_hash": "b076d0c889ec7d7bee0fa775d1d1f7df",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/passkey-conditional-create.md": {
+    "mtime": 1795061576.7560496,
+    "seen": 1795776002.987624,
+    "ast_hash": "715c51e5d0c6fea92a4c7e56209ed43a",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/passkey-management.md": {
+    "mtime": 1795061576.7563899,
+    "seen": 1795776002.987625,
+    "ast_hash": "5d8b1dbb700dee05ecc7aaccf4b31803",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/passkey-reauthentication.md": {
+    "mtime": 1795061576.7567344,
+    "seen": 1795776002.987626,
+    "ast_hash": "11708c587fcb28a5fc1576c556f57df3",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/passkey-registration.md": {
+    "mtime": 1795061576.757358,
+    "seen": 1795776002.987626,
+    "ast_hash": "807cae1e862957089ca3abadc8c94c99",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/passkeys.md": {
+    "mtime": 1795061576.7565396,
+    "seen": 1795776002.987627,
+    "ast_hash": "385d5b5d8847cbfef0b771ecca4ebe72",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/quick-sign-ins.md": {
+    "mtime": 1795061576.757391,
+    "seen": 1795776002.987627,
+    "ast_hash": "4787042cc4345baf24ac4cf5cd475fd8",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/restrict-outbound-connections.md": {
+    "mtime": 1795061576.7565656,
+    "seen": 1795776002.987628,
+    "ast_hash": "952913f620dbc76b1e3c99b336a7a238",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/sanitize-untrusted-html.md": {
+    "mtime": 1795061576.756779,
+    "seen": 1795776002.9876292,
+    "ast_hash": "10b62e77baa4e78ea56fa68f1f482490",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/secure-external-subresources.md": {
+    "mtime": 1795061576.7570043,
+    "seen": 1795776002.9876292,
+    "ast_hash": "d34797d9e7cdfdca527fee01d3051339",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/security.md": {
+    "mtime": 1795061576.7576685,
+    "seen": 1795776002.9876301,
+    "ast_hash": "1703d402bced981eef41bc9424444a0b",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/trusted-types.md": {
+    "mtime": 1795061576.7571678,
+    "seen": 1795776002.9876301,
+    "ast_hash": "f0220ce8f151edb410b0fd8c78657664",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/validate-origins.md": {
+    "mtime": 1795061576.7571566,
+    "seen": 1795776002.987631,
+    "ast_hash": "f48a4c488b41227c9c6c53c97b5ef20d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/security/verify-email-ownership.md": {
+    "mtime": 1795061576.7577925,
+    "seen": 1795776002.987632,
+    "ast_hash": "7c1348ac1c063b2423e81f3f598689be",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-atoms/carousel-slide-effects.md": {
+    "mtime": 1795061576.7670906,
+    "seen": 1795776002.987632,
+    "ast_hash": "80a3a8216d89e8350caf478e4b5f9b49",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-atoms/component-specific-light-dark-theme.md": {
+    "mtime": 1795061576.7672727,
+    "seen": 1795776002.987633,
+    "ast_hash": "eb704c306db07edc702996038b7f603d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-atoms/icons.md": {
+    "mtime": 1795061576.7668417,
+    "seen": 1795776002.987633,
+    "ast_hash": "25eec0523a651d78adaaadd8d0aa77ca",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-atoms/position-aware-tooltips.md": {
+    "mtime": 1795061576.767138,
+    "seen": 1795776002.987634,
+    "ast_hash": "fd3d864633868ae3366750a6f31f116c",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-atoms/pull-to-reveal.md": {
+    "mtime": 1795061576.7668898,
+    "seen": 1795776002.987634,
+    "ast_hash": "85ad86c63a2f6c7cff0ce866c584b7b8",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-atoms/responsive-table.md": {
+    "mtime": 1795061576.767094,
+    "seen": 1795776002.987635,
+    "ast_hash": "d200d4d09f2b1d57d50564ad9e46772b",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-atoms/scroll-position-aware-elements.md": {
+    "mtime": 1795061576.7675402,
+    "seen": 1795776002.9876359,
+    "ast_hash": "61d87749d8a744f3c65ad72a36930458",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-atoms/scroll-progress-indicator.md": {
+    "mtime": 1795061576.7668884,
+    "seen": 1795776002.9876359,
+    "ast_hash": "404cd65f26ff2b9ea889378b0a9d30c7",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-atoms/scrollability-affordance-hints.md": {
+    "mtime": 1795061576.7676187,
+    "seen": 1795776002.987637,
+    "ast_hash": "886e61d40f728c8d3681135f96f83d5a",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-atoms/shrinking-header-on-scroll.md": {
+    "mtime": 1795061576.7673497,
+    "seen": 1795776002.987637,
+    "ast_hash": "3c360d4caffd89210f441b59cd2cfb32",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-atoms/single-line-overflow.md": {
+    "mtime": 1795061576.7677853,
+    "seen": 1795776002.987638,
+    "ast_hash": "464c86098482fafd55adf8c3a9c07627",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-atoms/state-aware-sticky-headers.md": {
+    "mtime": 1795061576.7676215,
+    "seen": 1795776002.987638,
+    "ast_hash": "d60fc47963a03d7c55b2c507603d2664",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-atoms/viewport-aware-dropdowns.md": {
+    "mtime": 1795061576.7677267,
+    "seen": 1795776002.987639,
+    "ast_hash": "6a79708c0bf6bb1b2fa861c3e98d7a2d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/2d-panning.md": {
+    "mtime": 1795061576.7580295,
+    "seen": 1795776002.9876401,
+    "ast_hash": "47664d831af9e69514af70563d6acb5b",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/anchor-positioning-tab-underline.md": {
+    "mtime": 1795061576.757714,
+    "seen": 1795776002.9876401,
+    "ast_hash": "429c2f7a5a2d46ce2e120ded6de6975f",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/animate-element-entry-exit.md": {
+    "mtime": 1795061576.757581,
+    "seen": 1795776002.987641,
+    "ast_hash": "9615a50424338ef578cd94e76c27fcca",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/animate-to-from-top-layer.md": {
+    "mtime": 1795061576.7579663,
+    "seen": 1795776002.987641,
+    "ast_hash": "490f4ae99cf2f1097984014e10c09595",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/carousel-snap-highlights.md": {
+    "mtime": 1795061576.7582533,
+    "seen": 1795776002.987642,
+    "ast_hash": "aa73ee6d6ef2d7cc4ae9dbe32aa79f44",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/consistent-cross-document-transitions.md": {
+    "mtime": 1795061576.758096,
+    "seen": 1795776002.9876428,
+    "ast_hash": "3bdcb6b570ea866be3e0144fc7b5c16b",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/cross-document-transitions.md": {
+    "mtime": 1795061576.7585084,
+    "seen": 1795776002.987644,
+    "ast_hash": "64b95a7a6377032106ec337ee6c92ae5",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/custom-button-actions.md": {
+    "mtime": 1795061576.7583125,
+    "seen": 1795776002.987644,
+    "ast_hash": "5b7372a5604fa2788c3aa694652096b3",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/declarative-dialog-popover-control.md": {
+    "mtime": 1795061576.7588172,
+    "seen": 1795776002.987645,
+    "ast_hash": "ce5bf4d22facb94fb9a80d14b5ed5567",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/directional-navigation-transitions.md": {
+    "mtime": 1795061576.7583723,
+    "seen": 1795776002.9876459,
+    "ast_hash": "6949f2d712b4bb8d0f6262ee7dcb6b72",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/drag-and-drop.md": {
+    "mtime": 1795061576.7585182,
+    "seen": 1795776002.9876459,
+    "ast_hash": "57880aa1795915f4223f0d24e0c0588f",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/drag.md": {
+    "mtime": 1795061576.7585537,
+    "seen": 1795776002.987647,
+    "ast_hash": "1f82d31a2dbe89a3c5656813970a69b5",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/dynamic-sibling-animations.md": {
+    "mtime": 1795061576.7585728,
+    "seen": 1795776002.987647,
+    "ast_hash": "f2fc3a7e2cc058f675b17de7f2c77f16",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/dynamic-sort.md": {
+    "mtime": 1795061576.7588248,
+    "seen": 1795776002.987648,
+    "ast_hash": "aca73567ebe4122e09c3bf7f26e920bd",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/group-element-transitions.md": {
+    "mtime": 1795061576.759153,
+    "seen": 1795776002.987649,
+    "ast_hash": "93d97ab90fbe7dfb69cb111952e43a9b",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/highlight-text-ranges.md": {
+    "mtime": 1795061576.759037,
+    "seen": 1795776002.987649,
+    "ast_hash": "5df208b46de65da042166709a9e9e3a9",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/interactive-content-reveal.md": {
+    "mtime": 1795061576.7591588,
+    "seen": 1795776002.9876502,
+    "ast_hash": "d07f3a28190feaeb953daa4bff572053",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/interest-triggered-action-previews.md": {
+    "mtime": 1795061576.75944,
+    "seen": 1795776002.9876502,
+    "ast_hash": "ad3079ff99770ca4b6898d6004dfc442",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/interest-triggered-tooltips.md": {
+    "mtime": 1795061576.7588384,
+    "seen": 1795776002.987651,
+    "ast_hash": "3e68ad285a5047482c9c5992882a20f3",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/light-dismiss-a-dialog.md": {
+    "mtime": 1795061576.7599466,
+    "seen": 1795776002.987652,
+    "ast_hash": "eba76be85a56ee678907453e820e827d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/motion.md": {
+    "mtime": 1795061576.759314,
+    "seen": 1795776002.987652,
+    "ast_hash": "deecdb950e5982b498c03b2a01e5dde7",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/move-dom-element-without-losing-state.md": {
+    "mtime": 1795061576.7595518,
+    "seen": 1795776002.987653,
+    "ast_hash": "06c552eceec2d3c3ae5305461dcd1905",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/parallax-scroll-effects.md": {
+    "mtime": 1795061576.759441,
+    "seen": 1795776002.987653,
+    "ast_hash": "255e8c7ac1b632e2e27157144b44605b",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/persistent-top-layer-ui.md": {
+    "mtime": 1795061576.7598817,
+    "seen": 1795776002.987654,
+    "ast_hash": "b1388bafbbb0e3c7bb4c6b4ceb12b1a8",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/physics-based-easing.md": {
+    "mtime": 1795061576.7597628,
+    "seen": 1795776002.987654,
+    "ast_hash": "c42647d176102c7ac23f6a55ffd4cb69",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/platform-controls-dismiss-dialog.md": {
+    "mtime": 1795061576.7595315,
+    "seen": 1795776002.987655,
+    "ast_hash": "3ad76d381132b1dceee370f3823bb635",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/prevent-page-scroll-under-modal-dialog.md": {
+    "mtime": 1795061576.7605486,
+    "seen": 1795776002.9876559,
+    "ast_hash": "3f014b7c7de434971cc9b2ccede552d3",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/same-document-transitions.md": {
+    "mtime": 1795061576.7596533,
+    "seen": 1795776002.9876559,
+    "ast_hash": "274290704ee45e206939ec94ecb515e2",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/scoped-component-transitions.md": {
+    "mtime": 1795061576.7597857,
+    "seen": 1795776002.987657,
+    "ast_hash": "53885b2fc40d1a1da58fc2cbce372e30",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/scroll-completion-effects.md": {
+    "mtime": 1795061576.7601683,
+    "seen": 1795776002.987657,
+    "ast_hash": "33024961696612ff800ed423b87dc13d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/scroll-entry-exit-effects.md": {
+    "mtime": 1795061576.760566,
+    "seen": 1795776002.987658,
+    "ast_hash": "af355012a6f72296b8eb40b46c311fe3",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/scroll-snap-realtime-feedback.md": {
+    "mtime": 1795061576.7599988,
+    "seen": 1795776002.987659,
+    "ast_hash": "b9f0bbff7fc279275d002ed6019cbca5",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/scroll-snap-state-sync.md": {
+    "mtime": 1795061576.760734,
+    "seen": 1795776002.987659,
+    "ast_hash": "1b68207f819415b6b6aa2a623b2196ac",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/scroll-target-on-load.md": {
+    "mtime": 1795061576.7599912,
+    "seen": 1795776002.98766,
+    "ast_hash": "b087e91bb440691b020032c8aa017c17",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/scrollytelling.md": {
+    "mtime": 1795061576.7611735,
+    "seen": 1795776002.98766,
+    "ast_hash": "c0964d2d00ce7273d4c3191162895ff6",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/search-hidden-content.md": {
+    "mtime": 1795061576.7607799,
+    "seen": 1795776002.9876611,
+    "ast_hash": "a78323d8da37c8fc87930d071b1a1402",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/sortable-table.md": {
+    "mtime": 1795061576.7602286,
+    "seen": 1795776002.987662,
+    "ast_hash": "a2a9d1fec87beb49d86d1f45029f2e60",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/spatial-navigation.md": {
+    "mtime": 1795061576.7601643,
+    "seen": 1795776002.987662,
+    "ast_hash": "e9cef9408cacd59dff5117a78f4afef5",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/swipe-to-remove.md": {
+    "mtime": 1795061576.7609444,
+    "seen": 1795776002.987663,
+    "ast_hash": "eeedb88128956fb1f758c5299bc3f2bb",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-behaviors/swipe-to-reveal.md": {
+    "mtime": 1795061576.7605603,
+    "seen": 1795776002.987663,
+    "ast_hash": "ca0de6aaca9aa3369c67695e0c9ba722",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/accordion.md": {
+    "mtime": 1795061576.7642717,
+    "seen": 1795776002.987664,
+    "ast_hash": "11bd65f413f0c9fddd2a39869b086b71",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/app-menus.md": {
+    "mtime": 1795061576.7641282,
+    "seen": 1795776002.987664,
+    "ast_hash": "94a034ce145d8099dea99a22aa5329ed",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/breadcrumbs.md": {
+    "mtime": 1795061576.76457,
+    "seen": 1795776002.987665,
+    "ast_hash": "f6795a56d64dee1555e88ae72b462958",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/card.md": {
+    "mtime": 1795061576.7648144,
+    "seen": 1795776002.987666,
+    "ast_hash": "236bc2214182f902bffc6801230b13f4",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/carousel.md": {
+    "mtime": 1795061576.7645724,
+    "seen": 1795776002.987666,
+    "ast_hash": "cb1a052d44268a26cf022cf68283ded5",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/checkbox.md": {
+    "mtime": 1795061576.7645388,
+    "seen": 1795776002.9876668,
+    "ast_hash": "01eba0afb9d22917616307c1555e8427",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/copy-button.md": {
+    "mtime": 1795061576.7652917,
+    "seen": 1795776002.9876668,
+    "ast_hash": "2f73fbfa43be4719a7829672d110b455",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/dark-mode-toggle.md": {
+    "mtime": 1795061576.7648716,
+    "seen": 1795776002.987668,
+    "ast_hash": "00cb4f18e831fc14a81840dd616af8d5",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/dialog.md": {
+    "mtime": 1795061576.764667,
+    "seen": 1795776002.987669,
+    "ast_hash": "63fa77bf461d5946611300b93ebf3817",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/hovercard.md": {
+    "mtime": 1795061576.7654564,
+    "seen": 1795776002.987669,
+    "ast_hash": "3e38821686d15cc71fe08ccc78116a3b",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/menu.md": {
+    "mtime": 1795061576.7650733,
+    "seen": 1795776002.98767,
+    "ast_hash": "7cc7bef131e3301f1ebc2144ebf46333",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/navbar.md": {
+    "mtime": 1795061576.7656193,
+    "seen": 1795776002.9876711,
+    "ast_hash": "092502dcb3c0e9cebc949bfb226c2974",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/navigation-drawer.md": {
+    "mtime": 1795061576.7651026,
+    "seen": 1795776002.9876711,
+    "ast_hash": "0bd4bb16bf14f85a7689f1c549941909",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/persistent-app-tours.md": {
+    "mtime": 1795061576.7655578,
+    "seen": 1795776002.987672,
+    "ast_hash": "625b9983cefbd238c840fc1014f01176",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/persistent-toast-notifications.md": {
+    "mtime": 1795061576.765727,
+    "seen": 1795776002.987672,
+    "ast_hash": "89af2aea9954b3a1b9593efae178cc63",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/progress-ring.md": {
+    "mtime": 1795061576.7653797,
+    "seen": 1795776002.987673,
+    "ast_hash": "43a9980c6d83dba343e4332380e52db0",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/progress.md": {
+    "mtime": 1795061576.7659042,
+    "seen": 1795776002.987673,
+    "ast_hash": "727b3d333275b2be854e08c8767038ed",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/scrollspy.md": {
+    "mtime": 1795061576.7657335,
+    "seen": 1795776002.987674,
+    "ast_hash": "feaa864fcf950ec170cde189d29b7f48",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/spinner.md": {
+    "mtime": 1795061576.7665598,
+    "seen": 1795776002.987675,
+    "ast_hash": "a5cb76330bdfba8175239107a0b87b16",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/stack-drill-down.md": {
+    "mtime": 1795061576.7659059,
+    "seen": 1795776002.987675,
+    "ast_hash": "704736a0ba76a76651379bb26612999b",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/tabs.md": {
+    "mtime": 1795061576.7665682,
+    "seen": 1795776002.987676,
+    "ast_hash": "a09e513a9c725f5255bc9ec414a0ed3d",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/ui-components/toolbar.md": {
+    "mtime": 1795061576.766058,
+    "seen": 1795776002.987676,
+    "ast_hash": "461310247f1f6502ee5e576e3bfb8f37",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/user-experience/content-first-noise-reduction.md": {
+    "mtime": 1795061576.7640877,
+    "seen": 1795776002.9876769,
+    "ast_hash": "82dc61597ee6b19709e295d13a705afc",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/user-experience/form-factor-adaptation.md": {
+    "mtime": 1795061576.7644444,
+    "seen": 1795776002.9876769,
+    "ast_hash": "f63c5a5e05954b363c097bd3f142fcd7",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/user-experience/natural-interactions.md": {
+    "mtime": 1795061576.7642272,
+    "seen": 1795776002.987678,
+    "ast_hash": "73155a42b6e5a819c5cf7685f1dfb31e",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/adapt-scrollbar-to-contrast-preferences.md": {
+    "mtime": 1795061576.7620895,
+    "seen": 1795776002.987679,
+    "ast_hash": "4b74c373703c75c0d127d2723bc42f9a",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/apply-webgl-shaders.md": {
+    "mtime": 1795061576.7635922,
+    "seen": 1795776002.987679,
+    "ast_hash": "032dd22b7f33ce070554f4c629e875d0",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/browser-ui-theming.md": {
+    "mtime": 1795061576.7630696,
+    "seen": 1795776002.98768,
+    "ast_hash": "32fbf96bd0dcd14f6e57a01dbf0151aa",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/color.md": {
+    "mtime": 1795061576.7624896,
+    "seen": 1795776002.987681,
+    "ast_hash": "00a910fe1c9db0dbfc59545bd0371082",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/complex-shapes.md": {
+    "mtime": 1795061576.762399,
+    "seen": 1795776002.987681,
+    "ast_hash": "f0defb1104bfa7266b8682fcee5a7030",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/contrast-color.md": {
+    "mtime": 1795061576.7626238,
+    "seen": 1795776002.987682,
+    "ast_hash": "4ea1dbe6d8c2377a51416fe877ded103",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/custom-text-decorations.md": {
+    "mtime": 1795061576.762417,
+    "seen": 1795776002.987682,
+    "ast_hash": "5f27a6b19473f2f6e661469550c11d3b",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/customize-scrollbar-color-and-thickness.md": {
+    "mtime": 1795061576.7628489,
+    "seen": 1795776002.987683,
+    "ast_hash": "394700f80c2ddac2e8d4052c41658861",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/dark-mode.md": {
+    "mtime": 1795061576.7635095,
+    "seen": 1795776002.987684,
+    "ast_hash": "275cdc7156f2a5ee3b83898b910d23dd",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/equal-width-text-lines.md": {
+    "mtime": 1795061576.7626543,
+    "seen": 1795776002.987684,
+    "ast_hash": "80a19187d0781ce1674f28837d161bf0",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/export-html-media-from-canvas.md": {
+    "mtime": 1795061576.7629247,
+    "seen": 1795776002.9876852,
+    "ast_hash": "7ee9fa2be04c30f162a0a1d58f35430a",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/expose-canvas-content-to-browser-features.md": {
+    "mtime": 1795061576.7628517,
+    "seen": 1795776002.9876852,
+    "ast_hash": "7d33fdb03d73731a5610e518fb279828",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/improve-text-layout-and-legibility.md": {
+    "mtime": 1795061576.7634058,
+    "seen": 1795776002.987686,
+    "ast_hash": "a6f619a8fcad2d11b5ffefb2224679f9",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/interactive-content-in-3d-scenes.md": {
+    "mtime": 1795061576.7632618,
+    "seen": 1795776002.9876869,
+    "ast_hash": "ecb90d2125b123525aafcd1dfd4cf86f",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/precise-text-alignment.md": {
+    "mtime": 1795061576.7630715,
+    "seen": 1795776002.9876869,
+    "ast_hash": "c422df3027acc4dbd5d8d4fc1d4b5bad",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/shaped-cutouts.md": {
+    "mtime": 1795061576.7631452,
+    "seen": 1795776002.9876878,
+    "ast_hash": "3627fa4bbb4a37dc46c70e5ed773199e",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/soft-edge-content-fade.md": {
+    "mtime": 1795061576.76332,
+    "seen": 1795776002.9876878,
+    "ast_hash": "6aa27897428e36e6baa6fd3cfb8108d2",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/typography.md": {
+    "mtime": 1795061576.7636669,
+    "seen": 1795776002.987689,
+    "ast_hash": "1c8437e2182b10ccb789feea4cfadbcc",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/visual-effects.md": {
+    "mtime": 1795061576.7633164,
+    "seen": 1795776002.98769,
+    "ast_hash": "42502b6b8031651804036bbea88d97fc",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/visually-stable-font-fallbacks.md": {
+    "mtime": 1795061576.7639253,
+    "seen": 1795776002.98769,
+    "ast_hash": "86ecada272179e23075d43924d9d51cd",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/visually-stable-mixed-fonts.md": {
+    "mtime": 1795061576.7635005,
+    "seen": 1795776002.987691,
+    "ast_hash": "57dd77b79bc39a246b91178588501419",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/visual-design/visually-texture-content.md": {
+    "mtime": 1795061576.7639577,
+    "seen": 1795776002.987691,
+    "ast_hash": "729d2f440179417e51c16ec837152950",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/wasm/cpp-on-the-web.md": {
+    "mtime": 1795061576.7639105,
+    "seen": 1795776002.987692,
+    "ast_hash": "bf656b4242ff3bb9eb302b05b83a2c54",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/webmcp/agentic-forms.md": {
+    "mtime": 1795061576.7637794,
+    "seen": 1795776002.987693,
+    "ast_hash": "d4b064c00a722ac4084a8bf67ee62566",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/webmcp/agentic-javascript-tools.md": {
+    "mtime": 1795061576.7638395,
+    "seen": 1795776002.987693,
+    "ast_hash": "7b4a23574d337da176b861eda4650c3c",
+    "semantic_hash": ""
+  },
+  ".agents/skills/modern-web-guidance/guides/webmcp/webmcp.md": {
+    "mtime": 1795061576.764374,
+    "seen": 1795776002.987694,
+    "ast_hash": "2cb5f3a7f19f405fa87384e0df1b4f73",
+    "semantic_hash": ""
+  },
+  ".agents/skills/vite-patterns/SKILL.md": {
+    "mtime": 1793749856.0807703,
+    "seen": 1795776002.987694,
+    "ast_hash": "7ba593f0ee1cac3c587f3ed38da304bb",
+    "semantic_hash": ""
+  },
+  "AGENTS.md": {
+    "mtime": 1795664591.7712166,
+    "seen": 1795776002.9876952,
+    "ast_hash": "302d15c9c18814cb3ab67131a25221cc",
+    "semantic_hash": ""
+  },
+  "CLAUDE.md": {
+    "mtime": 1795594475.5808525,
+    "seen": 1795776002.9876962,
+    "ast_hash": "a3f4b39958889534b3ad6961f38f2af1",
+    "semantic_hash": ""
+  },
+  "DESIGN.md": {
+    "mtime": 1795060734.5501194,
+    "seen": 1795776002.9876962,
+    "ast_hash": "82a47d137272e5277c689ff02e59efc9",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1795669453.165788,
+    "seen": 1795776002.987697,
+    "ast_hash": "605021d74254d3c919b8ebe8a359b1c0",
+    "semantic_hash": ""
+  },
+  "docs/IMPLEMENTATION_PLAN.md": {
+    "mtime": 1795751503.512981,
+    "seen": 1795776002.987697,
+    "ast_hash": "dcbf66ea45587f03426841c421cf14b2",
+    "semantic_hash": ""
+  },
+  "index.html": {
+    "mtime": 1795775906.6579797,
+    "seen": 1795776002.9876978,
+    "ast_hash": "d93c1c5b4789aa158f6ea6ad41e09bf8",
+    "semantic_hash": ""
+  },
+  "assets/images/indogreen.png": {
+    "mtime": 1795161436.67539,
+    "seen": 1795776002.987699,
+    "ast_hash": "9f76757ff68ac5c68a8f66c6026bbfef",
+    "semantic_hash": ""
+  },
+  "package-lock.json": {
+    "mtime": 1795625139.9578247,
+    "seen": 1795776002.987699,
+    "ast_hash": "67d1335f5c04b0009c6e7b13029daea7",
+    "semantic_hash": ""
   }
 }
