@@ -41,7 +41,8 @@ export function getHeroCardHtml({ mode, input, result }) {
     const jumlahModul = result.battery?.jumlahModulBattery || 0;
     const batteryUnitKwh = result.battery?.batteryModuleKwh || 5;
     const batteryFormula = result.battery?.batteryFormula || `${batteryKwh}`;
-    const batteryDesc = jumlahModul > 1 ? `${jumlahModul} Unit (${batteryFormula} kWh)` : `1 Unit (${batteryUnitKwh} kWh)`;
+    const batteryDesc = result.battery?.batteryDesc
+      || (jumlahModul > 1 ? `${jumlahModul} Unit (${batteryFormula})` : `1 Unit @ ${batteryUnitKwh} kWh`);
     const persenCover = result.inputs?.persenCover ?? 100;
     const persenSiang = result.inputs?.persenSiang ?? 40;
     const persenMalam = result.inputs?.persenMalam ?? 60;

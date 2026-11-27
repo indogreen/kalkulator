@@ -41,9 +41,11 @@ export function generateWhatsAppMessage(mode, input = {}, result = {}) {
     const jumlahBattery = result.battery?.jumlahModulBattery || 0;
     const batteryUnitKwh = result.battery?.batteryModuleKwh || 5;
     const batteryFormula = result.battery?.batteryFormula || `${batteryUnitKwh}`;
-    const batteryDesc = jumlahBattery > 1
-      ? `${jumlahBattery} Unit @ ${batteryUnitKwh} kWh (${batteryFormula} kWh)`
-      : `1 Unit @ ${batteryUnitKwh} kWh`;
+    const batteryDesc = result.battery?.batteryDesc
+      || (jumlahBattery > 1 ? `${jumlahBattery} Unit @ ${batteryUnitKwh} kWh (${batteryFormula})` : `1 Unit @ ${batteryUnitKwh} kWh`);
+    const otherOptions = result.battery?.options && result.battery.options.length > 1
+      ? `  (Opsi alternatif simetris: ${result.battery.options.map(o => `${o.count} Unit @ ${o.unitKwh}kWh`).join(' / ')})`
+      : '';
 
     return [
       'Halo Tim Engineering PT. Indogreen Technology And Management,',
@@ -56,6 +58,7 @@ export function generateWhatsAppMessage(mode, input = {}, result = {}) {
       `- Estimasi Kebutuhan Luas Atap: ± ${luasAtap} m² (Dimensi ${panelDim} per panel)`,
       `- Rekomendasi Hybrid Inverter: ${inverterKw}`,
       `- Rekomendasi Baterai LiFePO4: ${batteryKwh} (${batteryDesc})`,
+      ...(otherOptions ? [otherOptions] : []),
       '',
       'Mohon dapat dibantu survei lokasi dan penawaran harga resminya. Terima kasih.'
     ].join('\n');

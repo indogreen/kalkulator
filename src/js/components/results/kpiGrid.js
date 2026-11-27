@@ -39,9 +39,13 @@ export function getKpiGridHtml({ mode, input, result }) {
     const jumlahModul = result.battery?.jumlahModulBattery || 0;
     const moduleKwh = result.battery?.batteryModuleKwh || 5;
     const batteryFormula = result.battery?.batteryFormula || `${batteryKwh}`;
-    const batteryDesc = jumlahModul > 1 ? `${jumlahModul} unit (${batteryFormula} kWh)` : `1 unit (${moduleKwh} kWh)`;
+    const batteryDesc = result.battery?.batteryDesc
+      || (jumlahModul > 1 ? `${jumlahModul} unit (${batteryFormula})` : `1 unit @ ${moduleKwh} kWh`);
     const dodPct = Math.round((result.battery?.batteryDoD || 0.85) * 100);
     const kwhMalamHari = result.energy?.kwhMalamHari || 0;
+    const optionsSummary = result.battery?.options && result.battery.options.length > 1
+      ? `Opsi: ${result.battery.options.map(o => `${o.count}×${o.unitKwh}kWh`).join(' | ')}`
+      : `Beban malam ${formatNumber(kwhMalamHari, 2)} kWh/hari (DoD ${dodPct}%)`;
 
     const hybridCards = [
       {
@@ -62,7 +66,7 @@ export function getKpiGridHtml({ mode, input, result }) {
         badge: '3. KAPASITAS BATTERY',
         value: `${formatNumber(batteryKwh, 0)} kWh`,
         sub: `≈ ${batteryDesc}`,
-        foot: `Beban malam ${formatNumber(kwhMalamHari, 2)} kWh/hari (DoD ${dodPct}%)`,
+        foot: optionsSummary,
         isHighlight: false
       }
     ];

@@ -460,8 +460,60 @@ export const HYBRID_SOLAR_PANELS = Object.freeze({
 export const HYBRID_BATTERY_UNITS = Object.freeze([
   { kwh: 5, label: '5 kWh', isDefault: true, description: '1 Unit Modul Baterai LiFePO4 5 kWh' },
   { kwh: 10, label: '10 kWh', isDefault: false, description: '1 Unit Modul Baterai LiFePO4 10 kWh' },
-  { kwh: 15, label: '15 kWh', isDefault: false, description: '1 Unit Modul Baterai LiFePO4 15 kWh' }
+  { kwh: 15, label: '15 kWh', isDefault: false, description: '1 Unit Modul Baterai LiFePO4 15 kWh' },
+  { kwh: 20, label: '20 kWh', isDefault: false, description: '1 Unit Modul Baterai LiFePO4 20 kWh' }
 ]);
+
+export const HYBRID_BATTERY_DATABASE = HYBRID_BATTERY_UNITS;
+
+/**
+ * Mendapatkan opsi konfigurasi modular simetris baterai berdasarkan total kapasitas yang dibutuhkan
+ * Misal: 20 kWh -> 4 unit @ 5kWh, 2 unit @ 10kWh, 1 unit @ 20kWh
+ * @param {number} totalKwh - Total kapasitas baterai bank (kWh)
+ * @returns {Array<{ unitKwh: number, count: number, totalKwh: number, label: string, shortLabel: string, formula: string, description: string }>}
+ */
+export function getBatteryConfigurationOptions(totalKwh) {
+  const kwh = Number(totalKwh) || 0;
+  if (kwh <= 0) return [];
+
+  const options = [];
+  for (const item of HYBRID_BATTERY_DATABASE) {
+    if (kwh % item.kwh === 0) {
+      const count = Math.round(kwh / item.kwh);
+      const formula = count > 1
+        ? Array(count).fill(`${item.kwh}`).join(' + ')
+        : `${item.kwh}`;
+      options.push({
+        unitKwh: item.kwh,
+        count,
+        totalKwh: kwh,
+        label: `${count} unit @ ${item.kwh}kWh`,
+        shortLabel: `${count} Unit @ ${item.kwh} kWh`,
+        formula: `${formula} kWh`,
+        description: count === 1
+          ? `1 Unit @ ${item.kwh} kWh`
+          : `${count} Unit @ ${item.kwh} kWh (${formula} kWh)`
+      });
+    }
+  }
+
+  // Jika tidak ada pembagian pas (edge case), berikan fallback kelipatan 5 kWh
+  if (options.length === 0) {
+    const count = Math.max(1, Math.ceil(kwh / 5));
+    const formula = count > 1 ? Array(count).fill('5').join(' + ') : '5';
+    options.push({
+      unitKwh: 5,
+      count,
+      totalKwh: count * 5,
+      label: `${count} unit @ 5kWh`,
+      shortLabel: `${count} Unit @ 5 kWh`,
+      formula: `${formula} kWh`,
+      description: count === 1 ? '1 Unit @ 5 kWh' : `${count} Unit @ 5 kWh (${formula} kWh)`
+    });
+  }
+
+  return options;
+}
 
 export const HYBRID_TECH_CONFIG = Object.freeze({
   PSH_HOURS: 3.8,               // Peak Sun Hours rata-rata Indonesia (jam/hari)

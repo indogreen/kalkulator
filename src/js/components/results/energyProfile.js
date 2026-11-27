@@ -73,12 +73,23 @@ export function getEnergyProfileHtml({ mode, result }) {
     {
       label: 'Rekomendasi Baterai Bank',
       value: `${formatNumber(result.battery?.kapasitasBatteryKwh || 0, 0)} kWh (${
-        (result.battery?.jumlahModulBattery || 0) > 1
-          ? `${result.battery?.jumlahModulBattery} Unit @ ${result.battery?.batteryModuleKwh || 5} kWh = ${result.battery?.batteryFormula} kWh`
-          : `1 Unit @ ${result.battery?.batteryModuleKwh || 5} kWh`
+        result.battery?.batteryDesc || (
+          (result.battery?.jumlahModulBattery || 0) > 1
+            ? `${result.battery?.jumlahModulBattery} Unit @ ${result.battery?.batteryModuleKwh || 5} kWh = ${result.battery?.batteryFormula}`
+            : `1 Unit @ ${result.battery?.batteryModuleKwh || 5} kWh`
+        )
       })`,
       highlight: true
-    }
+    },
+    ...(result.battery?.options && result.battery.options.length > 1 ? [{
+      label: 'Opsi Konfigurasi Simetris',
+      value: result.battery.options.map(opt => {
+        const isSelected = opt.unitKwh === result.battery.batteryModuleKwh;
+        return isSelected
+          ? `<strong>${opt.count} Unit @ ${opt.unitKwh}kWh (Terpilih)</strong>`
+          : `${opt.count} Unit @ ${opt.unitKwh}kWh`;
+      }).join(' • ')
+    }] : [])
   ];
 
   return `

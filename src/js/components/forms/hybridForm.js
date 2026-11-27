@@ -22,7 +22,8 @@ import {
   HYBRID_SOLAR_PANELS,
   HYBRID_BATTERY_UNITS,
   getHybridTariffOption,
-  getHybridSolarPanel
+  getHybridSolarPanel,
+  getBatteryConfigurationOptions
 } from '../../calculator/constants.js';
 import { formatNumber } from '../../utils/formatter.js';
 
@@ -45,6 +46,58 @@ export const HYBRID_SOLAR_PANEL_OPTIONS = Object.values(HYBRID_SOLAR_PANELS);
 export const MIN_VALID_MONTHLY_BILL = 50000;
 
 /**
+ * Menghitung kapasitas rekomendasi baterai bulat kelipatan 5 kWh
+ * @param {Object} currentParams
+ * @returns {number}
+ */
+export function getCalculatedBatteryCapacity(currentParams) {
+  const dayaObj = getHybridTariffOption(currentParams.kategori, currentParams.dayaId);
+  const totalKwhBulan = dayaObj.tariff > 0 ? (currentParams.biayaBulanan || 0) / dayaObj.tariff : 0;
+  const totalKwhHari = totalKwhBulan / HYBRID_TECH_CONFIG.DAYS_PER_MONTH;
+  const coverRatio = (currentParams.persenCover !== undefined ? currentParams.persenCover : 100) / 100;
+  const targetKwhHari = totalKwhHari * coverRatio;
+  const malamRatio = (currentParams.persenMalam !== undefined ? currentParams.persenMalam : 60) / 100;
+  const kwhMalamHari = targetKwhHari * malamRatio;
+  if (kwhMalamHari > 0) {
+    const rawBatteryKwh = kwhMalamHari / (HYBRID_TECH_CONFIG.BATTERY_DOD * HYBRID_TECH_CONFIG.BATTERY_EFFICIENCY);
+    return Math.max(5, Math.ceil(rawBatteryKwh / 5) * 5);
+  }
+  return 5;
+}
+
+/**
+ * Render HTML deretan kartu opsi baterai simetris
+ * @param {Array} options
+ * @param {number} selectedUnitKwh
+ * @returns {string}
+ */
+export function renderBatteryOptionCards(options, selectedUnitKwh) {
+  return options.map(opt => {
+    const isSelected = selectedUnitKwh === opt.unitKwh;
+    return `
+      <label for="radio-bat-${opt.unitKwh}" class="cursor-pointer block">
+        <input type="radio"
+          id="radio-bat-${opt.unitKwh}"
+          name="batteryUnitKwh"
+          value="${opt.unitKwh}"
+          class="sr-only peer"
+          ${isSelected ? 'checked' : ''}>
+        <div class="battery-card min-h-touch py-2.5 px-2 rounded-sm border text-center transition-all select-none peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-focus-visible:outline-offset-2 ${
+          isSelected
+            ? 'border-2 border-primary bg-ink text-on-dark font-bold'
+            : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
+        }">
+          <span class="text-xs mobile:text-sm font-bold block tabular-nums">${opt.count} Unit @ ${opt.unitKwh}kWh</span>
+          <span class="battery-sub text-[10px] font-medium block mt-0.5 ${
+            isSelected ? 'text-primary' : 'text-mute'
+          }">${opt.count > 1 ? `(${opt.formula})` : 'Single Pack (1 unit)'}</span>
+        </div>
+      </label>
+    `;
+  }).join('');
+}
+
+/**
  * Render formulir 7-langkah PLTS Hybrid Off-Grid ke dalam kontainer DOM
  *
  * @param {HTMLElement} container - Kontainer target DOM
@@ -55,7 +108,7 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
   const kategori = state.kategori === 'Bisnis' ? 'Bisnis' : 'Residential';
   const dayaObj = getHybridTariffOption(kategori, state.dayaId);
   const panelObj = getHybridSolarPanel(state.panelWp || HYBRID_TECH_CONFIG.PANEL_WP_DEFAULT);
-  const batteryUnitKwh = [5, 10, 15].includes(Number(state.batteryUnitKwh))
+  const batteryUnitKwh = [5, 10, 15, 20].includes(Number(state.batteryUnitKwh))
     ? Number(state.batteryUnitKwh)
     : 5;
   const biayaBulanan = state.biayaBulanan !== undefined && state.biayaBulanan !== null
@@ -86,6 +139,11 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
   const tariffList = HYBRID_PLN_TARIFFS[current.kategori];
   const initialKwhMonth = dayaObj.tariff > 0 ? current.biayaBulanan / dayaObj.tariff : 0;
   const initialKwhDay = initialKwhMonth / HYBRID_TECH_CONFIG.DAYS_PER_MONTH;
+  const initialBatteryCap = getCalculatedBatteryCapacity(current);
+  const initialBatteryOptions = getBatteryConfigurationOptions(initialBatteryCap);
+  if (!initialBatteryOptions.some(opt => opt.unitKwh === current.batteryUnitKwh)) {
+    current.batteryUnitKwh = (initialBatteryOptions.find(opt => opt.unitKwh === 5) || initialBatteryOptions[0]).unitKwh;
+  }
 
   container.innerHTML = `
     <form id="form-hybrid" class="flex flex-col gap-6" novalidate>
@@ -334,33 +392,16 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
             </div>
           </div>
 
-          <!-- Opsi 1 Unit Baterai Simetris -->
+          <!-- Opsi Konfigurasi Baterai Bank Simetris -->
           <div class="flex flex-col gap-1.5 pt-1">
-            <span class="text-xs font-semibold text-ink">Pilihan 1 Unit Baterai (Output Simetris):</span>
-            <div class="grid grid-cols-3 gap-2" role="radiogroup" aria-label="Pilihan Kapasitas 1 Unit Baterai LiFePO4">
-              ${HYBRID_BATTERY_UNITS.map(bat => {
-                const isSelected = current.batteryUnitKwh === bat.kwh;
-                return `
-                  <label for="radio-bat-${bat.kwh}" class="cursor-pointer block">
-                    <input type="radio"
-                      id="radio-bat-${bat.kwh}"
-                      name="batteryUnitKwh"
-                      value="${bat.kwh}"
-                      class="sr-only peer"
-                      ${isSelected ? 'checked' : ''}>
-                    <div class="battery-card min-h-touch py-2 px-2 rounded-sm border text-center transition-all select-none peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-focus-visible:outline-offset-2 ${
-                      isSelected
-                        ? 'border-2 border-primary bg-ink text-on-dark font-bold'
-                        : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
-                    }">
-                      <span class="text-sm font-bold block tabular-nums">${bat.label}</span>
-                      <span class="battery-sub text-[10px] font-medium block mt-0.5 ${
-                        isSelected ? 'text-primary' : 'text-mute'
-                      }">per unit</span>
-                    </div>
-                  </label>
-                `;
-              }).join('')}
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-semibold text-ink">
+                Pilihan Konfigurasi Baterai (<strong id="label-hybrid-battery-kwh" class="tabular-nums">${initialBatteryCap} kWh</strong>):
+              </span>
+              <span class="text-[11px] text-mute font-medium">Output Simetris</span>
+            </div>
+            <div id="container-hybrid-battery-options" class="grid grid-cols-1 mobile:grid-cols-3 gap-2" role="radiogroup" aria-label="Pilihan Konfigurasi Baterai LiFePO4">
+              ${renderBatteryOptionCards(initialBatteryOptions, current.batteryUnitKwh)}
             </div>
           </div>
         </div>
@@ -546,6 +587,7 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
         }
       });
       populateDayaDropdown(current.kategori);
+      syncBatteryOptionsUI();
       emitChange();
     });
   });
@@ -556,6 +598,7 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
       current.dayaId = dayaSelect.value;
       const chosen = getHybridTariffOption(current.kategori, current.dayaId);
       updateDayaDisplay(chosen);
+      syncBatteryOptionsUI();
       emitChange();
     });
   }
@@ -585,6 +628,7 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
       }
       syncBillChips(numVal);
       updateKwhPreview();
+      syncBatteryOptionsUI();
       emitChange();
     });
 
@@ -605,6 +649,7 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
       updateBillErrorState(false);
       syncBillChips(val);
       updateKwhPreview();
+      syncBatteryOptionsUI();
       emitChange();
     });
   });
@@ -643,6 +688,7 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
     if (lblDay) lblDay.textContent = `${clampedDay}%`;
     if (lblNight) lblNight.textContent = `${nightVal}%`;
 
+    syncBatteryOptionsUI();
     emitChange();
   }
 
@@ -700,6 +746,7 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
           }`;
         }
       });
+      syncBatteryOptionsUI();
       emitChange();
     });
   });
@@ -728,27 +775,49 @@ export function renderHybridForm(container, state = {}, onChange = () => {}) {
     });
   });
 
-  // 5. Pilihan 1 Unit Baterai Radio Cards
-  container.querySelectorAll('input[name="batteryUnitKwh"]').forEach(radio => {
-    radio.addEventListener('change', () => {
-      current.batteryUnitKwh = Number(radio.value) || 5;
-      container.querySelectorAll('input[name="batteryUnitKwh"]').forEach(r => {
-        const card = r.parentElement?.querySelector('.battery-card');
-        const sub = r.parentElement?.querySelector('.battery-sub');
-        if (card) {
-          card.className = `battery-card min-h-touch py-2 px-2 rounded-sm border text-center transition-all select-none peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-focus-visible:outline-offset-2 ${
-            r.checked
-              ? 'border-2 border-primary bg-ink text-on-dark font-bold'
-              : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
-          }`;
-        }
-        if (sub) {
-          sub.className = `battery-sub text-[10px] font-medium block mt-0.5 ${
-            r.checked ? 'text-primary' : 'text-mute'
-          }`;
-        }
+  // 5. Pilihan Konfigurasi Baterai Bank Simetris Radio Cards
+  function bindBatteryRadioListeners() {
+    container.querySelectorAll('input[name="batteryUnitKwh"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        current.batteryUnitKwh = Number(radio.value) || 5;
+        container.querySelectorAll('input[name="batteryUnitKwh"]').forEach(r => {
+          const card = r.parentElement?.querySelector('.battery-card');
+          const sub = r.parentElement?.querySelector('.battery-sub');
+          if (card) {
+            card.className = `battery-card min-h-touch py-2.5 px-2 rounded-sm border text-center transition-all select-none peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-primary peer-focus-visible:outline-offset-2 ${
+              r.checked
+                ? 'border-2 border-primary bg-ink text-on-dark font-bold'
+                : 'border-hairline bg-surface-soft text-ink hover:border-hairline-strong'
+            }`;
+          }
+          if (sub) {
+            sub.className = `battery-sub text-[10px] font-medium block mt-0.5 ${
+              r.checked ? 'text-primary' : 'text-mute'
+            }`;
+          }
+        });
+        emitChange();
       });
-      emitChange();
     });
-  });
+  }
+
+  function syncBatteryOptionsUI() {
+    const newCap = getCalculatedBatteryCapacity(current);
+    const options = getBatteryConfigurationOptions(newCap);
+
+    if (!options.some(opt => opt.unitKwh === current.batteryUnitKwh)) {
+      current.batteryUnitKwh = (options.find(opt => opt.unitKwh === 5) || options[0]).unitKwh;
+    }
+
+    const lbl = container.querySelector('#label-hybrid-battery-kwh');
+    if (lbl) lbl.textContent = `${newCap} kWh`;
+
+    const optContainer = container.querySelector('#container-hybrid-battery-options');
+    if (optContainer) {
+      optContainer.innerHTML = renderBatteryOptionCards(options, current.batteryUnitKwh);
+      bindBatteryRadioListeners();
+    }
+  }
+
+  bindBatteryRadioListeners();
 }

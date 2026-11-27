@@ -621,23 +621,31 @@ Ketika Anda siap memulai proses implementasi kode:
      - **Rp 5 Jt** (Rp 5.000.000)
    - Nilai default awal state aplikasi diatur ke **Rp 1.000.000** (`biayaBulanan: 1000000`).
 
-2. **Pilihan Kapasitas 1 Unit Baterai LiFePO4 (`HYBRID_BATTERY_UNITS`)**:
-   - Disediakan 3 pilihan kapasitas per unit modul baterai:
+2. **Database Unit Baterai LiFePO4 (`HYBRID_BATTERY_DATABASE`)**:
+   - Disediakan 4 pilihan kapasitas unit modul baterai resmi dalam database:
      - **5 kWh** (**Default**, LiFePO4 51.2V 100Ah nominal)
      - **10 kWh** (LiFePO4 51.2V 200Ah nominal)
      - **15 kWh** (LiFePO4 51.2V 300Ah nominal)
-   - Input radio interaktif ditempatkan pada Step 5 (Sistem PLTS & Baterai) di `hybridForm.js`.
+     - **20 kWh** (LiFePO4 51.2V 400Ah nominal)
+   - Input radio interaktif ditempatkan pada Step 5 (Sistem PLTS & Baterai) di `hybridForm.js` yang secara dinamis menyajikan kombinasi modular simetris yang valid.
 
-3. **Logika Output Rekomendasi Baterai Modular Simetris (`hybrid.js`)**:
-   - Seluruh modul bank baterai dirancang **simetris** dari unit kapasitas yang sama (contoh: `5 + 5` atau `10 + 10` atau `15 + 15`), dan **tidak mencampur unit asimetris** (seperti `5 + 10`).
-   - Formula kalkulasi:
+3. **Logika Output Rekomendasi Baterai Modular Simetris (`hybrid.js`, `getBatteryConfigurationOptions`)**:
+   - Menghitung kapasitas rekomendasi baterai bulat kelipatan 5 kWh:
      $$\text{Kebutuhan Bersih Baterai (kWh)} = \frac{\text{kWh Malam Hari}}{0.85 \times 0.95}$$
-     $$\text{Jumlah Modul} = \max\left(1, \left\lceil \frac{\text{Kebutuhan Bersih Baterai}}{\text{Kapasitas Unit Terpilih}} \right\rceil\right)$$
-     $$\text{Total Kapasitas Baterai Bank} = \text{Jumlah Modul} \times \text{Kapasitas Unit Terpilih}$$
-     $$\text{Formula Simetris} = \underbrace{\text{Kapasitas Unit} + \text{Kapasitas Unit} + \dots + \text{Kapasitas Unit}}_{\text{Jumlah Modul}}$$
+     $$\text{Kapasitas Baterai Bank (kWh)} = \max\left(5, \left\lceil \frac{\text{Kebutuhan Bersih Baterai}}{5} \right\rceil \times 5\right)$$
+   - Menghasilkan opsi konfigurasi yang habis membagi kapasitas target ($K \pmod{u} == 0$) dari database {5, 10, 15, 20 kWh}:
+     - Contoh jika output **20 kWh**:
+       - **4 unit @ 5kWh** ($4 \times 5 = 20\text{ kWh}$)
+       - **2 unit @ 10kWh** ($2 \times 10 = 20\text{ kWh}$)
+       - **1 unit @ 20kWh** ($1 \times 20 = 20\text{ kWh}$)
+       *(15 kWh tidak ditampilkan sebagai opsi karena bukan pembagi simetris dari 20 kWh).*
+     - Contoh jika output **30 kWh**:
+       - **6 unit @ 5kWh**, **3 unit @ 10kWh**, **2 unit @ 15kWh**
+     - Contoh jika output **45 kWh**:
+       - **9 unit @ 5kWh**, **3 unit @ 15kWh**
 
 4. **Visualisasi Hasil & Integrasi WhatsApp**:
-   - **Hero Card & KPI Grid**: Menampilkan total kapasitas baterai beserta deskripsi simetris (misal: `20 kWh (4 Unit @ 5 kWh (5 + 5 + 5 + 5 kWh))`).
-   - **Profil Energi Pelanggan**: Menyertakan detail unit per modul dan rumus simetris.
-   - **WhatsApp Hotline Generator**: Mengirim rincian rekomendasi baterai simetris ke tim sales engineering PT. Indogreen.
+   - **Hero Card & KPI Grid**: Menampilkan total kapasitas baterai beserta unit terpilih dan ringkasan opsi tersedia (misal: `20 kWh (4 Unit @ 5 kWh)` atau `2 Unit @ 10 kWh` atau `1 Unit @ 20 kWh`).
+   - **Profil Energi Pelanggan**: Menyertakan detail unit terpilih dan daftar opsi konfigurasi simetris yang tersedia.
+   - **WhatsApp Hotline Generator**: Mengirim rincian rekomendasi baterai simetris terpilih beserta opsi alternatif simetrisnya ke tim sales engineering PT. Indogreen.
 

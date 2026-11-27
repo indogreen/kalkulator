@@ -381,7 +381,7 @@ describe('Hybrid Form Component (hybridForm.js)', () => {
     elements['label-hybrid-kategori'] = createMockEl('label-hybrid-kategori');
     elements['badge-hybrid-daya-status'] = createMockEl('badge-hybrid-daya-status');
     elements['display-hybrid-tariff'] = createMockEl('display-hybrid-tariff');
-    elements['input-hybrid-bill'] = createMockEl('input-hybrid-bill', '2.500.000');
+    elements['input-hybrid-bill'] = createMockEl('input-hybrid-bill', '1.000.000');
     elements['error-hybrid-bill'] = createMockEl('error-hybrid-bill');
     elements['preview-hybrid-kwh-month'] = createMockEl('preview-hybrid-kwh-month');
     elements['preview-hybrid-kwh-day'] = createMockEl('preview-hybrid-kwh-day');
@@ -407,7 +407,8 @@ describe('Hybrid Form Component (hybridForm.js)', () => {
 
     const bat5 = createMockEl('radio-bat-5', '5');
     const bat10 = createMockEl('radio-bat-10', '10');
-    radioGroups.batteryUnitKwh = [bat5, bat10];
+    const bat20 = createMockEl('radio-bat-20', '20');
+    radioGroups.batteryUnitKwh = [bat5, bat10, bat20];
 
     const mockContainer = {
       innerHTML: '',
@@ -424,7 +425,7 @@ describe('Hybrid Form Component (hybridForm.js)', () => {
       }
     };
 
-    renderHybridForm(mockContainer, { biayaBulanan: 2500000, persenSiang: 40 }, (state) => {
+    renderHybridForm(mockContainer, { biayaBulanan: 1000000, persenSiang: 40 }, (state) => {
       capturedState = state;
     });
 

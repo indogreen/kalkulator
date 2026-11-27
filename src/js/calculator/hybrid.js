@@ -10,7 +10,12 @@
  * - Pricing/Cost module intentionally deferred to next phase (pricing: null)
  */
 
-import { HYBRID_TECH_CONFIG, getHybridTariffOption, getHybridSolarPanel } from './constants.js';
+import {
+  HYBRID_TECH_CONFIG,
+  getHybridTariffOption,
+  getHybridSolarPanel,
+  getBatteryConfigurationOptions
+} from './constants.js';
 
 /**
  * Memilih ukuran kapasitas inverter standar terdekat ke atas
@@ -45,7 +50,7 @@ export function calculateHybridOffGrid(params = {}) {
   const panelConfig = getHybridSolarPanel(params.panelWp || HYBRID_TECH_CONFIG.PANEL_WP_DEFAULT);
   const panelWp = panelConfig.wp;
 
-  const validBatteryUnits = [5, 10, 15];
+  const validBatteryUnits = [5, 10, 15, 20];
   const batteryUnitKwh = validBatteryUnits.includes(Number(params.batteryUnitKwh))
     ? Number(params.batteryUnitKwh)
     : HYBRID_TECH_CONFIG.BATTERY_MODULE_KWH;
@@ -103,21 +108,38 @@ export function calculateHybridOffGrid(params = {}) {
     kapasitasInverterKw = resolveStandardInverterKw(minInverterReq);
   }
 
-  // 4. Sizing Kapasitas Battery Bank LiFePO4 Simetris (Modular 5, 10, atau 15 kWh per unit)
+  // 4. Sizing Kapasitas Battery Bank LiFePO4 Simetris (Modular 5, 10, 15, atau 20 kWh per unit)
   let rawBatteryKwh = 0;
+  let baseCapacityKwh = 0;
+  let batteryOptions = [];
+  let selectedConfig = null;
   let jumlahModulBattery = 0;
   let kapasitasBatteryKwh = 0;
   let batteryFormula = '';
+  let batteryModuleKwh = batteryUnitKwh;
+
   if (targetKwhHari > 0) {
     if (kwhMalamHari > 0) {
       rawBatteryKwh = kwhMalamHari / (HYBRID_TECH_CONFIG.BATTERY_DOD * HYBRID_TECH_CONFIG.BATTERY_EFFICIENCY);
-      jumlahModulBattery = Math.max(1, Math.ceil(rawBatteryKwh / batteryUnitKwh));
+      baseCapacityKwh = Math.max(5, Math.ceil(rawBatteryKwh / 5) * 5);
     } else {
-      // Buffer minimum 1 unit untuk stabilitas arsitektur Hybrid Off-Grid
-      jumlahModulBattery = 1;
+      // Buffer minimum 1 unit (5 kWh) untuk stabilitas arsitektur Hybrid Off-Grid
+      baseCapacityKwh = 5;
     }
-    kapasitasBatteryKwh = Number((jumlahModulBattery * batteryUnitKwh).toFixed(2));
-    batteryFormula = Array(jumlahModulBattery).fill(`${batteryUnitKwh}`).join(' + ');
+
+    batteryOptions = getBatteryConfigurationOptions(baseCapacityKwh);
+
+    // Cari konfigurasi yang sesuai dengan batteryUnitKwh yang dipilih pengguna
+    selectedConfig = batteryOptions.find(opt => opt.unitKwh === batteryUnitKwh);
+    if (!selectedConfig) {
+      // Fallback ke opsi default (misal opsi pertama atau unit 5 kWh)
+      selectedConfig = batteryOptions.find(opt => opt.unitKwh === 5) || batteryOptions[0];
+    }
+
+    jumlahModulBattery = selectedConfig.count;
+    batteryModuleKwh = selectedConfig.unitKwh;
+    kapasitasBatteryKwh = selectedConfig.totalKwh;
+    batteryFormula = selectedConfig.formula;
   }
 
   return {
@@ -164,8 +186,11 @@ export function calculateHybridOffGrid(params = {}) {
     battery: {
       kapasitasBatteryKwh,
       jumlahModulBattery,
-      batteryModuleKwh: batteryUnitKwh,
+      batteryModuleKwh,
       batteryFormula,
+      batteryDesc: selectedConfig ? selectedConfig.description : '',
+      options: batteryOptions,
+      selectedOption: selectedConfig,
       batteryDoD: HYBRID_TECH_CONFIG.BATTERY_DOD,
       batteryEfficiency: HYBRID_TECH_CONFIG.BATTERY_EFFICIENCY,
       rawBatteryKwh: Number(rawBatteryKwh.toFixed(2))
