@@ -4,11 +4,12 @@
  */
 import http from 'node:http';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const PORT = process.env.PORT || 3000;
-const HOST = process.env.HOST;
+const HOST = process.env.HOST || '0.0.0.0';
 
 export const MIME_TYPES = {
   '.html': 'text/html; charset=utf-8',
@@ -89,6 +90,23 @@ export function createStaticHandler(rootDir = process.cwd()) {
   };
 }
 
+/**
+ * Detect active IPv4 addresses on non-internal network interfaces
+ * @returns {string[]}
+ */
+export function getLocalIpv4Addresses() {
+  const interfaces = os.networkInterfaces();
+  const addresses = [];
+  for (const name of Object.keys(interfaces)) {
+    for (const iface of interfaces[name] || []) {
+      if (iface.family === 'IPv4' && !iface.internal) {
+        addresses.push(iface.address);
+      }
+    }
+  }
+  return addresses;
+}
+
 const isDirectRun = Boolean(
   process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)
 );
@@ -96,19 +114,24 @@ const isDirectRun = Boolean(
 if (isDirectRun) {
   const server = http.createServer(createStaticHandler(process.cwd()));
   const onListen = () => {
+    const localIps = getLocalIpv4Addresses();
     console.log(`\n===============================================================`);
     console.log(`  PT. INDOGREEN TECHNOLOGY AND MANAGEMENT`);
     console.log(`  Kalkulator Energi Surya Interaktif`);
     console.log(`===============================================================`);
-    console.log(`  > Server lokal aktif di: http://localhost:${PORT}`);
-    console.log(`  > Buka tautan di atas pada browser untuk melihat kalkulator.`);
+    console.log(`  ➜  Local:   http://localhost:${PORT}`);
+    if (localIps.length > 0) {
+      localIps.forEach(ip => {
+        console.log(`  ➜  Network: http://${ip}:${PORT}`);
+      });
+    } else {
+      console.log(`  ➜  Network: (Tidak ada antarmuka jaringan aktif)`);
+    }
+    console.log(`===============================================================`);
+    console.log(`  > Buka tautan Network pada HP/tablet di jaringan Wi-Fi yang sama.`);
     console.log(`  > Cache-Control: no-store (sinkron real-time dengan Cloudflare Tunnel)`);
     console.log(`  > Tekan Ctrl+C untuk menghentikan server.\n`);
   };
 
-  if (HOST) {
-    server.listen(PORT, HOST, onListen);
-  } else {
-    server.listen(PORT, onListen);
-  }
+  server.listen(PORT, HOST, onListen);
 }

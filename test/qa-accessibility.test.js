@@ -19,7 +19,7 @@ import { getHeroCardHtml } from '../src/js/components/results/heroCard.js';
 import { calculateHybridOffGrid } from '../src/js/calculator/hybrid.js';
 import { calculateResidential } from '../src/js/calculator/residential.js';
 import { applyCacheBustingToHtml, computeAssetHash } from '../scripts/build.js';
-import { applyNoCacheHeaders, createStaticHandler } from '../scripts/serve.js';
+import { applyNoCacheHeaders, createStaticHandler, getLocalIpv4Addresses } from '../scripts/serve.js';
 
 describe('Phase 8: Accessibility & WCAG 2.1 AA Audit', () => {
   const indexHtml = fs.readFileSync(path.resolve('index.html'), 'utf8');
@@ -175,7 +175,7 @@ describe('Phase 8: Build Verification & Zero External Dependency Leak Check', ()
     assert.ok(content.includes('#00b100'), 'Compiled CSS must contain INDOGREEN primary green #00b100');
   });
 
-  test('4. Cache-busting hashes in index.html match built dist assets', () => {
+  test('4. Clean asset references in index.html without query strings and valid hash utility', () => {
     const sampleHtml = '<link rel="stylesheet" href="./dist/css/style.css"><script src="./dist/js/bundle.js"></script><img src="./assets/images/indogreen.png">';
     const busted = applyCacheBustingToHtml(sampleHtml, { css: 'aaaa1111', js: 'bbbb2222', logo: 'cccc3333' });
     assert.ok(busted.includes('./dist/css/style.css?v=aaaa1111'));
@@ -188,16 +188,18 @@ describe('Phase 8: Build Verification & Zero External Dependency Leak Check', ()
     assert.ok(rebusted.includes('./dist/js/bundle.js?v=eeee5555'));
     assert.ok(!rebusted.includes('aaaa1111'));
 
+    // index.html maintains clean URLs without query version strings
     const indexHtml = fs.readFileSync(path.resolve('index.html'), 'utf8');
-    const cssHash = computeAssetHash('dist/css/style.css');
-    const jsHash = computeAssetHash('dist/js/bundle.js');
-    const logoHash = computeAssetHash('assets/images/indogreen.png');
-    assert.ok(indexHtml.includes(`./dist/css/style.css?v=${cssHash}`), 'index.html CSS href must include current content hash');
-    assert.ok(indexHtml.includes(`./dist/js/bundle.js?v=${jsHash}`), 'index.html JS src must include current content hash');
-    assert.ok(indexHtml.includes(`./assets/images/indogreen.png?v=${logoHash}`), 'index.html logo src must include current content hash');
+    assert.ok(indexHtml.includes('href="./dist/css/style.css"'), 'index.html CSS href must be clean');
+    assert.ok(indexHtml.includes('src="./dist/js/bundle.js"'), 'index.html JS src must be clean');
+    assert.ok(indexHtml.includes('src="./assets/images/indogreen.png"'), 'index.html logo src must be clean');
+    assert.ok(!indexHtml.includes('style.css?v='), 'index.html must not contain style.css?v= query string');
+    assert.ok(!indexHtml.includes('bundle.js?v='), 'index.html must not contain bundle.js?v= query string');
+    assert.ok(!indexHtml.includes('indogreen.png?v='), 'index.html must not contain indogreen.png?v= query string');
   });
 
-  test('5. Static server emits no-cache & Cloudflare CDN bypass headers', async () => {
+  test('5. Static server emits no-cache headers and discovers local IPv4 addresses', async () => {
+    assert.ok(Array.isArray(getLocalIpv4Addresses()), 'getLocalIpv4Addresses must return an array');
     const headers = {};
     const mockRes = {
       statusCode: 0,

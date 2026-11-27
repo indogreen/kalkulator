@@ -158,12 +158,13 @@ const isDirectRun = Boolean(
 );
 
 if (isDirectRun) {
-  const hashOnly = process.argv.includes('--hash-only');
-  if (!hashOnly) {
-    buildBundle();
-  }
-  const htmlUpdated = updateHtmlAssetVersions();
-  if (htmlUpdated) {
-    console.log('✓ Updated cache-busting asset hashes in index.html');
+  buildBundle();
+
+  const updateHtml = process.argv.includes('--update-html-hash');
+  if (updateHtml) {
+    const htmlUpdated = updateHtmlAssetVersions();
+    if (htmlUpdated) {
+      console.log('✓ Updated cache-busting asset hashes in index.html');
+    }
   }
 }
