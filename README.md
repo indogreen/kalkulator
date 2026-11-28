@@ -144,7 +144,42 @@ Menjalankan 75 pengujian otomatis (18 suite) mencakup:
 - Verifikasi build produksi, cache-busting hash aset, header server, dan kebocoran dependensi eksternal.
 
 ### CI/CD (GitHub Actions)
-Workflow [`.github/workflows/ci.yml`](.github/workflows/ci.yml) menjalankan verifikasi dokumen fondasi, build aset produksi (`npm run build`), dan seluruh test suite (`npm test`) secara otomatis pada event `push` dan `pull_request` ke branch `main`. Branch `phase/**` dan `feature/**` tidak lagi memicu workflow CI.
+
+Proyek ini dilengkapi pipeline otomasi pengujian dan penyebaran berkesinambungan (CI/CD):
+
+1. **Continuous Integration ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)):**
+   - Menjalankan verifikasi dokumen fondasi, kompilasi build aset produksi (`npm run build`), dan seluruh test suite (`npm test`) secara otomatis pada event `push` dan `pull_request` ke branch `main`.
+   - Menggunakan concurrency cancel-in-progress untuk membatalkan pengujian lama saat ada commit baru.
+
+2. **Continuous Deployment ([`.github/workflows/cd.yml`](.github/workflows/cd.yml)):**
+   - Berjalan pada **GitHub Self-Hosted Runner** di server lokal (`192.168.1.34`).
+   - Dilengkapi **Fork Guard** (`if: github.repository == 'indogreen/kalkulator'`) agar tidak menggantung di antrean repo fork.
+   - Menggunakan token bawaan `${{ secrets.GITHUB_TOKEN }}` via `x-access-token` dan `safe.directory` untuk sinkronisasi Git otomatis.
+   - Alur deployment 4 tahap: Git Sync ➔ `npm ci` & `npm run build` ➔ `sudo systemctl restart kalkulator-idg.service` ➔ Health check (Port sesuai `.env` atau default).
+   - **Prasyarat Server (`/etc/sudoers.d/github-actions-runner`):**
+     ```bash
+     <user-runner> ALL=(ALL) NOPASSWD: /bin/systemctl restart kalkulator-idg.service, /usr/bin/systemctl restart kalkulator-idg.service
+     ```
+   - **Unit Service Systemd (`/etc/systemd/system/kalkulator-idg.service`):**
+     ```ini
+     [Unit]
+     Description=Indogreen Solar Energy Calculator Service
+     After=network.target
+
+     [Service]
+     Type=simple
+     User=<user-runner>
+     WorkingDirectory=/opt/lampp/htdocs/project/indogreen/kalkulator
+     ExecStart=/usr/bin/node scripts/serve.js
+     Restart=always
+     RestartSec=5
+     Environment=NODE_ENV=production
+     Environment=PORT=3000
+     Environment=HOST=0.0.0.0
+
+     [Install]
+     WantedBy=multi-user.target
+     ```
 
 ---
 

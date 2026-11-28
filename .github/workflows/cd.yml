@@ -1,0 +1,80 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cd-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy to Production Server
+    if: github.repository == 'indogreen/kalkulator'
+    runs-on: self-hosted
+
+    steps:
+      - name: Deploy to Server
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          echo "=================================================="
+          echo "🚀 Starting Automated Deployment to Production..."
+          echo "Host: $(hostname) | Date: $(date)"
+          echo "=================================================="
+
+          PROJECT_DIR="${PROJECT_DIR:-/opt/lampp/htdocs/project/indogreen/kalkulator}"
+          if [ ! -d "$PROJECT_DIR" ]; then
+            if [ -d "$HOME/kalkulator" ]; then
+              PROJECT_DIR="$HOME/kalkulator"
+            else
+              echo "❌ Error: Project directory $PROJECT_DIR not found!"
+              exit 1
+            fi
+          fi
+
+          echo "📁 Target directory: $PROJECT_DIR"
+          cd "$PROJECT_DIR"
+
+          echo "📥 [1/4] Pulling latest changes from Git..."
+          git config --global --add safe.directory "$PROJECT_DIR" || true
+          git fetch "https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }}.git" main
+          git reset --hard FETCH_HEAD
+
+          echo "📦 [2/4] Installing Dependencies & Building Production Assets..."
+          npm ci || npm install
+          npm run build
+
+          echo "🔄 [3/4] Restarting Systemd Service..."
+          sudo systemctl restart kalkulator-idg.service
+
+          echo "🩺 [4/4] Performing Health Check..."
+          sleep 3
+
+          # Detect active port from .env or fallback to 3000 / 5500
+          APP_PORT=3000
+          if [ -f "$PROJECT_DIR/.env" ]; then
+            PARSED_PORT=$(grep -E '^[[:space:]]*PORT=' "$PROJECT_DIR/.env" | cut -d '=' -f2 | tr -d ' "\r' || true)
+            if [ -n "$PARSED_PORT" ]; then
+              APP_PORT="$PARSED_PORT"
+            fi
+          fi
+
+          if curl -s -f "http://localhost:${APP_PORT}" > /dev/null; then
+            echo "✅ Kalkulator Web is healthy (port ${APP_PORT})."
+          elif [ "$APP_PORT" != "5500" ] && curl -s -f "http://localhost:5500" > /dev/null; then
+            echo "✅ Kalkulator Web is healthy (fallback port 5500)."
+          else
+            echo "⚠️ Warning: Health check did not respond on port ${APP_PORT} (or fallback 5500)."
+          fi
+
+          echo "=================================================="
+          echo "🎉 Deployment Completed Successfully!"
+          echo "=================================================="
